@@ -1,0 +1,301 @@
+@plugin tailwindcss-animate;
+@import "tailwindcss";
+
+@theme {
+  --color-amber-50: color-mix(in srgb, var(--primary-color, #f59e0b) 10%, transparent);
+  --color-amber-100: color-mix(in srgb, var(--primary-color, #f59e0b) 15%, transparent);
+  --color-amber-200: color-mix(in srgb, var(--primary-color, #f59e0b) 25%, transparent);
+  --color-amber-300: var(--primary-color, #fcd34d);
+  --color-amber-400: var(--primary-color, #fbbf24);
+  --color-amber-500: var(--primary-color, #f59e0b);
+  --color-amber-600: var(--primary-color, #d97706);
+  --color-amber-700: var(--primary-color, #b45309);
+  --color-amber-800: var(--primary-color, #92400e);
+  --color-amber-900: var(--primary-color, #78350f);
+  --color-amber-950: color-mix(in srgb, var(--primary-color, #f59e0b) 10%, transparent);
+}
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --primary-color: #f59e0b;
+    --primary-rgb: 245, 158, 11;
+    --accent-color: #f59e0b;
+    --accent-glow: rgba(245, 158, 11, 0.15);
+  }
+
+  * {
+    border-color: #27272a;
+    box-sizing: border-box;
+  }
+
+  html {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #09090b;
+    color: #f4f4f5;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+    margin: 0;
+    padding: 0;
+  }
+
+  #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+    min-height: 100vh;
+  }
+}
+
+/* Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+/* Tabular Numerals for Finance */
+.num-tabular {
+  font-family: var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Touch Button Base */
+.btn-touch {
+  min-height: 42px;
+  touch-action: manipulation;
+  transition: all 0.12s ease-out;
+}
+
+.btn-touch:active {
+  transform: scale(0.98);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   80mm Thermal Printer Print Architecture (POS System Standard)
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media print {
+  @page {
+    size: 80mm auto;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 80mm !important;
+    min-width: 80mm !important;
+    max-width: 80mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: var(--font-mono), 'JetBrains Mono', 'Courier New', Courier, monospace !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    overflow: visible !important;
+  }
+
+  /* Hide app shell and navigation elements */
+  nav,
+  header,
+  main,
+  aside,
+  footer,
+  button,
+  .print\:hidden,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Reset fixed overlays so ticket renders at the top of the paper */
+  .fixed {
+    position: static !important;
+    inset: auto !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  /* Unified Thermal Ticket Target */
+  .pos-thermal-ticket,
+  #receipt-print-area,
+  #kitchen-printable-ticket,
+  #delivery-printable-ticket,
+  .ticket-printable {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    width: 72mm !important;
+    max-width: 72mm !important;
+    min-width: 72mm !important;
+    margin: 0 auto !important;
+    padding: 2mm 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    font-size: 11.5px !important;
+    line-height: 1.35 !important;
+    font-family: var(--font-mono), 'JetBrains Mono', 'Courier New', Courier, monospace !important;
+    box-sizing: border-box !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .pos-thermal-ticket *,
+  #receipt-print-area *,
+  #kitchen-printable-ticket *,
+  #delivery-printable-ticket *,
+  .ticket-printable * {
+    color: #000000 !important;
+    background-color: transparent !important;
+    border-color: #000000 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .pos-thermal-ticket .border-dashed,
+  #receipt-print-area .border-b,
+  #receipt-print-area .border-t,
+  #kitchen-printable-ticket .border-dashed,
+  #delivery-printable-ticket .border-dashed,
+  .ticket-printable .border-dashed {
+    border-color: #000000 !important;
+    border-style: dashed !important;
+    border-width: 1px !important;
+  }
+}
+
+/* Infinite Marquee Animation for Top Utility Ticker */
+@keyframes marquee {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Bottom Sheet Modal Slide-Up & Slide-Down Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes slideUpSheet {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes slideDownSheet {
+  from { transform: translateY(0); }
+  to   { transform: translateY(110%); }
+}
+
+.animate-sheet-enter {
+  animation: slideUpSheet 360ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.animate-sheet-exit {
+  animation: slideDownSheet 280ms cubic-bezier(0.32, 0, 0.68, 0) both;
+}
+
+.animate-overlay-enter {
+  animation: fadeIn 200ms ease both;
+}
+
+.animate-overlay-exit {
+  animation: fadeOut 250ms ease both;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Navbar Double-Chain Tavern Sign Physics (Menu QR)
+   ═══════════════════════════════════════════════════════════════════════════ */
+@keyframes tavernSignDrop {
+  0% {
+    transform: translateY(-90%) rotate(-4deg);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(5px) rotate(2deg);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(-2px) rotate(-1deg);
+  }
+  88% {
+    transform: translateY(1px) rotate(0.4deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes tavernSignSway {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(1.2deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-1.2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-tavern-drop {
+  transform-origin: 50% 0%;
+  animation: tavernSignDrop 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-tavern-sway {
+  transform-origin: 50% -8px;
+  animation: tavernSignSway 5.5s ease-in-out infinite;
+}
+
+

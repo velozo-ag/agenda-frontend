@@ -1,0 +1,49 @@
+import { useEffect } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { useMyTenant, useTenantBranding, applyTenantTheme, getPageTitleForPath } from '../../hooks/useTenantBranding';
+import { getTenantSlug } from '../../api/axiosClient';
+
+/**
+ * Headless component that listens to URL / route changes and automatically:
+ * 1. Synchronizes document.title with the active salon's name + current page.
+ * 2. Injects the salon's custom logo as the browser tab favicon (<link rel="icon">).
+ * 3. Applies CSS custom properties (--primary-color, --accent-glow, etc.).
+ */
+export function DynamicBrandingManager() {
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const { isAuthenticated, user } = useAuth();
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN' || user?.role === 'SUPERADMIN' || user?.username === 'superadmin';
+
+  // 1. Authenticated tenant data (disabled for SuperAdmin on master portal)
+  const { data: authTenant } = useMyTenant({ enabled: isAuthenticated && !isSuperAdmin });
+
+  // 2. Public / unauthenticated tenant resolution via slug
+  const urlSlug = searchParams.get('slug') || searchParams.get('tenant') || getTenantSlug() || 'admin';
+  const { data: publicTenant, error: publicTenantError } = useTenantBranding(urlSlug);
+
+  // Active tenant
+  const activeTenant = (isAuthenticated && !isSuperAdmin && authTenant) ? authTenant : publicTenant;
+
+  useEffect(() => {
+    if (publicTenantError && (publicTenantError.status === 404 || publicTenantError.response?.status === 404)) {
+      window.location.href = 'https://roosty.com.ar';
+    }
+  }, [publicTenantError]);
+
+  useEffect(() => {
+    if (isSuperAdmin && location.pathname.startsWith('/superadmin')) {
+      document.title = 'SuperAdmin | Roosty Agenda';
+      return;
+    }
+
+    if (activeTenant) {
+      applyTenantTheme(activeTenant);
+    } else {
+      document.title = getPageTitleForPath(location.pathname, 'Roosty Agenda');
+    }
+  }, [location.pathname, location.search, activeTenant, isSuperAdmin]);
+
+  return null;
+}
