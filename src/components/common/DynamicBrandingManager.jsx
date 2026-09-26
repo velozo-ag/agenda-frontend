@@ -20,7 +20,7 @@ export function DynamicBrandingManager() {
   const { data: authTenant } = useMyTenant({ enabled: isAuthenticated && !isSuperAdmin });
 
   // 2. Public / unauthenticated tenant resolution via slug
-  const urlSlug = searchParams.get('slug') || searchParams.get('tenant') || getTenantSlug() || 'admin';
+  const urlSlug = searchParams.get('slug') || searchParams.get('tenant') || getTenantSlug();
   const { data: publicTenant, error: publicTenantError } = useTenantBranding(urlSlug);
 
   // Active tenant
