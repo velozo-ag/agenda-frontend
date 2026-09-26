@@ -161,15 +161,15 @@ export function Navbar() {
 
           {/* Ver Portal Clientes shortcut */}
           <a
-            href={tenant?.slug ? `https://${tenant.slug}.roosty.site` : '/'}
+            href={tenant?.slug ? `https://${tenant.slug}.agenda.roosty.site` : '/'}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-touch px-2.5 py-1 rounded-lg text-[11px] font-medium border border-zinc-800 bg-zinc-900/90 text-zinc-300 hover:text-white hover:bg-zinc-850 flex items-center gap-1.5 transition-colors cursor-pointer"
-            title={tenant?.slug ? `Abrir https://${tenant.slug}.roosty.site` : 'Abrir Portal'}
+            title={tenant?.slug ? `Abrir https://${tenant.slug}.agenda.roosty.site` : 'Abrir Portal'}
           >
             <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
             <span className="hidden md:inline">
-              {tenant?.slug ? `${tenant.slug}.roosty.site` : 'Portal'}
+              {tenant?.slug ? `${tenant.slug}.agenda.roosty.site` : 'Portal'}
             </span>
           </a>
 

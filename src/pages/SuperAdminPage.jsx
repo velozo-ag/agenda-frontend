@@ -52,7 +52,7 @@ export const PLAN_PRESETS = {
     name: 'Plan Cero',
     price: '$0',
     billing: 'Gratis',
-    desc: 'Hasta 40 turnos. Subdominio dedicado (ej: carlos.roosty.site). Ideal para que prueben la interfaz y se enganchen.',
+    desc: 'Hasta 40 turnos. Subdominio dedicado (ej: carlos.agenda.roosty.site). Ideal para que prueben la interfaz y se enganchen.',
     color: 'border-zinc-700 bg-zinc-800/40 text-zinc-300',
     badge: 'bg-zinc-800 text-zinc-300 border-zinc-700',
     hasSubdomain: true,
@@ -69,7 +69,7 @@ export const PLAN_PRESETS = {
     name: 'Plan Navaja',
     price: '$14.900/mes',
     billing: 'Mensual',
-    desc: 'Turnos ilimitados + Subdominio propio (carlos.roosty.site) + Módulo de captura de seña. (Un solo barbero).',
+    desc: 'Turnos ilimitados + Subdominio propio (carlos.agenda.roosty.site) + Módulo de captura de seña. (Un solo barbero).',
     color: 'border-amber-500/40 bg-amber-500/10 text-amber-300',
     badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
     hasSubdomain: true,
@@ -110,10 +110,10 @@ export const resolvePlan = (planType) => {
 };
 
 export function getTenantPublicUrl(tenant) {
-  // Todos los planes tienen slug subdominio dedicado (ej: carlos.roosty.site)
+  // Todos los planes tienen slug subdominio dedicado (ej: carlos.agenda.roosty.site)
   return {
-    label: `${tenant.slug}.roosty.site`,
-    href: `https://${tenant.slug}.roosty.site`,
+    label: `${tenant.slug}.agenda.roosty.site`,
+    href: `https://${tenant.slug}.agenda.roosty.site`,
     localHref: `/book?tenant=${tenant.slug}`,
     isSubdomain: true,
   };
@@ -835,7 +835,7 @@ export function SuperAdminPage() {
                         </span>
 
                         <span className="px-1.5 py-0.2 rounded bg-purple-500/10 border border-purple-500/20 text-[9px] font-mono text-purple-300">
-                          🌐 {tenant.slug}.roosty.site
+                          🌐 {tenant.slug}.agenda.roosty.site
                         </span>
 
                         {tenant.hasDeposit && (
@@ -1047,7 +1047,7 @@ export function SuperAdminPage() {
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-xs font-semibold text-zinc-200 font-mono">{statusLabel}</span>
-                        <span className="text-zinc-400 text-xs font-mono">{demo.slug}.roosty.site</span>
+                        <span className="text-zinc-400 text-xs font-mono">{demo.slug}.agenda.roosty.site</span>
                       </div>
                       <h3 className="text-base font-bold text-zinc-100">{demo.storeName}</h3>
                       <p className="text-xs text-zinc-400">{demo.ownerName}</p>
@@ -1297,7 +1297,7 @@ export function SuperAdminPage() {
                         </div>
                         <div className="text-[10px] font-mono text-zinc-400 pt-2 border-t border-zinc-800/80 space-y-0.5">
                           <div>⚡ {p.maxAppointmentsMonth > 0 ? `Hasta ${p.maxAppointmentsMonth} turnos` : 'Turnos ilimitados'}</div>
-                          <div>🌐 Subdominio propio (.roosty.site)</div>
+                          <div>🌐 Subdominio propio (.agenda.roosty.site)</div>
                           <div>✂️ {p.hasMultiBarber ? 'Múltiples barberos' : '1 barbero'}</div>
                           <div>💰 {p.hasDeposit ? 'Captura de seña ✅' : 'Sin seña ❌'}</div>
                           <div>📊 {p.hasCommissions ? 'Panel empleados ✅' : 'Sin comisiones ❌'}</div>
@@ -1329,7 +1329,7 @@ export function SuperAdminPage() {
                           onChange={(e) => setCustomHasSubdomain(e.target.checked)}
                           className="rounded border-zinc-700 text-amber-500 focus:ring-0"
                         />
-                        <span>Subdominio propio ({slug || 'slug'}.roosty.site)</span>
+                        <span>Subdominio propio ({slug || 'slug'}.agenda.roosty.site)</span>
                       </label>
 
                       <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
@@ -1432,12 +1432,12 @@ export function SuperAdminPage() {
                       className="bg-transparent text-amber-400 font-bold focus:outline-none px-1 flex-1 font-mono"
                       required
                     />
-                    <span>.roosty.site</span>
+                    <span>.agenda.roosty.site</span>
                   </div>
                   <p className="text-[11px] text-zinc-400 font-mono mt-1">
                     Subdominio dedicado de la barbería: {' '}
                     <span className="text-amber-400 font-bold">
-                      https://{slug || 'carlos'}.roosty.site
+                      https://{slug || 'carlos'}.agenda.roosty.site
                     </span>
                   </p>
                 </div>

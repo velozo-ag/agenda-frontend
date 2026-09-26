@@ -17,7 +17,7 @@ export function DemoExpiredPage() {
 
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '5491100000000';
   const message = encodeURIComponent(
-    `Hola equipo Roosty. Estuve probando la demo de ${storeName} (${slug}.roosty.site) y quiero activar mi cuenta real. ¿Cómo avanzo?`
+    `Hola equipo Roosty. Estuve probando la demo de ${storeName} (${slug}.agenda.roosty.site) y quiero activar mi cuenta real. ¿Cómo avanzo?`
   );
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
 

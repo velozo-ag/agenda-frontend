@@ -697,7 +697,7 @@ export function TenantBrandingSettingsView() {
             {/* Live QR Code Card for Table / Mirror Stickers */}
             {(() => {
               const publicUrl = tenantData?.slug
-                ? `https://${tenantData.slug}.roosty.site`
+                ? `https://${tenantData.slug}.agenda.roosty.site`
                 : window.location.origin;
 
               return (
