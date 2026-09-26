@@ -1,4 +1,4 @@
-@plugin tailwindcss-animate;
+@plugin "tailwindcss-animate";
 @import "tailwindcss";
 
 @theme {
