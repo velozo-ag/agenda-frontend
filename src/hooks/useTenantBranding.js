@@ -4,11 +4,11 @@ import { getTenantSlug } from '../api/axiosClient';
 import { getImageUrl } from '../utils/imageUrl';
 
 export const hexToRgb = (hex) => {
-  if (!hex || !hex.startsWith('#')) return '245, 158, 11';
+  if (!hex || !hex.startsWith('#')) return '99, 102, 241';
   let c = hex.substring(1);
   if (c.length === 3) c = c.split('').map((x) => x + x).join('');
   const num = parseInt(c, 16);
-  if (isNaN(num)) return '245, 158, 11';
+  if (isNaN(num)) return '99, 102, 241';
   return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
 };
 
@@ -97,7 +97,7 @@ export const applyTenantTheme = (tenant, customSubTitle) => {
   if (!tenant || typeof document === 'undefined') return;
 
   // 1. Dynamic Primary Colors
-  const primaryColor = tenant.primaryColor || '#f59e0b';
+  const primaryColor = tenant.primaryColor || '#6366f1';
   const rgb = hexToRgb(primaryColor);
   document.documentElement.style.setProperty('--primary-color', primaryColor);
   document.documentElement.style.setProperty('--accent-color', primaryColor);

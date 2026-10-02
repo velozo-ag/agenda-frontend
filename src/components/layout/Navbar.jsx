@@ -121,7 +121,8 @@ export function Navbar() {
     <>
       <header className="h-14 w-full max-w-full bg-zinc-950 border-b border-zinc-800/80 px-3 sm:px-4 flex items-center justify-between sticky top-0 z-40 select-none overflow-visible">
         {/* ─── Left: Dynamic Brand Logo & Status ─── */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
+          {/* LOGO */}
           {tenant?.logoUrl && !logoFailed ? (
             <button
               onClick={() => handleNav(homePath)}
@@ -149,7 +150,17 @@ export function Navbar() {
             </button>
           )}
 
-          {/* Caja & Ingresos shortcut */}
+          {/* MOBILE INFO (Store Name & Staff) - Takes advantage of the empty top space */}
+          <div className="flex flex-col justify-center min-w-0 md:hidden ml-1">
+            <span className="text-xs font-bold text-zinc-100 truncate w-full max-w-[130px]">
+              {tenant?.storeName || tenant?.name || 'Roosty Agenda'}
+            </span>
+            <span className="text-[10px] text-[var(--primary-color,#818cf8)] font-medium truncate opacity-90">
+              {user?.fullName || user?.username || 'Staff'}
+            </span>
+          </div>
+
+          {/* Caja & Ingresos shortcut (Desktop Only) */}
           <button
             onClick={() => handleNav('/cashier')}
             className="btn-touch px-2.5 py-1 rounded-lg text-[11px] font-medium border border-zinc-800 bg-zinc-900/90 text-zinc-300 hover:text-white hover:bg-zinc-850 hidden sm:flex items-center gap-1.5 transition-colors cursor-pointer"
@@ -159,21 +170,7 @@ export function Navbar() {
             <span>Caja & Cobros</span>
           </button>
 
-          {/* Ver Portal Clientes shortcut */}
-          <a
-            href={tenant?.slug ? `https://${tenant.slug}.agenda.roosty.site` : '/'}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-touch px-2.5 py-1 rounded-lg text-[11px] font-medium border border-zinc-800 bg-zinc-900/90 text-zinc-300 hover:text-white hover:bg-zinc-850 flex items-center gap-1.5 transition-colors cursor-pointer"
-            title={tenant?.slug ? `Abrir https://${tenant.slug}.agenda.roosty.site` : 'Abrir Portal'}
-          >
-            <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="hidden md:inline">
-              {tenant?.slug ? `${tenant.slug}.agenda.roosty.site` : 'Portal'}
-            </span>
-          </a>
-
-          {/* Live Clock */}
+          {/* Live Clock (Desktop Only) */}
           <LiveClock />
         </div>
 
@@ -205,7 +202,22 @@ export function Navbar() {
         </nav>
 
         {/* ─── Right: Settings & User Profile ─── */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-auto md:ml-0">
+          {/* Ver Portal Clientes shortcut - Moved here for mobile balance, muted color */}
+          <a
+            href={tenant?.slug ? `https://${tenant.slug}.agenda.roosty.site` : '/'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-touch px-2 py-1 rounded-lg text-[10px] font-medium border border-zinc-800/50 bg-zinc-900/40 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+            title="Abrir Portal Público"
+          >
+            <span className="md:hidden">Portal</span>
+            <span className="hidden md:inline">
+              {tenant?.slug ? `${tenant.slug}.agenda.roosty.site` : 'Portal Público'}
+            </span>
+            <ExternalLink className="w-3 h-3 opacity-70" />
+          </a>
+
           {/* SuperAdmin Link */}
           {isSuperAdmin && (
             <button
@@ -297,6 +309,14 @@ export function Navbar() {
                     >
                       <BarChart2 className="w-4 h-4 text-zinc-400" />
                       <span>Métricas & Dashboard</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleNav('/admin/waitlist')}
+                      className="w-full px-2.5 py-2 rounded-xl text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors cursor-pointer"
+                    >
+                      <Clock className="w-4 h-4 text-zinc-400" />
+                      <span>Lista de Espera</span>
                     </button>
 
                     <button

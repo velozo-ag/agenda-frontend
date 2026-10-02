@@ -56,43 +56,43 @@ export function TenantBookingSettingsView({ section }) {
   if (isLoading) {
     return (
       <div className="p-8 flex justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
       </div>
     );
   }
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg h-full flex flex-col">
-      <div className="p-6 border-b border-zinc-800 flex justify-between items-center bg-zinc-900/50">
+    <div className="bg-zinc-900/60 border border-zinc-800/60 rounded-2xl overflow-hidden shadow-lg h-full flex flex-col">
+      <div className="p-5 border-b border-zinc-800/60 flex justify-between items-center">
         <div>
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            {section === 'agenda' && <><Calendar className="w-5 h-5 text-amber-400"/> Configuración de Turnos</>}
-            {section === 'notifications' && <><Bell className="w-5 h-5 text-amber-400"/> Alertas & Notificaciones</>}
-            {section === 'payments' && <><CreditCard className="w-5 h-5 text-amber-400"/> Pagos & Señas</>}
+          <h2 className="text-sm font-bold text-white flex items-center gap-2">
+            {section === 'agenda' && <><Calendar className="w-4 h-4 text-indigo-400"/> Configuración de Turnos</>}
+            {section === 'notifications' && <><Bell className="w-4 h-4 text-indigo-400"/> Alertas & No-shows</>}
+            {section === 'payments' && <><CreditCard className="w-4 h-4 text-indigo-400"/> Pagos & Señas</>}
           </h2>
-          <p className="text-sm text-zinc-400 mt-1">
-            {section === 'agenda' && 'Ajusta la duración de turnos, cancelaciones y reprogramaciones.'}
-            {section === 'notifications' && 'Configura las alertas de inasistencia (no-show).'}
-            {section === 'payments' && 'Configura los datos bancarios para las señas de las reservas.'}
+          <p className="text-xs text-zinc-500 mt-0.5">
+            {section === 'agenda' && 'Duración de turnos, cancelaciones y reprogramaciones.'}
+            {section === 'notifications' && 'Alertas de inasistencia (no-show).'}
+            {section === 'payments' && 'Datos bancarios para las señas de reservas.'}
           </p>
         </div>
         <button
           onClick={handleSave}
           disabled={!hasChanges || updateSettings.isPending}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-            hasChanges 
-              ? 'bg-amber-500 hover:bg-amber-400 text-zinc-950 shadow-md shadow-amber-500/20' 
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+            hasChanges
+              ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-500/20'
               : saveSuccess
-                ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                 : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
           }`}
         >
           {updateSettings.isPending ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
           ) : (
-            <Save className="w-4 h-4" />
+            <Save className="w-3.5 h-3.5" />
           )}
-          {saveSuccess ? 'Guardado' : 'Guardar Cambios'}
+          {saveSuccess ? 'Guardado ✓' : 'Guardar'}
         </button>
       </div>
 

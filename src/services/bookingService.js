@@ -11,5 +11,12 @@ export const bookingService = {
   cancelAppointment: (token, reason) => apiClient.post(`/booking/appointments/${token}/cancel`, { reason }),
   rescheduleAppointment: (token, newStartTime) => apiClient.post(`/booking/appointments/${token}/reschedule`, { newStartTime }),
   joinWaitlist: (slug, data) => apiClient.post(`/booking/waitlist`, data),
+  uploadDeposit: (token, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return apiClient.post(`/booking/appointments/${token}/deposit`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  },
 };
 

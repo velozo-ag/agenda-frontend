@@ -8,7 +8,7 @@
  */
 export function getImageUrl(url) {
   if (!url || typeof url !== 'string' || !url.trim()) {
-    return '';
+    return null;
   }
 
   const trimmed = url.trim();

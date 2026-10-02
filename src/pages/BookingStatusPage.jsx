@@ -1,373 +1,528 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { 
-  Loader2, 
-  AlertCircle, 
-  CheckCircle, 
-  Clock, 
-  Upload, 
-  XCircle, 
-  CalendarX, 
+import {
+  Loader2,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Upload,
+  XCircle,
+  CalendarX,
   CalendarClock,
-  CalendarPlus,
   MessageCircle,
   Scissors,
   ArrowRight,
   User,
   Calendar as CalendarIcon,
   ShieldCheck,
-  ChevronLeft
+  ChevronLeft,
+  X,
 } from 'lucide-react';
-import { 
-  useAppointmentStatus, 
-  useCancelAppointment, 
-  useRescheduleAppointment, 
-  usePublicBarbers, 
-  useSalonInfo 
+import {
+  useAppointmentStatus,
+  useCancelAppointment,
+  useRescheduleAppointment,
+  usePublicAvailableSlots,
+  usePublicBarbers,
+  useSalonInfo,
+  useUploadDeposit,
 } from '../hooks/useBooking';
 import { getTenantSlug } from '../api/axiosClient';
 import { applyTenantTheme } from '../hooks/useTenantBranding';
 import { getImageUrl } from '../utils/imageUrl';
+import { useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
-const DEFAULT_COVER_IMAGE = 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1600&auto=format&fit=crop';
+const DEFAULT_COVER_IMAGE =
+  'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=1600&auto=format&fit=crop';
 
 export function BookingStatusPage() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const navigate = useNavigate();
   const urlSlug = searchParams.get('slug') || searchParams.get('tenant');
+  const queryClient = useQueryClient();
+  const fileInputRef = React.useRef(null);
 
   const { data: statusData, isLoading, error } = useAppointmentStatus(token);
   const effectiveSlug = urlSlug || statusData?.data?.tenantSlug || getTenantSlug() || 'admin';
   const { data: salonInfoData } = useSalonInfo(effectiveSlug);
-  const salon = salonInfoData?.data || {};
+  const salon = salonInfoData?.data || salonInfoData || {};
   const { data: barbersData } = usePublicBarbers(effectiveSlug);
-  const barbers = barbersData?.data || [];
+  const barbers = barbersData?.data || barbersData || [];
 
   const { mutate: cancelAppointment, isPending: isCancelling } = useCancelAppointment(token);
+  const { mutate: uploadDeposit, isPending: isUploading } = useUploadDeposit(token);
   const { mutate: rescheduleAppointment, isPending: isRescheduling } = useRescheduleAppointment(token);
 
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
+  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
+  const getLocalISODate = (date) => {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const [rescheduleDate, setRescheduleDate] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return getLocalISODate(d);
+  });
+  const [selectedRescheduleSlot, setSelectedRescheduleSlot] = useState(null);
 
   const appt = statusData?.data || statusData;
 
-  useEffect(() => {
-    setShowCancelConfirm(false);
-    setCancelReason('');
-  }, [token]);
+  const isTerminated = ['CANCELLED', 'COMPLETED', 'NO_SHOW'].includes(appt?.status);
+  const isFuture = appt?.startTime ? new Date(appt.startTime) > new Date() : false;
+  const canCancel = appt?.canCancel ?? (!isTerminated && isFuture);
+  const canReschedule = appt?.canReschedule ?? (!isTerminated && isFuture);
+
+  const { data: slotsData, isLoading: isLoadingSlots } = usePublicAvailableSlots(effectiveSlug, {
+    serviceId: appt?.serviceId,
+    barberId: appt?.barberId,
+    date: rescheduleDate,
+  });
+  const availableSlots = Array.isArray(slotsData?.data) ? slotsData.data : (Array.isArray(slotsData) ? slotsData : []);
 
   useEffect(() => {
-    if (salon && Object.keys(salon).length > 0) {
-      applyTenantTheme(salon, 'Estado de Reserva');
+    if (salon?.tenant) {
+      applyTenantTheme(salon.tenant);
     }
   }, [salon]);
 
-  useEffect(() => {
-    if (appt?.clientEmail || appt?.clientPhone) {
-      sessionStorage.setItem('roosty_last_client_query', appt.clientEmail || appt.clientPhone);
-    }
-  }, [appt?.clientEmail, appt?.clientPhone]);
-
-  if (!token) {
-    return (
-      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4">
-        <AlertCircle className="w-12 h-12 text-rose-500 mb-4" />
-        <h1 className="text-xl font-bold text-zinc-100 mb-2">Enlace inválido</h1>
-        <p className="text-zinc-500 text-center max-w-sm mb-6">El token de tu turno no es válido o falta en la URL.</p>
-        <button onClick={() => navigate('/book')} className="text-amber-500 hover:underline">Volver al inicio</button>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-8 h-8 text-amber-500 animate-spin" />
-        <span className="text-xs text-zinc-400">Consultando estado de tu turno...</span>
-      </div>
-    );
-  }
-
-  if (error || !appt || (!appt.id && !appt.token)) {
-    return (
-      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4 text-center">
-        <XCircle className="w-12 h-12 text-rose-500 mb-4" />
-        <h1 className="text-xl font-bold text-zinc-100 mb-2">Turno no encontrado</h1>
-        <p className="text-zinc-500 max-w-sm mb-6">No pudimos encontrar la reserva. Es posible que haya sido cancelada o que el enlace sea incorrecto.</p>
-        <button
-          onClick={() => navigate(`/book?slug=${effectiveSlug}`)}
-          className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-sm transition-all"
-        >
-          Ir a la agenda del salón
-        </button>
-      </div>
-    );
-  }
-  const coverImageUrl = (salon.heroUrl || salon.backgroundImageUrl)
-    ? getImageUrl(salon.heroUrl || salon.backgroundImageUrl)
-    : DEFAULT_COVER_IMAGE;
-
-  const assignedBarber = appt.barberId ? barbers.find((b) => b.id === appt.barberId) : null;
-
   const handleCancel = () => {
     cancelAppointment(cancelReason, {
-      onSuccess: () => setShowCancelConfirm(false)
+      onSuccess: () => {
+        setShowCancelConfirm(false);
+        setCancelReason('');
+        toast.success('Turno cancelado correctamente');
+        queryClient.invalidateQueries({ queryKey: ['appointment-status', token] });
+      },
+      onError: () => toast.error('Error al cancelar el turno'),
     });
   };
 
-  const handleReschedule = () => {
-    alert("Para reprogramar tu turno, te sugerimos cancelarlo y agendar una nueva fecha, o comunicarte con el local.");
+  const handleConfirmReschedule = () => {
+    if (!selectedRescheduleSlot) return;
+    rescheduleAppointment(selectedRescheduleSlot, {
+      onSuccess: () => {
+        toast.success('Turno reprogramado exitosamente');
+        setShowRescheduleModal(false);
+        setSelectedRescheduleSlot(null);
+        queryClient.invalidateQueries({ queryKey: ['appointment-status', token] });
+      },
+      onError: (err) => {
+        toast.error(err.response?.data?.message || 'Error al reprogramar el turno');
+      },
+    });
   };
 
-  const handleDownloadIcs = () => {
-    const start = new Date(appt.startTime).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-    const end = new Date(appt.endTime || appt.startTime).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-    const serviceTitle = appt.serviceNameSnapshot || appt.serviceName || 'Servicio';
-    const barberNameStr = assignedBarber ? assignedBarber.fullName : 'Cualquiera';
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-    const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-DTSTART:${start}
-DTEND:${end}
-SUMMARY:Turno de ${serviceTitle} en ${salon.storeName || salon.name || 'Barbería'}
-DESCRIPTION:Barbero: ${barberNameStr}\\nEstado: ${appt.status}
-END:VEVENT
-END:VCALENDAR`;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('La imagen es demasiado grande. Máximo 5MB.');
+      return;
+    }
 
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `turno-${appt.token.substring(0,6)}.ics`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    uploadDeposit(file, {
+      onSuccess: () => {
+        toast.success('Comprobante enviado exitosamente');
+        queryClient.invalidateQueries({ queryKey: ['appointment-status', token] });
+      },
+      onError: (err) => {
+        toast.error('Error al subir comprobante. Intente de nuevo.');
+        console.error(err);
+      },
+    });
   };
 
-  return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center p-4 sm:p-6 relative overflow-x-hidden font-sans">
-      {/* Background Banner */}
-      <div className="absolute top-0 left-0 right-0 h-[260px] sm:h-[320px] overflow-hidden pointer-events-none z-0">
-        <img
-          src={coverImageUrl}
-          alt={salon.storeName || salon.name || 'Portada'}
-          className="w-full h-full object-cover object-center opacity-30 filter brightness-90"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/20 via-zinc-950/80 to-zinc-950" />
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4">
+        <Loader2 className="w-8 h-8 text-[var(--primary-color,#6366f1)] animate-spin mb-4" />
+        <p className="text-zinc-400 font-medium animate-pulse">Cargando estado de tu turno...</p>
       </div>
+    );
+  }
 
-      <div className="w-full max-w-md flex flex-col gap-6 mt-4 relative z-10">
-        {/* Top Navigation Bar with Back & My Appointments */}
-        <div className="w-full flex items-center justify-between gap-2 -mb-2">
+  if (error || !statusData) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4">
+        <div className="bg-rose-500/10 text-rose-500 p-4 rounded-xl flex flex-col items-center text-center max-w-sm">
+          <AlertCircle className="w-12 h-12 mb-3" />
+          <h2 className="text-lg font-bold mb-1">No se pudo cargar el turno</h2>
+          <p className="text-sm opacity-80 mb-6">El enlace puede haber expirado o es incorrecto.</p>
           <button
-            onClick={() => {
-              navigate(`/book?slug=${effectiveSlug}`);
-            }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 text-xs font-bold text-zinc-300 hover:text-white transition-all cursor-pointer backdrop-blur-xs shadow-md"
-            title="Reservar nuevo turno"
+            onClick={() => navigate(`/book?slug=${effectiveSlug}`)}
+            className="h-10 px-6 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 font-semibold rounded-lg transition-colors text-sm"
           >
-            <ChevronLeft className="w-4 h-4 text-amber-500" />
-            <span>Reservar nuevo turno</span>
+            Volver a reservar
           </button>
         </div>
+      </div>
+    );
+  }
 
-        {/* Salon Brand Header */}
-        <div className="flex flex-col items-center gap-2 text-center">
-          {salon.logoUrl ? (
-            <img 
-              src={getImageUrl(salon.logoUrl)} 
-              alt={salon.storeName || salon.name || 'Logo'} 
-              className="h-14 sm:h-16 max-w-[220px] object-contain drop-shadow-md"
-            />
-          ) : (
-            <div className="text-xl font-black text-white tracking-wide uppercase">
-              {salon.storeName || salon.name || 'Roosty Agenda'}
-            </div>
-          )}
-          <span className="text-xs text-zinc-400 font-semibold tracking-wide">
-            Portal de Turnos Online
-          </span>
-        </div>
+  if (!appt || !appt.status) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4">
+        <Loader2 className="w-8 h-8 text-[var(--primary-color,#6366f1)] animate-spin mb-4" />
+        <p className="text-zinc-400 font-medium animate-pulse">Cargando...</p>
+      </div>
+    );
+  }
 
-        {/* Status Card */}
-        <div className={`rounded-3xl border p-6 sm:p-7 flex flex-col items-center text-center gap-4 shadow-xl backdrop-blur-xs ${
-          appt.status === 'CONFIRMED' ? 'bg-emerald-500/10 border-emerald-500/30' :
-          appt.status === 'PENDING_REVIEW' ? 'bg-amber-500/10 border-amber-500/30' :
-          appt.status === 'CANCELLED' ? 'bg-rose-500/10 border-rose-500/30' :
-          'bg-zinc-900/90 border-zinc-800'
-        }`}>
-          {appt.status === 'CONFIRMED' && <CheckCircle className="w-14 h-14 text-emerald-400 animate-in zoom-in duration-300" />}
-          {appt.status === 'PENDING_REVIEW' && <Clock className="w-14 h-14 text-amber-400 animate-pulse" />}
-          {appt.status === 'CANCELLED' && <XCircle className="w-14 h-14 text-rose-400" />}
+  const assignedBarber = barbers.find((b) => b.id === appt.barberId);
+  const rawCover = salon.heroUrl || salon.backgroundImageUrl;
+  const coverImageUrl = (rawCover ? getImageUrl(rawCover) : null) || DEFAULT_COVER_IMAGE;
+
+  return (
+    <div className="font-sans relative">
+      {/* Global Background */}
+      {/* BACKGROUND BANNER FIXED */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        {coverImageUrl ? (
+          <img
+            src={coverImageUrl}
+            alt={salon.storeName || salon.name || 'Portada'}
+            className="w-full h-full object-cover object-center opacity-40"
+          />
+        ) : null}
+        <div className="absolute inset-0 bg-zinc-950/40" />
+      </div>
+
+      {/* App Wrapper */}
+      <div className="relative z-10 min-h-screen bg-zinc-950/40 backdrop-blur-sm flex flex-col items-center p-4 sm:p-6 overflow-x-hidden text-zinc-100">
+        <div className="w-full max-w-md flex flex-col gap-6 relative z-10">
           
-          <div className="space-y-1">
-            <h1 className="text-2xl font-black tracking-tight text-white">
-              {appt.status === 'CONFIRMED' ? '¡Tu turno está Confirmado!' :
-               appt.status === 'PENDING_REVIEW' ? 'Solicitud Pendiente de Confirmación' :
-               appt.status === 'CANCELLED' ? 'Turno Cancelado' : appt.status}
-            </h1>
-            <p className="text-xs sm:text-sm text-zinc-300 max-w-xs mx-auto leading-relaxed">
-              {appt.status === 'CONFIRMED' && '¡Te esperamos en el local! Guardá este enlace o descargá el evento en tu calendario.'}
-              {appt.status === 'PENDING_REVIEW' && 'Solicitud de turno recibida. Tu reserva está pendiente de confirmación por el equipo del salón.'}
-              {appt.status === 'CANCELLED' && 'Esta reserva ha sido cancelada. Si querés agendar una nueva cita, podés hacerlo con el botón inferior.'}
-            </p>
+          {/* Top Navigation */}
+          <div className="w-full flex items-center gap-2 mb-2">
+            <button
+              onClick={() => navigate(`/book?slug=${effectiveSlug}`)}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-zinc-900/50 hover:bg-zinc-800/80 border border-white/10 text-xs font-medium text-zinc-300 hover:text-white transition-all cursor-pointer backdrop-blur-md"
+            >
+              <ChevronLeft className="w-4 h-4 text-zinc-400" />
+              <span>Volver</span>
+            </button>
           </div>
-        </div>
 
-        {/* Details Card */}
-        <div className="bg-zinc-900/90 border border-zinc-800/90 rounded-3xl p-5 sm:p-6 space-y-4 shadow-xl backdrop-blur-xs">
-          <div className="flex justify-between items-center border-b border-zinc-800 pb-3.5">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Servicio</span>
-              <div className="text-base font-bold text-white mt-0.5">
-                {appt.serviceNameSnapshot || appt.serviceName || 'Servicio'}
-              </div>
-            </div>
-            {appt.priceSnapshot && (
-              <div className="text-right">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">Precio</span>
-                <div className="text-lg font-black font-mono text-amber-400 mt-0.5">
-                  ${Number(appt.priceSnapshot).toLocaleString('es-AR')}
-                </div>
+          {/* Salon Brand Header */}
+          <div className="flex flex-col items-center gap-2 text-center">
+            {salon.logoUrl ? (
+              <img
+                src={getImageUrl(salon.logoUrl)}
+                alt={salon.storeName || salon.name || 'Logo'}
+                className="h-14 sm:h-16 max-w-[220px] object-contain drop-shadow-md"
+              />
+            ) : (
+              <div className="text-xl font-bold text-white tracking-wide uppercase">
+                {salon.storeName || salon.name || 'Roosty Agenda'}
               </div>
             )}
+            <span className="text-xs text-zinc-400 font-medium tracking-wide">Portal de Turnos Online</span>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 text-xs border-b border-zinc-800 pb-3.5">
-            <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Profesional</span>
-              <div className="font-semibold text-zinc-200 mt-1 flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-amber-500" />
-                <span>{assignedBarber ? assignedBarber.fullName : 'Cualquiera disponible'}</span>
-              </div>
-            </div>
+          {/* Status UI (Top) NO box */}
+          <div className="flex flex-col items-center text-center mt-4 mb-4 gap-3">
+            {appt.status === 'CONFIRMED' && <CheckCircle className="w-16 h-16 text-emerald-400 animate-in zoom-in duration-300" />}
+            {appt.status === 'PENDING_REVIEW' && <Clock className="w-16 h-16 text-amber-400 animate-pulse" />}
+            {appt.status === 'CANCELLED' && <XCircle className="w-16 h-16 text-rose-400" />}
+            {appt.status === 'COMPLETED' && <CheckCircle className="w-16 h-16 text-emerald-400" />}
 
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">Fecha y Hora</span>
-              <div className="font-semibold text-zinc-200 mt-1 font-mono flex items-center gap-1.5">
-                <CalendarIcon className="w-3.5 h-3.5 text-amber-500" />
-                <span>
+              <h1 className="text-2xl font-bold tracking-tight text-white">
+                {appt.status === 'CONFIRMED' && '¡Tu turno está Confirmado!'}
+                {appt.status === 'PENDING_REVIEW' && 'Solicitud Pendiente'}
+                {appt.status === 'CANCELLED' && 'Turno Cancelado'}
+                {appt.status === 'COMPLETED' && 'Turno Completado'}
+              </h1>
+              <p className="text-sm text-zinc-300 mt-2 max-w-xs mx-auto leading-relaxed">
+                {appt.status === 'CONFIRMED' && '¡Te esperamos en el local!'}
+                {appt.status === 'PENDING_REVIEW' && 'Tu reserva está pendiente de confirmación por el salón.'}
+                {appt.status === 'CANCELLED' && (appt.cancellationReason || 'Esta reserva ha sido cancelada.')}
+                {appt.status === 'COMPLETED' && 'Esperamos que hayas disfrutado tu visita.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Master Ticket Card */}
+          <div className="w-full bg-zinc-900/50 backdrop-blur-md border border-white/10 rounded-xl p-5 sm:p-6 shadow-xl flex flex-col gap-5">
+            {/* Service & Price */}
+            <div className="flex justify-between items-start">
+              <div>
+                <span className="text-xs font-medium uppercase tracking-wider text-zinc-400">Servicio</span>
+                <div className="text-base font-medium text-white mt-1">
+                  {appt.serviceNameSnapshot || appt.serviceName || 'Servicio'}
+                </div>
+              </div>
+              {appt.priceSnapshot && (
+                <div className="text-right">
+                  <span className="text-xs font-medium uppercase tracking-wider text-zinc-400">Total</span>
+                  <div className="text-lg font-mono tabular-nums font-medium text-[var(--primary-color,#818cf8)] mt-1">
+                    ${Number(appt.priceSnapshot).toLocaleString('es-AR')}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <span className="text-xs font-medium uppercase tracking-wider text-zinc-400">Profesional</span>
+                <div className="font-medium text-zinc-200 mt-1">
+                  {assignedBarber ? assignedBarber.fullName : 'Cualquiera disponible'}
+                </div>
+              </div>
+              <div>
+                <span className="text-xs font-medium uppercase tracking-wider text-zinc-400">Fecha y Hora</span>
+                <div className="font-medium text-zinc-200 mt-1">
                   {new Date(appt.startTime).toLocaleString('es-AR', {
                     day: '2-digit',
                     month: 'short',
                     hour: '2-digit',
-                    minute: '2-digit'
-                  })} hs
-                </span>
+                    minute: '2-digit',
+                  })}{' '}
+                  hs
+                </div>
               </div>
             </div>
+
+            {appt.clientName && (
+              <div>
+                <span className="text-xs font-medium uppercase tracking-wider text-zinc-400 block mb-1">
+                  Titular de la reserva
+                </span>
+                <span className="text-zinc-200 font-medium">{appt.clientName}</span>
+                {appt.clientPhone && <span className="text-zinc-400 ml-2">⬢ {appt.clientPhone}</span>}
+              </div>
+            )}
+
+            {/* Upload Deposit (Immersive UI) */}
+            {appt.status === 'PENDING_REVIEW' && !appt.depositPaid && appt.depositAmount > 0 && (
+              <>
+                <div className="border-t border-dashed border-white/10 my-1" />
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-[var(--primary-color,#818cf8)]" />
+                      <span className="text-sm font-medium text-white">Seña Requerida</span>
+                    </div>
+                    <span className="text-sm font-mono tabular-nums text-[var(--primary-color,#818cf8)]">
+                      ${Number(appt.depositAmount).toLocaleString('es-AR')}
+                    </span>
+                  </div>
+                  <p className="text-xs text-zinc-400">
+                    Realizá la transferencia y adjuntá la foto para confirmar tu lugar.
+                  </p>
+                  {appt.depositProofUrl ? (
+                    <div className="text-sm font-medium text-emerald-400 p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/20 text-center">
+                      Comprobante enviado y en revisión
+                    </div>
+                  ) : (
+                    <>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        className="hidden"
+                        onChange={handleFileChange}
+                      />
+                      <button
+                        disabled={isUploading}
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-full h-11 bg-[var(--primary-color,#6366f1)] hover:bg-[var(--primary-color,#4f46e5)] text-zinc-950 rounded-lg flex items-center justify-center gap-2 font-medium text-sm transition-colors cursor-pointer disabled:opacity-50"
+                      >
+                        {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                        {isUploading ? 'Subiendo...' : 'Adjuntar Comprobante'}
+                      </button>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
           </div>
 
-          {appt.clientName && (
-            <div className="text-xs text-zinc-400">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block mb-0.5">Titular de la reserva</span>
-              <span className="text-zinc-200 font-semibold">{appt.clientName}</span>
-              {appt.clientPhone && <span className="text-zinc-500 ml-2">• {appt.clientPhone}</span>}
+          {/* Actions */}
+          <div className="w-full flex flex-col gap-3">
+            {showCancelConfirm ? (
+              <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-5 space-y-4">
+                <div>
+                  <h3 className="font-bold text-base text-rose-400">¿Estás seguro de cancelar tu turno?</h3>
+                  <p className="text-xs text-zinc-400 mt-1">Esta acción liberará tu horario inmediatamente.</p>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Motivo de la cancelación (opcional)"
+                  value={cancelReason}
+                  onChange={(e) => setCancelReason(e.target.value)}
+                  className="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-xs text-zinc-100 placeholder-zinc-500 outline-none focus:border-rose-500/50"
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowCancelConfirm(false)}
+                    className="flex-1 h-11 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                  >
+                    Volver
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    disabled={isCancelling}
+                    className="flex-1 h-11 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center cursor-pointer"
+                  >
+                    {isCancelling ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirmar Cancelación'}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {(salon.whatsappPhone || salon.contactWhatsapp || salon.phone) && (
+                  <a
+                    href={`https://wa.me/${(
+                      salon.whatsappPhone ||
+                      salon.contactWhatsapp ||
+                      salon.phone
+                    ).replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                      `Hola ${salon.storeName || salon.name || ''}! Te escribo por mi turno para el ${new Date(
+                        appt.startTime
+                      ).toLocaleString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })} hs.`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full h-11 border border-zinc-700 hover:bg-zinc-800/50 text-zinc-300 font-medium text-sm rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Escribir al WhatsApp del Salón</span>
+                  </a>
+                )}
+
+                {canReschedule && (
+                  <button
+                    onClick={() => setShowRescheduleModal(true)}
+                    disabled={isRescheduling}
+                    className="w-full h-11 border border-zinc-700 hover:bg-zinc-800/50 text-zinc-300 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  >
+                    <CalendarClock className="w-4 h-4" /> Reprogramar Turno
+                  </button>
+                )}
+
+                {canCancel && (
+                  <button
+                    onClick={() => setShowCancelConfirm(true)}
+                    className="w-full h-11 hover:bg-rose-500/10 hover:text-rose-400 text-zinc-400 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  >
+                    <CalendarX className="w-4 h-4" /> Cancelar Turno
+                  </button>
+                )}
+              </>
+            )}
+
+            <div className="mt-4 border-t border-white/10 pt-4">
+              <button
+                onClick={() => navigate(`/book?slug=${effectiveSlug}`)}
+                className="w-full h-11 bg-white hover:bg-zinc-200 text-zinc-950 font-medium text-sm rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer"
+              >
+                <span>Reservar otro turno</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
-          )}
+          </div>
+          
         </div>
+      </div>
 
-        {/* Upload Receipt (if pending review and deposit required) */}
-        {appt.status === 'PENDING_REVIEW' && !appt.depositPaid && appt.depositAmount > 0 && (
-          <div className="bg-zinc-900/90 border border-amber-500/30 rounded-3xl p-5 sm:p-6 text-center space-y-3 shadow-xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Seña Requerida: ${Number(appt.depositAmount).toLocaleString('es-AR')}</span>
+      {/* Reschedule Modal */}
+      {showRescheduleModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-zinc-900 border border-white/10 rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <div className="flex items-center gap-2">
+                <CalendarClock className="w-5 h-5 text-[var(--primary-color,#818cf8)]" />
+                <h3 className="font-semibold text-white text-base">Reprogramar Turno</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowRescheduleModal(false)}
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
-            <h3 className="font-bold text-sm text-zinc-200">Subí tu comprobante de pago</h3>
-            <p className="text-xs text-zinc-400 max-w-xs mx-auto">
-              Realizá la transferencia y adjuntá la foto para que el salón confirme tu lugar.
-            </p>
-            <button className="w-full h-12 bg-amber-500 hover:bg-amber-400 text-zinc-950 rounded-2xl flex items-center justify-center gap-2 font-bold text-sm transition-all cursor-pointer shadow-md shadow-amber-500/20">
-              <Upload className="w-4 h-4" /> Adjuntar Comprobante
-            </button>
-          </div>
-        )}
 
-        {/* Cancel Confirmation View */}
-        {showCancelConfirm ? (
-          <div className="bg-rose-500/10 border border-rose-500/30 rounded-3xl p-5 sm:p-6 animate-in slide-in-from-bottom-4 space-y-4">
             <div>
-              <h3 className="font-bold text-base text-rose-400">¿Estás seguro de cancelar tu turno?</h3>
-              <p className="text-xs text-zinc-400 mt-1">Esta acción liberará tu horario inmediatamente para otros clientes.</p>
+              <label className="text-xs font-medium text-zinc-300 block mb-1.5">Elegí la nueva fecha</label>
+              <input
+                type="date"
+                min={getLocalISODate(new Date())}
+                value={rescheduleDate}
+                onChange={(e) => {
+                  setRescheduleDate(e.target.value);
+                  setSelectedRescheduleSlot(null);
+                }}
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 outline-none focus:border-[var(--primary-color,#6366f1)]"
+              />
             </div>
-            <input 
-              type="text" 
-              placeholder="Motivo de la cancelación (opcional)" 
-              value={cancelReason}
-              onChange={e => setCancelReason(e.target.value)}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-xs text-zinc-100 placeholder-zinc-500 outline-none focus:border-rose-500/50"
-            />
-            <div className="flex gap-2">
-              <button 
-                onClick={() => setShowCancelConfirm(false)} 
-                className="flex-1 h-12 bg-zinc-900 hover:bg-zinc-850 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+
+            <div>
+              <label className="text-xs font-medium text-zinc-300 block mb-1.5">Horarios Disponibles</label>
+              {isLoadingSlots ? (
+                <div className="py-6 flex items-center justify-center text-zinc-400 text-xs gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin text-[var(--primary-color,#6366f1)]" />
+                  <span>Buscando horarios...</span>
+                </div>
+              ) : availableSlots.length === 0 ? (
+                <div className="py-6 text-center text-zinc-400 text-xs bg-zinc-950/50 rounded-lg border border-zinc-800/60 p-4">
+                  No hay turnos disponibles para esta fecha. Probá seleccionando otro día.
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-44 overflow-y-auto pr-1">
+                  {availableSlots.map((slot) => {
+                    const time = new Date(slot).toLocaleTimeString('es-AR', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    });
+                    const isSelected = selectedRescheduleSlot === slot;
+                    return (
+                      <button
+                        key={slot}
+                        type="button"
+                        onClick={() => setSelectedRescheduleSlot(slot)}
+                        className={`py-2 px-2.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer text-center ${
+                          isSelected
+                            ? 'bg-[var(--primary-color,#6366f1)] text-zinc-950 font-bold border-transparent'
+                            : 'bg-zinc-950/80 border-zinc-800 text-zinc-200 hover:border-zinc-700 hover:bg-zinc-800/60'
+                        }`}
+                      >
+                        {time} hs
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-2 pt-2 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => setShowRescheduleModal(false)}
+                className="flex-1 h-10 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-xs font-medium text-zinc-300 transition-colors cursor-pointer"
               >
                 Volver
               </button>
-              <button 
-                onClick={handleCancel} 
-                disabled={isCancelling} 
-                className="flex-1 h-12 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold transition-colors disabled:opacity-50 flex items-center justify-center cursor-pointer"
+              <button
+                type="button"
+                disabled={!selectedRescheduleSlot || isRescheduling}
+                onClick={handleConfirmReschedule}
+                className="flex-1 h-10 bg-[var(--primary-color,#6366f1)] hover:bg-[var(--primary-color,#4f46e5)] text-zinc-950 font-bold rounded-lg text-xs transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
               >
-                {isCancelling ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirmar Cancelación'}
+                {isRescheduling ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirmar Cambio'}
               </button>
             </div>
           </div>
-        ) : (
-          <div className="flex flex-col gap-3">
-            {appt.status !== 'CANCELLED' && (
-              <button 
-                onClick={handleDownloadIcs}
-                className="w-full h-12 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-200 font-bold text-xs rounded-2xl flex items-center justify-center gap-2 transition-all cursor-pointer"
-              >
-                <CalendarPlus className="w-4 h-4 text-amber-500" />
-                <span>Agregar a mi Calendario (Google / Apple)</span>
-              </button>
-            )}
-
-            {(salon.whatsappPhone || salon.contactWhatsapp || salon.phone) && (
-              <a
-                href={`https://wa.me/${(salon.whatsappPhone || salon.contactWhatsapp || salon.phone).replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hola ${salon.storeName || salon.name || ''}! Te escribo por mi turno para el ${new Date(appt.startTime).toLocaleString('es-AR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })} hs.`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full h-12 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold text-xs rounded-2xl flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Escribir al WhatsApp del Salón</span>
-              </a>
-            )}
-
-            {appt.canReschedule && (
-              <button 
-                onClick={handleReschedule} 
-                disabled={isRescheduling} 
-                className="w-full h-12 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded-2xl text-xs font-semibold text-zinc-300 flex items-center justify-center gap-2 transition-colors cursor-pointer"
-              >
-                <CalendarClock className="w-4 h-4" /> Reprogramar Turno
-              </button>
-            )}
-
-            {appt.canCancel && (
-              <button 
-                onClick={() => setShowCancelConfirm(true)} 
-                className="w-full h-12 border border-zinc-800/80 hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/30 text-zinc-500 rounded-2xl text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
-              >
-                <CalendarX className="w-4 h-4" /> Cancelar Turno
-              </button>
-            )}
-
-            <button
-              onClick={() => navigate(`/book?slug=${effectiveSlug}`)}
-              className="w-full h-12 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs rounded-2xl flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm mt-2"
-            >
-              <span>Reservar otro turno</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

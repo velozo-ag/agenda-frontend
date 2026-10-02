@@ -21,11 +21,15 @@ export default function TimeOffModal({ isOpen, onClose, barber }) {
   const [endTime, setEndTime] = useState('23:59');
   const [reason, setReason] = useState('');
 
+  const getLocalISODate = (date) => {
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+  };
+
   useEffect(() => {
     if (isOpen) {
       const today = new Date();
-      setStartDate(today.toISOString().split('T')[0]);
-      setEndDate(today.toISOString().split('T')[0]);
+      setStartDate(getLocalISODate(today));
+      setEndDate(getLocalISODate(today));
       setStartTime('00:00');
       setEndTime('23:59');
       setReason('');
@@ -46,8 +50,8 @@ export default function TimeOffModal({ isOpen, onClose, barber }) {
       onSuccess: () => {
         // Reset form but keep modal open to see the new entry
         const today = new Date();
-        setStartDate(today.toISOString().split('T')[0]);
-        setEndDate(today.toISOString().split('T')[0]);
+        setStartDate(getLocalISODate(today));
+        setEndDate(getLocalISODate(today));
         setStartTime('00:00');
         setEndTime('23:59');
         setReason('');

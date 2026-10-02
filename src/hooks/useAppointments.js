@@ -34,6 +34,7 @@ export function useCreateAppointment() {
     mutationFn: appointmentService.createAppointment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['available-slots'] });
       toast.success('Turno creado correctamente');
     },
     onError: (err) => {
@@ -48,6 +49,7 @@ export function useUpdateAppointment() {
     mutationFn: ({ id, ...data }) => appointmentService.updateAppointment(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['available-slots'] });
       toast.success('Turno actualizado correctamente');
     },
     onError: (err) => {
@@ -62,6 +64,8 @@ export function useUpdateAppointmentStatus() {
     mutationFn: ({ id, ...data }) => appointmentService.updateStatus(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['appointment'] });
+      queryClient.invalidateQueries({ queryKey: ['available-slots'] });
       toast.success('Estado actualizado');
     },
     onError: (err) => {
@@ -76,6 +80,8 @@ export function useMarkNoShow() {
     mutationFn: (id) => appointmentService.markNoShow(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['appointment'] });
+      queryClient.invalidateQueries({ queryKey: ['available-slots'] });
       toast.success('Marcado como No-Show');
     },
     onError: (err) => {
@@ -90,6 +96,8 @@ export function useUndoNoShow() {
     mutationFn: (id) => appointmentService.undoNoShow(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['appointment'] });
+      queryClient.invalidateQueries({ queryKey: ['available-slots'] });
       toast.success('No-Show revertido');
     },
     onError: (err) => {
@@ -104,6 +112,7 @@ export function useConfirmDeposit() {
     mutationFn: (id) => appointmentService.confirmDeposit(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['appointment'] });
       toast.success('Seña aprobada');
     },
     onError: (err) => {
@@ -118,10 +127,27 @@ export function useRejectDeposit() {
     mutationFn: ({ id, reason }) => appointmentService.rejectDeposit(id, reason),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['appointment'] });
       toast.success('Seña rechazada');
     },
     onError: (err) => {
       toast.error(err.response?.data?.message || 'Error al rechazar seña');
+    }
+  });
+}
+
+export function useRescheduleAppointment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, newStartTime }) => appointmentService.reschedule(id, newStartTime),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['appointment'] });
+      queryClient.invalidateQueries({ queryKey: ['available-slots'] });
+      toast.success('Turno reprogramado exitosamente');
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || 'Error al reprogramar el turno');
     }
   });
 }

@@ -41,11 +41,13 @@ export function AppointmentsDayStrip({ selectedDate, onChange, barberId }) {
   
   const daysWithAppointments = useMemo(() => {
     const set = new Set();
-    appointments.forEach(a => {
-      const datePart = new Date(a.startTime);
-      const isoLocal = new Date(datePart.getTime() - (datePart.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-      set.add(isoLocal);
-    });
+    appointments
+      .filter(a => a.status !== 'CANCELLED' && a.status !== 'NO_SHOW')
+      .forEach(a => {
+        const datePart = new Date(a.startTime);
+        const isoLocal = new Date(datePart.getTime() - (datePart.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+        set.add(isoLocal);
+      });
     return set;
   }, [appointments]);
 

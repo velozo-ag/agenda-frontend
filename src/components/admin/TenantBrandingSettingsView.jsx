@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Palette, 
-  Store, 
-  Image as ImageIcon, 
-  MapPin, 
-  Phone, 
+import {
+  Palette,
+  Store,
+  Image as ImageIcon,
+  MapPin,
+  Phone,
   Clock,
-  Save, 
-  Check, 
-  Eye, 
+  Save,
+  Check,
+  Eye,
   Loader2,
-  Printer,
-  ChefHat,
-  RefreshCw,
   Type,
   QrCode,
   Copy,
   ExternalLink,
-  Zap,
-  Mail
+  Mail,
 } from 'lucide-react';
 import { useMyTenant, useUpdateBranding, applyTenantTheme } from '../../hooks/useTenantBranding';
 import { ImageUploader } from '../ui/ImageUploader';
@@ -80,8 +76,8 @@ export function TenantBrandingSettingsView() {
     backgroundImageUrl: '',
     heroTitle: '',
     heroSubtitle: '',
-    primaryColor: '#f59e0b',
-    backgroundColor: '#140e0c',
+    primaryColor: '#6366f1',
+    backgroundColor: '#09090b',
     fontFamily: 'Montserrat',
     address: '',
     phone: '',
@@ -108,8 +104,8 @@ export function TenantBrandingSettingsView() {
         backgroundImageUrl: tenantData.backgroundImageUrl || '',
         heroTitle: tenantData.heroTitle || '',
         heroSubtitle: tenantData.heroSubtitle || '',
-        primaryColor: tenantData.primaryColor || '#f59e0b',
-        backgroundColor: tenantData.backgroundColor || '#140e0c',
+        primaryColor: tenantData.primaryColor || '#6366f1',
+        backgroundColor: tenantData.backgroundColor || '#09090b',
         fontFamily: tenantData.fontFamily || 'Montserrat',
         address: tenantData.address || '',
         phone: tenantData.phone || '',
@@ -272,11 +268,11 @@ export function TenantBrandingSettingsView() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                    <Palette className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Color de Acentuación Global (Toda la App & Menú)</span>
+                    <Palette className="w-3.5 h-3.5 text-indigo-400" />
+                    <span>Color de Acentuación Global (Toda la App)</span>
                   </h3>
-                  <span className="text-[10px] font-mono text-amber-400/90 font-semibold bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
-                    Aplica a todo el POS
+                  <span className="text-[10px] font-mono text-indigo-400/90 font-semibold bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
+                    Toda la interfaz
                   </span>
                 </div>
 
@@ -327,8 +323,8 @@ export function TenantBrandingSettingsView() {
               {/* Color de Fondo de el portal (Solo Menú QR) */}
               <div className="space-y-3">
                 <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                  <Palette className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Color de Fondo Exclusivo del Menú Digital QR</span>
+                  <Palette className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Color de Fondo del Portal de Reservas</span>
                 </h3>
 
                 <div className="space-y-3 pt-1">

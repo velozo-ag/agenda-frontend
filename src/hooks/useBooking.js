@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useQueries, useMutation } from '@tanstack/react-query';
 import { bookingService } from '../services/bookingService';
 
 export function useSalonInfo(slug) {
@@ -79,3 +79,56 @@ export function useJoinWaitlist(slug) {
   });
 }
 
+export function useUploadDeposit(token) {
+  return useMutation({
+    mutationFn: (file) => bookingService.uploadDeposit(token, file),
+  });
+}
+
+/**
+ * Consulta en paralelo los próximos `daysAhead` días para un servicio/barbero
+ * y devuelve:
+ *   - daysWithSlots: Set<string> de ISO dates que tienen al menos 1 slot
+ *   - isCheckingDays: true mientras alguna query sigue cargando
+ */
+export function useAvailableDaysForService(slug, { serviceId, barberId, daysAhead = 14 } = {}) {
+  const enabled = !!slug && !!serviceId;
+
+  // Generar los próximos N días como ISO strings
+  const dates = [];
+  if (enabled) {
+    const now = new Date();
+    for (let i = 0; i < daysAhead; i++) {
+      const d = new Date(now);
+      d.setDate(now.getDate() + i);
+      dates.push(d.toISOString().split('T')[0]);
+    }
+  }
+
+  const results = useQueries({
+    queries: dates.map((date) => ({
+      queryKey: ['booking-available-slots', slug, { serviceId, barberId: barberId === 'any' ? null : barberId, date }],
+      queryFn: () => bookingService.getAvailableSlots(slug, {
+        serviceId,
+        barberId: barberId === 'any' ? null : barberId,
+        date,
+      }),
+      enabled,
+      staleTime: 60_000,
+      retry: 0,
+    })),
+  });
+
+  const daysWithSlots = new Set();
+  let isCheckingDays = false;
+
+  results.forEach((result, idx) => {
+    if (result.isLoading) isCheckingDays = true;
+    const slots = result.data?.data;
+    if (Array.isArray(slots) && slots.length > 0) {
+      daysWithSlots.add(dates[idx]);
+    }
+  });
+
+  return { daysWithSlots, isCheckingDays };
+}
