@@ -122,6 +122,7 @@ export const useTenantBranding = (customSlug) => {
 
   return useQuery({
     queryKey: ['tenant', 'public', slug],
+    enabled: !!slug,
     queryFn: async () => {
       const data = await tenantService.getPublicBranding(slug);
       if (data) {
