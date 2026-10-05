@@ -30,7 +30,7 @@ export function DynamicBrandingManager() {
 
   useEffect(() => {
     if (publicTenantError && (publicTenantError.status === 404 || publicTenantError.response?.status === 404)) {
-      window.location.href = 'https://roosty.com.ar';
+      window.location.href = 'https://agenda.roosty.com.ar';
     }
   }, [publicTenantError]);
 
