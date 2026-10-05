@@ -40,8 +40,8 @@ export function LandingNavbar({ onOpenWizard }) {
           <div
             className={`flex items-center justify-between h-14 pl-5 pr-2.5 rounded-full border transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
               scrolled
-                ? 'bg-white/85 backdrop-blur-xl border-zinc-200/80 shadow-[0_8px_30px_rgba(0,0,0,0.06)]'
-                : 'bg-[#faf9f8]/70 backdrop-blur-sm border-zinc-200/50'
+                ? 'bg-zinc-950/80 backdrop-blur-2xl border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.8)]'
+                : 'bg-transparent border-transparent'
             }`}
           >
             {/* Brand */}
@@ -49,9 +49,9 @@ export function LandingNavbar({ onOpenWizard }) {
               <img
                 src="/roosty2.png"
                 alt="Roosty"
-                className="h-6 sm:h-7 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80"
+                className="h-6 sm:h-7 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80 invert opacity-90"
               />
-              <span className="lp-mono text-[10px] font-bold tracking-widest uppercase px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200/80">
+              <span className="font-sans text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                 Agenda
               </span>
             </a>
@@ -62,7 +62,7 @@ export function LandingNavbar({ onOpenWizard }) {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-zinc-600 hover:text-zinc-950 transition-colors"
+                  className="text-sm font-medium text-zinc-400 hover:text-white transition-colors tracking-tight"
                 >
                   {link.name}
                 </a>
@@ -74,11 +74,11 @@ export function LandingNavbar({ onOpenWizard }) {
               <button
                 type="button"
                 onClick={onOpenWizard}
-                className="group lp-btn-indigo inline-flex items-center gap-2 pl-5 pr-2 h-10 rounded-full text-sm font-semibold cursor-pointer"
+                className="group bg-white hover:bg-zinc-100 text-zinc-950 inline-flex items-center gap-2 pl-5 pr-1.5 h-10 rounded-full text-sm font-semibold cursor-pointer transition-colors"
               >
-                <span>Crear cuenta gratis</span>
-                <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">
-                  <ArrowRight className="w-3.5 h-3.5" />
+                <span className="tracking-tight">Iniciar gratis</span>
+                <span className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105">
+                  <ArrowRight className="w-3.5 h-3.5 text-white" />
                 </span>
               </button>
             </div>
@@ -88,14 +88,14 @@ export function LandingNavbar({ onOpenWizard }) {
               <button
                 type="button"
                 onClick={onOpenWizard}
-                className="lp-btn-indigo px-3.5 h-9 rounded-full text-xs font-semibold cursor-pointer"
+                className="bg-white text-zinc-950 px-3.5 h-9 rounded-full text-xs font-semibold cursor-pointer"
               >
                 Empezar
               </button>
               <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="w-10 h-10 rounded-full flex items-center justify-center text-zinc-800 hover:bg-zinc-100 active:scale-95 transition-all cursor-pointer"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer"
                 aria-label="Abrir menú"
               >
                 <Menu className="w-5 h-5" />
@@ -111,17 +111,17 @@ export function LandingNavbar({ onOpenWizard }) {
           open ? 'visible opacity-100' : 'invisible opacity-0 pointer-events-none'
         }`}
       >
-        <div className="absolute inset-0 bg-[#faf9f8]/95 backdrop-blur-2xl" onClick={() => setOpen(false)} />
+        <div className="absolute inset-0 bg-zinc-950/95 backdrop-blur-3xl" onClick={() => setOpen(false)} />
         <div className="relative h-full flex flex-col px-6 pt-5 pb-10">
           <div className="flex items-center justify-between h-14">
-            <img src="/roosty2.png" alt="Roosty" className="h-7 w-auto" />
+            <img src="/roosty2.png" alt="Roosty" className="h-7 w-auto invert opacity-90" />
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="w-10 h-10 rounded-full bg-white border border-zinc-200 flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
+              className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center active:scale-95 transition-transform cursor-pointer text-white"
               aria-label="Cerrar menú"
             >
-              <X className="w-5 h-5 text-zinc-900" />
+              <X className="w-5 h-5" />
             </button>
           </div>
 
@@ -132,7 +132,7 @@ export function LandingNavbar({ onOpenWizard }) {
                 href={link.href}
                 onClick={() => setOpen(false)}
                 style={{ transitionDelay: open ? `${100 + i * 60}ms` : '0ms' }}
-                className={`lp-serif text-3xl font-bold text-zinc-950 py-3 border-b border-zinc-200/80 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                className={`font-sans tracking-tighter text-3xl font-bold text-white py-4 border-b border-white/10 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
                   open ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                 }`}
               >
@@ -148,11 +148,11 @@ export function LandingNavbar({ onOpenWizard }) {
               onOpenWizard();
             }}
             style={{ transitionDelay: open ? '320ms' : '0ms' }}
-            className={`mt-auto lp-btn-indigo h-14 rounded-2xl text-base font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+            className={`mt-auto bg-white text-zinc-950 h-14 rounded-2xl text-base font-semibold flex items-center justify-center gap-2 cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
               open ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
             }`}
           >
-            Crear cuenta gratis <ArrowRight className="w-4 h-4" />
+            Iniciar gratis <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

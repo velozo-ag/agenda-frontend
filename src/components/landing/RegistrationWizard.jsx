@@ -102,28 +102,28 @@ const slugify = (value) =>
     .slice(0, 30);
 
 const INPUT_BASE =
-  'w-full h-11 rounded-xl bg-white border text-sm text-zinc-900 placeholder:text-zinc-400 transition-all outline-none focus:ring-4';
-const INPUT_OK = 'border-zinc-300 focus:border-indigo-500 focus:ring-indigo-500/10';
-const INPUT_ERR = 'border-red-400 focus:border-red-500 focus:ring-red-500/10';
+  'w-full h-12 rounded-xl bg-white/[0.02] border text-sm text-white placeholder:text-zinc-600 transition-all outline-none focus:ring-4 font-normal tracking-tight';
+const INPUT_OK = 'border-white/10 focus:border-indigo-500 focus:ring-indigo-500/20';
+const INPUT_ERR = 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20';
 
 function Field({ id, label, icon: Icon, error, children, hint }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1">
+      <label htmlFor={id} className="block text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-500 mb-2">
         {label}
       </label>
       <div className="relative">
         {Icon && (
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500">
             <Icon className="w-4 h-4" />
           </div>
         )}
         {children}
       </div>
       {error ? (
-        <p className="text-red-500 text-xs mt-1 font-medium">{error}</p>
+        <p className="text-red-400 text-xs mt-1.5 font-medium">{error}</p>
       ) : (
-        hint && <p className="text-zinc-400 text-[11px] mt-1">{hint}</p>
+        hint && <p className="text-zinc-500 text-[11px] mt-1.5">{hint}</p>
       )}
     </div>
   );
@@ -154,19 +154,26 @@ export function RegistrationWizard({ onClose }) {
     slug: '',
   });
 
-  // Entrada escalonada + bloqueo de scroll + ESC
+  // Entrada escalonada + bloqueo de scroll + ESC.
+  // Se bloquea <html> ademas de <body>: index.css/index.html fijan overflow-x: clip en <html>,
+  // lo que impide que el overflow del <body> se propague al viewport (el scroll seguia activo).
   useEffect(() => {
     const t = setTimeout(() => setReady(true), 40);
-    const prevOverflow = document.body.style.overflow;
+    const html = document.documentElement;
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = html.style.overflow;
     document.body.style.overflow = 'hidden';
+    html.style.overflow = 'hidden';
     const onKey = (e) => {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', onKey);
-    setTimeout(() => nameInputRef.current?.focus(), 450);
+    const focusTimer = setTimeout(() => nameInputRef.current?.focus(), 450);
     return () => {
       clearTimeout(t);
-      document.body.style.overflow = prevOverflow;
+      clearTimeout(focusTimer);
+      document.body.style.overflow = prevBodyOverflow;
+      html.style.overflow = prevHtmlOverflow;
       window.removeEventListener('keydown', onKey);
     };
   }, [onClose]);
@@ -293,11 +300,11 @@ export function RegistrationWizard({ onClose }) {
   });
 
   return (
-    <div className="fixed inset-0 z-[200] bg-[#faf9f8] overflow-hidden lp-root" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-[200] bg-zinc-950/80 backdrop-blur-2xl overflow-hidden lp-root font-sans" role="dialog" aria-modal="true">
       <div className="h-full w-full flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
         {/* ───────── LADO IZQUIERDO: PREVIEW INTERACTIVO (solo desktop) ───────── */}
         <div
-          className={`hidden lg:flex w-1/2 h-full bg-[#0e0e11] text-zinc-100 p-8 xl:p-10 flex-col justify-between relative overflow-hidden border-r border-zinc-800/80 shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`hidden lg:flex w-1/2 h-full bg-zinc-950 text-white p-8 xl:p-12 flex-col justify-between relative overflow-hidden border-r border-white/5 shrink-0 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             ready ? 'translate-x-0 opacity-100' : '-translate-x-12 opacity-0'
           }`}
         >
@@ -312,14 +319,14 @@ export function RegistrationWizard({ onClose }) {
                 className="h-7 w-auto object-contain invert opacity-90 transition-opacity group-hover:opacity-70"
               />
             </button>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 text-[10px] lp-mono text-zinc-400">
-              <Sparkles className="w-3 h-3 text-indigo-400" />
-              <span>Vista previa de tu portal</span>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.02] border border-white/5 text-[10px] uppercase tracking-[0.15em] font-bold text-zinc-400">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Preview en vivo</span>
             </span>
           </div>
 
-          {/* Telefono Centralizado */}
-          <div className="relative my-auto flex flex-col items-center justify-center -mt-4 z-10 pointer-events-none">
+          {/* Telefono centralizado */}
+          <div className="relative my-auto flex flex-col items-center justify-center z-10 pointer-events-none">
             <BookingPortalPhoneDemo
               forcedStep={step === 1 ? 0 : step === 2 ? 1 : 2}
               businessName={displayName}
@@ -327,21 +334,6 @@ export function RegistrationWizard({ onClose }) {
               isStatic={true}
               preset={preset}
             />
-
-            <div className="w-[285px] sm:w-[310px] mt-4 p-3 rounded-2xl bg-zinc-900/95 border border-zinc-800 flex items-center justify-between gap-3 shadow-lg">
-              <div className="flex items-center gap-3 truncate">
-                <div className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center shrink-0">
-                  <CalendarCheck className="w-4 h-4" />
-                </div>
-                <div className="truncate text-left">
-                  <div className="text-[11px] font-semibold text-white truncate leading-tight mb-0.5">Reservas 24/7 automáticas</div>
-                  <div className="text-[9px] text-zinc-400 truncate">Caen directo en tu agenda online</div>
-                </div>
-              </div>
-              <span className="px-2 py-1 rounded-lg text-[9px] font-black tracking-widest uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
-                100% Tuyo
-              </span>
-            </div>
           </div>
 
           <div className="relative text-xs text-zinc-500 flex items-center justify-between pt-2 border-t border-zinc-800/60 z-10">
@@ -351,57 +343,58 @@ export function RegistrationWizard({ onClose }) {
         </div>
 
         {/* ───────── LADO DERECHO: FORMULARIO ───────── */}
+        {/* En desktop compactamos paddings/espaciados para que entre sin scroll; el overflow queda como red de seguridad (sin barra visible) para pantallas muy bajas. */}
         <div
-          className={`w-full lg:w-1/2 min-h-full lg:h-full bg-[#faf9f8] p-6 sm:p-8 xl:p-12 flex flex-col justify-between shrink-0 lg:overflow-y-auto transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`w-full lg:w-1/2 min-h-full lg:h-full bg-zinc-900/40 p-6 sm:p-8 lg:px-10 lg:py-6 xl:px-16 xl:py-8 flex flex-col justify-between shrink-0 lg:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             ready ? 'translate-x-0 opacity-100' : 'translate-x-12 opacity-0'
           }`}
         >
           <div>
             {/* Top bar movil + cerrar */}
-            <div className="flex items-center justify-between mb-5">
-              <img src="/roosty2.png" alt="Roosty" className="h-6 w-auto lg:hidden" />
+            <div className="flex items-center justify-between mb-6 lg:mb-4">
+              <img src="/roosty2.png" alt="Roosty" className="h-6 w-auto lg:hidden invert opacity-90" />
               <span className="hidden lg:block" />
               <button
                 type="button"
                 onClick={onClose}
-                className="w-9 h-9 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:text-zinc-950 hover:border-zinc-300 flex items-center justify-center active:scale-95 transition-all cursor-pointer"
+                className="w-10 h-10 rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10 flex items-center justify-center active:scale-95 transition-all cursor-pointer"
                 aria-label="Cerrar"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex items-center justify-between text-xs font-semibold text-zinc-500 mb-2">
-              <span className="lp-mono uppercase tracking-wider text-zinc-700">
-                {step === 1 && 'Paso 01 / 02 — Tus datos'}
-                {step === 2 && 'Paso 02 / 02 — Tu local'}
-                {step === 3 && '¡Tu cuenta está lista!'}
+            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 mb-3">
+              <span>
+                {step === 1 && 'Paso 01 / 02 — Setup Inicial'}
+                {step === 2 && 'Paso 02 / 02 — Configuración'}
+                {step === 3 && 'Deployment Completo'}
               </span>
-              <span className="lp-mono lp-tabular text-zinc-900 font-bold">{progress}%</span>
+              <span className="text-white">{progress}%</span>
             </div>
-            <div className="h-1.5 w-full bg-zinc-200 rounded-full overflow-hidden mb-4">
+            <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden mb-4">
               <div
-                className="h-full bg-indigo-600 rounded-full transition-all duration-500 ease-out"
+                className="h-full bg-indigo-500 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
           </div>
 
           {/* Cuerpo */}
-          <div className="my-auto max-w-md w-full mx-auto py-4">
+          <div className="my-auto max-w-md w-full mx-auto py-2">
             {/* PASO 1 */}
             {step === 1 && (
-              <form onSubmit={handleStep1} className="space-y-4" noValidate>
+              <form onSubmit={handleStep1} className="space-y-5" noValidate>
                 <div {...stagger(80)}>
-                  <h1 className="lp-serif text-2xl sm:text-3xl font-bold text-zinc-950 tracking-tight leading-tight">
-                    Comencemos por vos.
+                  <h1 className="font-sans text-3xl sm:text-4xl font-bold text-white tracking-tighter leading-tight">
+                    Cuenta admin.
                   </h1>
-                  <p className="text-zinc-500 text-xs sm:text-sm mt-1">
-                    Creá tu usuario administrador para gestionar tu agenda.
+                  <p className="text-zinc-400 text-sm mt-2 tracking-tight">
+                    Credenciales de acceso para tu panel de control.
                   </p>
                 </div>
 
-                <div className="space-y-3 pt-1">
+                <div className="space-y-4 pt-1">
                   <div {...stagger(160)}>
                     <Field id="ownerName" label="Tu nombre completo" icon={User} error={fieldErrors.ownerName}>
                       <input
@@ -467,7 +460,7 @@ export function RegistrationWizard({ onClose }) {
                       <button
                         type="button"
                         onClick={() => setShowPassword((s) => !s)}
-                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-400 hover:text-zinc-700 transition-colors cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-400 hover:text-zinc-300 transition-colors cursor-pointer"
                         aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                       >
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -476,14 +469,14 @@ export function RegistrationWizard({ onClose }) {
                   </div>
                 </div>
 
-                <div {...stagger(420)}>
+                <div {...stagger(420)} className="pt-2">
                   <button
                     type="submit"
-                    className="group lp-btn-indigo w-full h-12 inline-flex items-center justify-center gap-2.5 px-5 rounded-xl text-sm font-semibold cursor-pointer"
+                    className="group bg-white hover:bg-zinc-100 text-zinc-950 w-full h-12 inline-flex items-center justify-between px-5 rounded-xl text-sm font-semibold cursor-pointer transition-colors"
                   >
-                    <span>Continuar</span>
-                    <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">
-                      <ArrowRight className="w-3 h-3" />
+                    <span className="tracking-tight">Siguiente paso</span>
+                    <span className="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                      <ArrowRight className="w-4 h-4 text-white" />
                     </span>
                   </button>
                 </div>
@@ -492,13 +485,13 @@ export function RegistrationWizard({ onClose }) {
 
             {/* PASO 2 */}
             {step === 2 && (
-              <form onSubmit={handleStep2} className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-500" noValidate>
+              <form onSubmit={handleStep2} className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-500" noValidate>
                 <div>
-                  <h1 className="lp-serif text-2xl sm:text-3xl font-bold text-zinc-950 tracking-tight leading-tight">
-                    Ahora, tu local.
+                  <h1 className="font-sans text-3xl sm:text-4xl font-bold text-white tracking-tighter leading-tight">
+                    Datos del negocio.
                   </h1>
-                  <p className="text-zinc-500 text-xs sm:text-sm mt-1">
-                    Mirá cómo va quedando tu portal en la vista previa.
+                  <p className="text-zinc-400 text-sm mt-2 tracking-tight">
+                    Configuración visible para tus clientes.
                   </p>
                 </div>
 
@@ -515,10 +508,10 @@ export function RegistrationWizard({ onClose }) {
                 </Field>
 
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-700 mb-1.5">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-500 mb-2">
                     Tu rubro
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-3">
                     {INDUSTRIES.map((ind) => {
                       const Icon = ind.icon;
                       const selected = form.industry === ind.id;
@@ -527,24 +520,24 @@ export function RegistrationWizard({ onClose }) {
                           key={ind.id}
                           type="button"
                           onClick={() => setField('industry', ind.id)}
-                          className={`p-2.5 rounded-xl border text-left flex items-center gap-2.5 transition-all duration-200 cursor-pointer active:scale-[0.98] ${
+                          className={`p-3 rounded-xl border text-left flex items-center gap-3 transition-all duration-200 cursor-pointer active:scale-[0.98] ${
                             selected
-                              ? 'bg-indigo-50 border-indigo-400 ring-2 ring-indigo-500/15'
-                              : 'bg-white border-zinc-200 hover:border-zinc-300'
+                              ? 'bg-indigo-500/10 border-indigo-500/50 ring-2 ring-indigo-500/20'
+                              : 'bg-white/[0.02] border-white/10 hover:border-white/20'
                           }`}
                         >
                           <div
-                            className={`p-1.5 rounded-lg shrink-0 ${
-                              selected ? 'bg-indigo-600 text-white' : 'bg-zinc-100 text-zinc-600'
+                            className={`p-2 rounded-lg shrink-0 ${
+                              selected ? 'bg-indigo-500 text-white' : 'bg-white/5 text-zinc-400'
                             }`}
                           >
-                            <Icon className="w-3.5 h-3.5" />
+                            <Icon className="w-4 h-4" />
                           </div>
                           <div className="truncate">
-                            <div className={`font-semibold text-xs truncate ${selected ? 'text-zinc-950' : 'text-zinc-800'}`}>
+                            <div className={`font-semibold text-xs tracking-tight truncate ${selected ? 'text-white' : 'text-zinc-300'}`}>
                               {ind.label}
                             </div>
-                            <div className="text-[10px] text-zinc-500 truncate leading-none mt-0.5">{ind.desc}</div>
+                            <div className="text-[10px] text-zinc-500 truncate leading-none mt-1">{ind.desc}</div>
                           </div>
                         </button>
                       );
@@ -554,9 +547,9 @@ export function RegistrationWizard({ onClose }) {
 
                 <Field
                   id="slug"
-                  label="Tu link personalizado"
+                  label="Link de reservas"
                   error={fieldErrors.slug}
-                  hint="Es la dirección que van a usar tus clientes para reservar."
+                  hint="URL pública de tu portal."
                 >
                   <input
                     id="slug"
@@ -565,23 +558,23 @@ export function RegistrationWizard({ onClose }) {
                     onChange={handleSlug}
                     placeholder={preset.slug}
                     autoComplete="off"
-                    className={`${INPUT_BASE} pl-3.5 pr-[148px] lp-mono text-indigo-700 font-semibold ${
+                    className={`${INPUT_BASE} pl-4 pr-[148px] font-mono text-indigo-400 font-bold ${
                       fieldErrors.slug ? INPUT_ERR : INPUT_OK
                     }`}
                   />
-                  <span className="absolute inset-y-0 right-3.5 flex items-center text-[11px] lp-mono text-zinc-400 pointer-events-none">
+                  <span className="absolute inset-y-0 right-4 flex items-center text-[11px] font-mono text-zinc-500 pointer-events-none">
                     .{LANDING_CONFIG.rootDomain}
                   </span>
                 </Field>
 
                 {globalError && (
-                  <div className="p-3.5 rounded-xl bg-red-50 border border-red-200/90 text-xs text-red-800 space-y-2">
+                  <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-xs text-red-400 space-y-2">
                     <p className="font-medium leading-relaxed">{globalError}</p>
                     <a
                       href={WHATSAPP_SALES_LINK}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 font-semibold text-indigo-600 hover:underline"
+                      className="inline-flex items-center gap-1.5 font-semibold text-red-300 hover:underline"
                     >
                       <MessageCircle className="w-3.5 h-3.5" />
                       Escribinos por WhatsApp
@@ -589,33 +582,32 @@ export function RegistrationWizard({ onClose }) {
                   </div>
                 )}
 
-                <div className="flex gap-2.5 pt-1">
+                <div className="flex gap-3 pt-2">
                   <button
                     type="button"
                     onClick={() => {
                       setStep(1);
                       setGlobalError('');
                     }}
-                    className="px-4 h-12 rounded-xl bg-white border border-zinc-300 hover:bg-zinc-50 active:scale-[0.98] text-zinc-700 text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer"
+                    className="px-4 h-12 rounded-xl bg-white/[0.02] border border-white/10 hover:bg-white/[0.05] active:scale-[0.98] text-zinc-300 text-sm font-semibold flex items-center gap-2 transition-all cursor-pointer tracking-tight"
                   >
                     <ChevronLeft className="w-4 h-4" />
-                    <span>Atrás</span>
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="group lp-btn-indigo flex-1 h-12 inline-flex items-center justify-center gap-2 px-5 rounded-xl text-sm font-semibold disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                    className="group bg-white hover:bg-zinc-100 text-zinc-950 flex-1 h-12 inline-flex items-center justify-between px-5 rounded-xl text-sm font-semibold disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer transition-colors"
                   >
                     {loading ? (
-                      <>
+                      <span className="flex items-center gap-2 mx-auto">
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Creando tu barbería...</span>
-                      </>
+                        <span className="tracking-tight">Desplegando...</span>
+                      </span>
                     ) : (
                       <>
-                        <span>Crear mi cuenta gratis</span>
-                        <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-0.5">
-                          <ArrowRight className="w-3 h-3" />
+                        <span className="tracking-tight">Finalizar setup</span>
+                        <span className="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                          <ArrowRight className="w-4 h-4 text-white" />
                         </span>
                       </>
                     )}
@@ -627,75 +619,61 @@ export function RegistrationWizard({ onClose }) {
             {/* PASO 3: EXITO */}
             {step === 3 && success && (
               <div className="flex flex-col items-center text-center animate-in zoom-in-95 duration-500">
-                <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mb-4 shadow-sm">
-                  <CheckCircle2 className="w-7 h-7" />
+                <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-6">
+                  <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h1 className="lp-serif text-2xl sm:text-3xl font-bold text-zinc-950 tracking-tight mb-1.5">
-                  ¡Tu barbería está lista!
+                <h1 className="font-sans text-3xl sm:text-4xl font-bold text-white tracking-tighter mb-2">
+                  Sistema online.
                 </h1>
-                <p className="text-zinc-600 text-sm max-w-sm mb-5">
-                  Creamos tu cuenta en el <strong className="text-zinc-900">Plan Cero</strong>. Entrá, cargá tus
-                  servicios y horarios y compartí tu link.
+                <p className="text-zinc-400 text-sm max-w-sm mb-8 tracking-tight">
+                  Tu portal está provisionado y activo.
                 </p>
 
-                <div className="w-full lp-bezel-light rounded-2xl p-1.5 mb-4 text-left">
-                  <div className="rounded-xl bg-white border border-zinc-200/80 divide-y divide-zinc-100">
-                    <div className="p-3.5 flex items-start gap-4">
+                <div className="w-full p-2 rounded-[1.5rem] bg-white/[0.02] border border-white/5 mb-6 text-left">
+                  <div className="rounded-xl bg-zinc-950 border border-white/5 divide-y divide-white/5">
+                    <div className="p-5 flex items-start gap-4">
                       <div className="flex-1">
-                        <span className="lp-mono text-[10px] font-bold uppercase tracking-widest text-zinc-400 block mb-1">
-                          Tu link de reservas
+                        <span className="font-sans text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-500 block mb-2">
+                          Endpoint público
                         </span>
-                        <span className="lp-mono text-sm font-semibold text-indigo-700 break-all select-all block mb-3">
+                        <span className="font-mono text-sm font-bold text-indigo-400 break-all select-all block mb-4">
                           {success.slug}.{LANDING_CONFIG.rootDomain}
                         </span>
-                        <span className="lp-mono text-[10px] font-bold uppercase tracking-widest text-zinc-400 block mb-1">
-                          Usuario de acceso
+                        <span className="font-sans text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-500 block mb-2">
+                          Admin login
                         </span>
-                        <span className="lp-mono text-sm font-semibold text-zinc-900 break-all select-all">
+                        <span className="font-mono text-sm font-medium text-white break-all select-all">
                           {form.email.trim().toLowerCase()}
                         </span>
                       </div>
-                      <div className="shrink-0 flex flex-col items-center gap-1.5">
+                      <div className="shrink-0">
                         <img
                           src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://${success.slug}.${LANDING_CONFIG.rootDomain}/book`}
                           alt="QR Code"
-                          className="w-[72px] h-[72px] rounded-lg border border-zinc-200 object-cover"
+                          className="w-[80px] h-[80px] rounded-lg border border-white/10 object-cover invert-[0.9]"
                         />
                       </div>
-                    </div>
-                    <div className="p-2.5 flex items-center justify-between gap-3 bg-zinc-50/50 rounded-b-xl">
-                      <span className="lp-mono text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
-                        Plan Cero
-                      </span>
-                      <a
-                        href={`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://${success.slug}.${LANDING_CONFIG.rootDomain}/book`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-[10px] font-semibold text-indigo-600 hover:text-indigo-700 transition-colors lp-mono uppercase tracking-widest flex items-center gap-1"
-                      >
-                        Descargar QR
-                      </a>
                     </div>
                   </div>
                 </div>
 
                 <a
                   href={loginUrl}
-                  className="group w-full h-12 inline-flex items-center justify-between px-5 rounded-xl bg-zinc-950 hover:bg-zinc-900 text-white text-sm font-semibold shadow-md active:scale-[0.98] transition-all cursor-pointer"
+                  className="group w-full h-12 inline-flex items-center justify-between px-5 rounded-xl bg-white hover:bg-zinc-100 text-zinc-950 text-sm font-semibold active:scale-[0.98] transition-all cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <ExternalLink className="w-4 h-4 text-zinc-400 group-hover:text-white transition-colors" />
-                    <span>Ir a mi panel ahora</span>
+                    <ExternalLink className="w-4 h-4 text-zinc-500 group-hover:text-zinc-950 transition-colors" />
+                    <span className="tracking-tight">Abrir dashboard</span>
                   </span>
                   {autoRedirect ? (
-                    <span className="flex items-center gap-1.5 text-zinc-400 font-normal text-[11px]">
-                      <span>Auto-apertura en</span>
-                      <span className="lp-mono lp-tabular text-xs font-bold text-indigo-300 bg-white/10 px-2 py-0.5 rounded">
+                    <span className="flex items-center gap-2 text-zinc-500 font-normal text-xs">
+                      <span>Iniciando en</span>
+                      <span className="font-mono text-xs font-bold text-indigo-600 bg-indigo-500/10 px-2 py-0.5 rounded">
                         {countdown}s
                       </span>
                     </span>
                   ) : (
-                    <ArrowRight className="w-4 h-4 text-zinc-400" />
+                    <ArrowRight className="w-4 h-4 text-zinc-950" />
                   )}
                 </a>
 
@@ -703,9 +681,9 @@ export function RegistrationWizard({ onClose }) {
                   <button
                     type="button"
                     onClick={() => setAutoRedirect(false)}
-                    className="mt-3 text-xs font-medium text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer"
+                    className="mt-4 text-[11px] font-medium text-zinc-500 hover:text-white transition-colors cursor-pointer uppercase tracking-widest"
                   >
-                    Cancelar redirección automática
+                    Abortar auto-login
                   </button>
                 )}
               </div>
@@ -713,12 +691,12 @@ export function RegistrationWizard({ onClose }) {
           </div>
 
           {/* Footer */}
-          <div className="pt-3 border-t border-zinc-200/80 flex items-center justify-between text-xs text-zinc-500">
+          <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs text-zinc-500 mt-4">
             <div className="flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-indigo-600" />
-              <span className="text-[11px]">Tus datos viajan cifrados</span>
+              <Lock className="w-3.5 h-3.5 text-indigo-500" />
+              <span className="text-[10px] uppercase tracking-widest">Conexión Segura</span>
             </div>
-            <img src="/roosty2.png" alt="Roosty" className="h-4 w-auto opacity-70" />
+            <img src="/roosty2.png" alt="Roosty" className="h-4 w-auto opacity-50 invert" />
           </div>
         </div>
       </div>

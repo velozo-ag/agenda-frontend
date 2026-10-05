@@ -40,6 +40,19 @@ export function LandingPage() {
     };
   }, []);
 
+  useEffect(() => {
+    // <html> tiene overflow-x: clip (index.html / index.css): con eso el overflow del <body>
+    // NO se propaga al viewport, asi que hay que bloquear ambos elementos.
+    const html = document.documentElement;
+    const locked = wizardOpen || curtain !== 'idle';
+    html.style.overflow = locked ? 'hidden' : '';
+    document.body.style.overflow = locked ? 'hidden' : '';
+    return () => {
+      html.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, [wizardOpen, curtain]);
+
   const openWizard = useCallback(() => {
     if (wizardOpen || curtain !== 'idle') return;
     clearTimers();
@@ -61,7 +74,7 @@ export function LandingPage() {
   }, [wizardOpen, curtain]);
 
   return (
-    <div className="lp-root min-h-screen bg-white text-zinc-900 selection:bg-indigo-500/20 selection:text-indigo-700">
+    <div className="lp-root min-h-screen bg-zinc-950 text-zinc-100 selection:bg-indigo-500/30 selection:text-indigo-300 font-sans">
       <LandingNavbar onOpenWizard={openWizard} />
 
       <main>
@@ -82,7 +95,7 @@ export function LandingPage() {
       {/* Lamina de transicion */}
       {curtain !== 'idle' && (
         <div
-          className={`fixed inset-0 z-[300] bg-[#faf9f8] text-zinc-900 flex flex-col items-center justify-center p-6 border-t border-zinc-300/80 shadow-2xl pointer-events-auto ${
+          className={`fixed inset-0 z-[300] bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center p-6 border-t border-white/10 shadow-2xl pointer-events-auto backdrop-blur-3xl ${
             curtain === 'covering' ? 'lp-curtain-up' : ''
           } ${curtain === 'lifting' ? 'lp-curtain-lift' : ''}`}
         >
@@ -91,12 +104,12 @@ export function LandingPage() {
               curtain === 'loading' || curtain === 'loading_close' || curtain === 'lifting' ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
           >
-            <img src="/roosty2.png" alt="Roosty" className="h-9 w-auto mb-5" />
-            <div className="w-48 h-1.5 bg-zinc-200 rounded-full overflow-hidden mb-3.5">
-              <div className="h-full bg-indigo-600 rounded-full w-full animate-pulse" />
+            <img src="/roosty2.png" alt="Roosty" className="h-9 w-auto mb-5 invert opacity-90" />
+            <div className="w-48 h-1.5 bg-white/10 rounded-full overflow-hidden mb-3.5">
+              <div className="h-full bg-indigo-500 rounded-full w-full animate-pulse" />
             </div>
-            <p className="lp-mono text-[11px] tracking-widest text-zinc-500 uppercase font-semibold">
-              {curtain === 'loading_close' ? 'Volviendo...' : 'Preparando tu agenda...'}
+            <p className="font-sans text-[11px] tracking-[0.2em] text-zinc-400 uppercase font-bold">
+              {curtain === 'loading_close' ? 'Volviendo...' : 'Preparando entorno...'}
             </p>
           </div>
         </div>
