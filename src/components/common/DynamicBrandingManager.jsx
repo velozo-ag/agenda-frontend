@@ -29,14 +29,18 @@ export function DynamicBrandingManager() {
   const activeTenant = (isAuthenticated && !isSuperAdmin && authTenant) ? authTenant : publicTenant;
 
   useEffect(() => {
-    // Si no hay slug y estamos en prod, redirigir instantáneamente sin esperar al backend
+    // Si no hay slug y estamos en prod (y NO estamos ya en la landing), redirigir instantáneamente
     if (!urlSlug && typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-      window.location.href = 'https://agenda.roosty.com.ar';
+      if (window.location.hostname !== 'agenda.roosty.com.ar') {
+        window.location.href = 'https://agenda.roosty.com.ar';
+      }
       return;
     }
     
     if (publicTenantError && (publicTenantError.status === 404 || publicTenantError.response?.status === 404)) {
-      window.location.href = 'https://agenda.roosty.com.ar';
+      if (typeof window !== 'undefined' && window.location.hostname !== 'agenda.roosty.com.ar') {
+        window.location.href = 'https://agenda.roosty.com.ar';
+      }
     }
   }, [publicTenantError, urlSlug]);
 

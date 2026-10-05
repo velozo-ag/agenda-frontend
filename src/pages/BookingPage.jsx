@@ -282,7 +282,9 @@ export function BookingPage() {
         if (baseHost.includes('.localhost')) baseHost = 'localhost';
         window.location.href = `${window.location.protocol}//${baseHost}${port}`;
       } else {
-        window.location.href = 'https://agenda.roosty.com.ar';
+        if (window.location.hostname !== 'agenda.roosty.com.ar') {
+          window.location.href = 'https://agenda.roosty.com.ar';
+        }
       }
       return null;
     }
