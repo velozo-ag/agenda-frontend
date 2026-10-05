@@ -8,7 +8,9 @@ import {
   Calendar,
   Bell,
   CreditCard,
+  Scissors,
 } from 'lucide-react';
+import BarbersAdminPage from './BarbersAdminPage';
 import { UsersAdminPage } from './UsersAdminPage';
 import SchedulesAdminPage from './SchedulesAdminPage';
 import { TenantBrandingSettingsView } from '../components/admin/TenantBrandingSettingsView';
@@ -41,8 +43,14 @@ const SETTINGS_TABS = [
     icon: CreditCard,
   },
   {
+    id: 'barbers',
+    name: 'Barberos',
+    description: 'Comisiones y perfiles',
+    icon: Scissors,
+  },
+  {
     id: 'users',
-    name: 'Barberos & Staff',
+    name: 'Staff (Admins)',
     description: 'Gestión de equipo y roles',
     icon: Users,
   },
@@ -73,7 +81,7 @@ export function AdminSettingsPage() {
   return (
     <div className="p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-4rem)] flex flex-col select-none animate-in fade-in slide-in-from-bottom-4 duration-500">
 
-      {/* ── Header ── */}
+      {/* ─── Header ─── */}
       <div className="mb-6 pb-4 border-b border-zinc-800/60 flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center shrink-0">
           <Settings className="w-4 h-4 text-indigo-400" />
@@ -91,20 +99,15 @@ export function AdminSettingsPage() {
         </div>
       </div>
 
-      {/* ── Layout: Sidebar + Content ── */}
+      {/* ─── Layout: Sidebar + Content ─── */}
       <div className="flex-1 flex flex-col md:flex-row gap-5 min-h-0">
 
-        {/* ── Sidebar navigation ── */}
+        {/* ─── Sidebar navigation ─── */}
         <nav className="md:w-52 lg:w-56 shrink-0">
           <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest font-mono px-1 mb-2 hidden md:block">
             Módulos
           </p>
 
-          {/*
-            Mobile  → fila de pills scrolleables horizontalmente
-            Desktop → columna vertical
-            Se oculta scrollbar nativo con utility classes
-          */}
           <div
             className="
               flex md:flex-col gap-1
@@ -134,14 +137,12 @@ export function AdminSettingsPage() {
                       : 'bg-transparent border-transparent hover:bg-zinc-900/60 hover:border-zinc-800/50'}
                   `}
                 >
-                  {/* Icon */}
                   <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                     active ? 'bg-indigo-500/20 text-indigo-400' : 'bg-zinc-900 text-zinc-600'
                   }`}>
                     <Icon className="w-3.5 h-3.5" />
                   </div>
 
-                  {/* Desktop label */}
                   <div className="hidden md:block min-w-0 flex-1">
                     <div className={`text-xs font-semibold truncate leading-tight ${active ? 'text-indigo-300' : 'text-zinc-400'}`}>
                       {tab.name}
@@ -151,7 +152,6 @@ export function AdminSettingsPage() {
                     </div>
                   </div>
 
-                  {/* Mobile: nombre corto en pill */}
                   <span className={`text-xs font-medium md:hidden whitespace-nowrap ${active ? 'text-indigo-300' : 'text-zinc-400'}`}>
                     {tab.name}
                   </span>
@@ -165,7 +165,7 @@ export function AdminSettingsPage() {
           </div>
         </nav>
 
-        {/* ── Content area ── */}
+        {/* ─── Content area ─── */}
         <div className="flex-1 overflow-hidden flex flex-col min-w-0">
           {activeTab === 'branding' && <TenantBrandingSettingsView />}
 
@@ -173,6 +173,7 @@ export function AdminSettingsPage() {
             <TenantBookingSettingsView section={activeTab} />
           )}
 
+          {activeTab === 'barbers' && <BarbersAdminPage />}
           {activeTab === 'users' && <UsersAdminPage />}
           {activeTab === 'schedules' && <SchedulesAdminPage />}
         </div>

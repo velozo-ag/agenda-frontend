@@ -56,6 +56,14 @@ export function AgendaPage() {
     ? allAppointments
     : allAppointments.filter(a => a.status !== 'CANCELLED' && a.status !== 'NO_SHOW');
 
+  
+  // If multi-barber and 'Todos' is selected, force 'day' view instead of 'week'
+  React.useEffect(() => {
+    if (view === 'week' && barbers.length > 1 && !selectedBarberId) {
+      setView('day');
+    }
+  }, [view, barbers.length, selectedBarberId]);
+  
   const handlePrev = () => {
     const newDate = new Date(selectedDate);
     newDate.setDate(newDate.getDate() - (view === 'day' ? 1 : 7));
@@ -85,7 +93,7 @@ export function AgendaPage() {
       : `${startOfWeek.toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })} – ${endOfWeek.toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })}`;
 
   return (
-    <div className="flex flex-col bg-zinc-950 p-2 md:p-4 gap-2 md:gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ height: 'calc(100vh - 56px)' }}>
+    <div className="flex flex-col bg-zinc-950 p-2 md:p-4 gap-2 md:gap-3 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-hidden" style={{ height: 'calc(100vh - 56px)' }}>
 
       {/* ── Top Bar ── */}
       <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center bg-zinc-900/80 border border-zinc-800/70 backdrop-blur-md px-3 sm:px-4 py-3 rounded-2xl shrink-0 shadow-sm gap-3">
@@ -148,7 +156,7 @@ export function AgendaPage() {
             ].map(v => (
               <button
                 key={v.id}
-                onClick={() => setView(v.id)}
+                onClick={() => setView(v.id)} disabled={v.id === 'week' && barbers.length > 1 && !selectedBarberId}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   v.hideOnMobile ? 'hidden lg:block' : ''
                 } ${
@@ -221,16 +229,19 @@ export function AgendaPage() {
           <AgendaListView appointments={appointments} onAppointmentClick={handleAppointmentClick} />
         ) : view === 'week' ? (
           <WeeklyCalendar
-            appointments={appointments}
-            selectedDate={selectedDate}
-            barberId={selectedBarberId}
-            onSlotClick={handleSlotClick}
-            onAppointmentClick={handleAppointmentClick}
-          />
+              appointments={appointments}
+              selectedDate={selectedDate}
+              barbers={barbers}
+              barberId={selectedBarberId}
+              onSlotClick={handleSlotClick}
+              onAppointmentClick={handleAppointmentClick}
+            />
         ) : (
           <DayView
             appointments={appointments}
             selectedDate={selectedDate}
+            barbers={barbers}
+            selectedBarberId={selectedBarberId}
             onSlotClick={handleSlotClick}
             onAppointmentClick={handleAppointmentClick}
           />

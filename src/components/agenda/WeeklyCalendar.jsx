@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppointmentCard } from './AppointmentCard';
 
-export function WeeklyCalendar({ appointments, onSlotClick, onAppointmentClick, selectedDate, barberId }) {
+export function WeeklyCalendar({ appointments, onSlotClick, onAppointmentClick, selectedDate, barbers = [], barberId }) {
   // Mobile responsiveness
   const [isMobile, setIsMobile] = useState(false);
   
@@ -146,7 +146,7 @@ export function WeeklyCalendar({ appointments, onSlotClick, onAppointmentClick, 
                       }}
                       className="absolute group px-0.5 py-0.5 hover:z-30 hover:scale-[1.02] transition-transform duration-200 overflow-visible"
                     >
-                      <AppointmentCard appointment={appt} onClick={onAppointmentClick} />
+                      <AppointmentCard appointment={appt} barberColor={barbers.find(b => b.id === appt.barberId)?.color} onClick={onAppointmentClick} />
                     </div>
                   );
                 })}

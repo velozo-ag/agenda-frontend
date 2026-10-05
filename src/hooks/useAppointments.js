@@ -74,6 +74,22 @@ export function useUpdateAppointmentStatus() {
   });
 }
 
+export function useCompleteAppointment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id) => appointmentService.complete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['appointment'] });
+      queryClient.invalidateQueries({ queryKey: ['available-slots'] });
+      toast.success('Turno completado y cobrado');
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || 'Error al completar turno');
+    }
+  });
+}
+
 export function useMarkNoShow() {
   const queryClient = useQueryClient();
   return useMutation({

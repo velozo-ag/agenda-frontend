@@ -1,48 +1,60 @@
-import { Scissors, User, BadgeDollarSign, AlertTriangle } from 'lucide-react';
 import React from 'react';
+import { Scissors, User, BadgeDollarSign, AlertTriangle, Clock, CheckCircle2, PlayCircle, XCircle, UserX } from 'lucide-react';
 
 const statusStyles = {
   PENDING_REVIEW: {
-    card: 'bg-zinc-800/70 border-zinc-700/40',
+    card: 'bg-zinc-900/60 border-zinc-700/30 backdrop-blur-md',
     text: 'text-zinc-200',
-    badge: 'bg-zinc-700/60 text-zinc-400 border-zinc-600/40',
-    dot: 'bg-zinc-500',
-    bar: 'bg-zinc-500',
+    badge: 'bg-zinc-800 text-zinc-300 border-zinc-700',
+    dot: 'bg-zinc-400',
+    opacity: 'opacity-100',
+    icon: Clock,
+    iconColor: 'text-zinc-400',
   },
   CONFIRMED: {
-    card: 'bg-blue-950/80 border-blue-800/40',
-    text: 'text-blue-100',
-    badge: 'bg-blue-900/60 text-blue-400 border-blue-700/40',
+    card: 'bg-zinc-900/60 border-blue-900/30 backdrop-blur-md',
+    text: 'text-zinc-100',
+    badge: 'bg-blue-900/50 text-blue-400 border-blue-700/30',
     dot: 'bg-blue-400',
-    bar: 'bg-blue-400',
+    opacity: 'opacity-100',
+    icon: CheckCircle2,
+    iconColor: 'text-blue-400',
   },
   IN_PROGRESS: {
-    card: 'bg-indigo-950/80 border-indigo-700/50',
-    text: 'text-indigo-100',
-    badge: 'bg-indigo-900/60 text-indigo-300 border-indigo-600/40',
-    dot: 'bg-indigo-400 animate-pulse',
-    bar: 'bg-indigo-400',
+    card: 'bg-zinc-900/80 border-indigo-600/50 backdrop-blur-md shadow-lg',
+    text: 'text-white',
+    badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40 animate-pulse',
+    dot: 'bg-indigo-400',
+    opacity: 'opacity-100',
+    icon: PlayCircle,
+    iconColor: 'text-indigo-400',
   },
   COMPLETED: {
-    card: 'bg-emerald-950/70 border-emerald-800/40',
-    text: 'text-emerald-100',
-    badge: 'bg-emerald-900/50 text-emerald-400 border-emerald-700/30',
+    card: 'bg-zinc-900/60 border-emerald-900/30 backdrop-blur-md',
+    text: 'text-zinc-300',
+    badge: 'bg-emerald-900/30 text-emerald-500 border-emerald-800/30',
     dot: 'bg-emerald-500',
-    bar: 'bg-emerald-500',
+    opacity: 'opacity-75',
+    icon: CheckCircle2,
+    iconColor: 'text-emerald-500',
   },
   CANCELLED: {
-    card: 'bg-zinc-900/40 border-zinc-800/20 opacity-50',
+    card: 'bg-zinc-950/80 border-zinc-900/50 backdrop-blur-md',
     text: 'text-zinc-500',
-    badge: 'bg-zinc-800/40 text-zinc-600 border-zinc-700/20',
+    badge: 'bg-zinc-900/50 text-zinc-600 border-zinc-800',
     dot: 'bg-zinc-700',
-    bar: 'bg-zinc-700',
+    opacity: 'opacity-50 grayscale',
+    icon: XCircle,
+    iconColor: 'text-zinc-500',
   },
   NO_SHOW: {
-    card: 'bg-rose-950/50 border-rose-900/30 opacity-60',
-    text: 'text-rose-300',
-    badge: 'bg-rose-900/40 text-rose-500 border-rose-800/30',
+    card: 'bg-zinc-950/80 border-rose-950/30 backdrop-blur-md',
+    text: 'text-rose-400/70',
+    badge: 'bg-rose-950/30 text-rose-500 border-rose-900/30',
     dot: 'bg-rose-600',
-    bar: 'bg-rose-600',
+    opacity: 'opacity-60 grayscale',
+    icon: UserX,
+    iconColor: 'text-rose-500',
   },
 };
 
@@ -55,7 +67,7 @@ const statusLabels = {
   NO_SHOW: 'Ausente',
 };
 
-export function AppointmentCard({ appointment, onClick }) {
+export function AppointmentCard({ appointment, barberColor, onClick }) {
   const {
     clientName,
     serviceNameSnapshot: serviceName,
@@ -74,91 +86,103 @@ export function AppointmentCard({ appointment, onClick }) {
   const durationMins = (end.getTime() - start.getTime()) / 60000;
 
   const styles = statusStyles[status] || statusStyles.PENDING_REVIEW;
+  const accentColor = barberColor || '#a1a1aa'; // fallback to zinc-400
+  const StatusIcon = styles.icon;
 
-  // ─── SINGLE-ROW (≤30 min) ────────────────────────────────────────────────
-  // At 4rem/hour, 30min = 2rem = 32px. We NEVER expand beyond the slot height
-  // to avoid visual collisions with adjacent appointments.
-  // Layout: [colored left bar] [startTime] [·] [service] [·] [client]
+  // Render tiny colored background behind the card
+  const CardBg = () => (
+    <div 
+      className="absolute inset-0 pointer-events-none" 
+      style={{ backgroundColor: accentColor, opacity: 0.12 }} 
+    />
+  );
+
+  // --- SINGLE-ROW (<=30 min) ---
   if (durationMins <= 30) {
     return (
       <div
         onClick={() => onClick(appointment)}
-        title={`${startTimeStr} – ${endTimeStr} · ${serviceName} · ${clientName} (${statusLabels[status] || status})`}
-        className={`h-full w-full rounded-lg border cursor-pointer flex items-center gap-1.5 px-1.5 overflow-hidden transition-all ${styles.card}`}
+        title={`${startTimeStr} - ${endTimeStr} | ${serviceName} | ${clientName} (${statusLabels[status] || status})`}
+        className={`relative h-full w-full rounded-lg border cursor-pointer flex items-center gap-1 px-1.5 overflow-hidden transition-all ${styles.card} ${styles.opacity}`}
       >
-        {/* Status bar — left edge */}
-        <div className={`w-[3px] self-stretch rounded-full shrink-0 my-1 ${styles.bar}`} />
+        <CardBg />
+        {/* Barber Accent Bar */}
+        <div className="w-[3px] self-stretch rounded-full shrink-0 my-1 z-10" style={{ backgroundColor: accentColor }} />
 
-        {/* Time — always visible, monospaced */}
-        <span className={`font-mono text-[9px] font-bold shrink-0 tabular-nums opacity-80 ${styles.text}`}>
+        {/* Status Icon */}
+        <StatusIcon className={`w-3 h-3 shrink-0 z-10 ${styles.iconColor}`} />
+
+        {/* Time */}
+        <span className={`font-mono text-[9px] font-bold shrink-0 tabular-nums opacity-80 z-10 ${styles.text}`}>
           {startTimeStr}
         </span>
 
-        {/* Separator */}
-        <span className={`text-[9px] opacity-30 shrink-0 ${styles.text}`}>·</span>
+        <span className={`text-[9px] opacity-30 shrink-0 z-10 ${styles.text}`}>|</span>
 
-        {/* Service name — takes all available space */}
-        <span className={`text-[10px] font-bold truncate flex-1 min-w-0 ${styles.text}`}>
+        {/* Service */}
+        <span className={`text-[10px] font-bold truncate flex-1 min-w-0 z-10 ${styles.text}`}>
           {serviceName}
         </span>
 
-        {/* Client — hidden if too narrow, shown when there's space */}
-        <span className={`text-[9px] opacity-60 truncate hidden sm:block max-w-[80px] shrink-0 ${styles.text}`}>
+        {/* Client */}
+        <span className={`text-[9px] opacity-60 truncate hidden sm:block max-w-[70px] shrink-0 z-10 ${styles.text}`}>
           {clientName}
         </span>
 
         {/* Alerts */}
-        {barberAlert && <AlertTriangle className="w-2.5 h-2.5 text-amber-400 shrink-0" />}
-        {depositProofUrl && !depositPaid && (
-          <BadgeDollarSign className="w-2.5 h-2.5 text-amber-400 shrink-0" />
-        )}
+        <div className="flex items-center gap-0.5 shrink-0 z-10">
+          {barberAlert && <AlertTriangle className="w-2.5 h-2.5 text-amber-400" />}
+          {depositProofUrl && !depositPaid && (
+            <BadgeDollarSign className="w-2.5 h-2.5 text-amber-400" />
+          )}
+        </div>
       </div>
     );
   }
 
-  // ─── TWO-ROW COMPACT (31–50 min) ─────────────────────────────────────────
+  // --- TWO-ROW COMPACT (31-50 min) ---
   if (durationMins <= 50) {
     return (
       <div
         onClick={() => onClick(appointment)}
-        title={`${startTimeStr} – ${endTimeStr} · ${serviceName} · ${clientName} (${statusLabels[status] || status})`}
-        className={`h-full w-full rounded-xl border cursor-pointer flex items-stretch gap-1.5 overflow-hidden transition-all ${styles.card}`}
+        title={`${startTimeStr} - ${endTimeStr} | ${serviceName} | ${clientName} (${statusLabels[status] || status})`}
+        className={`relative h-full w-full rounded-xl border cursor-pointer flex items-stretch gap-1.5 overflow-hidden transition-all ${styles.card} ${styles.opacity}`}
       >
-        {/* Status bar — left edge */}
-        <div className={`w-[3px] shrink-0 self-stretch rounded-l-xl ${styles.bar}`} />
+        <CardBg />
+        {/* Barber Accent Bar */}
+        <div className="w-[3px] shrink-0 self-stretch rounded-l-xl z-10" style={{ backgroundColor: accentColor }} />
 
-        <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5 pr-1 py-1">
-          {/* Service + alert */}
+        <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5 pr-1 py-1 z-10">
           <div className={`flex items-center gap-1 ${styles.text}`}>
             <span className="text-[11px] font-bold truncate flex-1 min-w-0">{serviceName}</span>
             {barberAlert && <AlertTriangle className="w-2.5 h-2.5 text-amber-400 shrink-0" />}
-            {depositProofUrl && !depositPaid && (
-              <BadgeDollarSign className="w-2.5 h-2.5 text-amber-400 shrink-0" />
-            )}
+            {depositProofUrl && !depositPaid && <BadgeDollarSign className="w-2.5 h-2.5 text-amber-400 shrink-0" />}
           </div>
-          {/* Client + time */}
-          <div className={`flex items-center gap-1 text-[9px] opacity-65 ${styles.text}`}>
-            <User className="w-2 h-2 shrink-0" />
-            <span className="truncate">{clientName}</span>
-            <span className="font-mono shrink-0 tabular-nums">· {startTimeStr}</span>
+          <div className={`flex items-center gap-1 text-[9px] opacity-75 ${styles.text}`}>
+            <StatusIcon className={`w-2.5 h-2.5 shrink-0 ${styles.iconColor}`} />
+            <span className="font-mono shrink-0 tabular-nums">{startTimeStr}</span>
+            <span className="opacity-50">•</span>
+            <User className="w-2.5 h-2.5 shrink-0 opacity-60" />
+            <span className="truncate opacity-80">{clientName}</span>
           </div>
         </div>
       </div>
     );
   }
 
-  // ─── FULL (>50 min) ───────────────────────────────────────────────────────
+  // --- FULL (>50 min) ---
   return (
     <div
       onClick={() => onClick(appointment)}
-      title={`${startTimeStr} – ${endTimeStr} · ${serviceName} · ${clientName} (${statusLabels[status] || status})`}
-      className={`p-1.5 h-full w-full rounded-xl border transition-all cursor-pointer flex flex-col shadow-md overflow-hidden group ${styles.card}`}
+      title={`${startTimeStr} - ${endTimeStr} | ${serviceName} | ${clientName} (${statusLabels[status] || status})`}
+      className={`relative p-1.5 h-full w-full rounded-xl border transition-all cursor-pointer flex flex-col shadow-md overflow-hidden group ${styles.card} ${styles.opacity}`}
     >
-      {/* Colored top accent bar */}
-      <div className={`h-0.5 rounded-full mb-1.5 mx-1 shrink-0 ${styles.dot}`} />
+      <CardBg />
+      {/* Barber Accent Top Dot/Bar */}
+      <div className="h-0.5 rounded-full mb-1.5 mx-1 shrink-0 z-10" style={{ backgroundColor: accentColor }} />
 
       {/* Header */}
-      <div className="flex justify-between items-start shrink-0 mb-1 px-1">
+      <div className="flex justify-between items-start shrink-0 mb-1 px-1 z-10">
         <div className={`font-bold text-[11px] truncate leading-tight flex items-center gap-1 flex-1 ${styles.text}`}>
           <Scissors className="w-3 h-3 shrink-0 opacity-70" />
           <span className="truncate">{serviceName}</span>
@@ -169,19 +193,20 @@ export function AppointmentCard({ appointment, onClick }) {
       </div>
 
       {/* Client */}
-      <div className={`text-[10px] font-medium opacity-75 truncate leading-tight flex items-center gap-1 mb-1 px-1 ${styles.text}`}>
+      <div className={`text-[10px] font-medium opacity-75 truncate leading-tight flex items-center gap-1 mb-1 px-1 z-10 ${styles.text}`}>
         <User className="w-2.5 h-2.5 shrink-0" />
         <span className="truncate">{clientName}</span>
       </div>
 
       {/* Footer */}
-      <div className="mt-auto px-1 flex flex-col gap-1 overflow-hidden">
+      <div className="mt-auto px-1 flex flex-col gap-1 overflow-hidden z-10">
         <div className={`font-mono text-[9px] font-semibold opacity-60 border-t border-white/10 pt-1 border-dashed truncate ${styles.text}`}>
-          {startTimeStr} – {endTimeStr}
+          {startTimeStr} - {endTimeStr}
         </div>
 
         <div className="flex flex-wrap items-center gap-1">
-          <div className={`px-1.5 py-0.5 rounded-md text-[8px] font-bold tracking-wide uppercase border ${styles.badge} truncate`}>
+          <div className={`px-1.5 py-0.5 rounded-md text-[8px] font-bold tracking-wide uppercase border flex items-center gap-1 ${styles.badge} truncate`}>
+            <StatusIcon className="w-2.5 h-2.5" />
             {statusLabels[status] || status}
           </div>
 

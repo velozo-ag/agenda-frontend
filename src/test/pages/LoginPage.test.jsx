@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -30,7 +30,7 @@ describe('LoginPage', () => {
   it('Login exitoso guarda token en localStorage y redirige', async () => {
     renderLoginPage();
 
-    const userInput = screen.getByPlaceholderText('admin');
+    const userInput = await screen.findByPlaceholderText('admin');
     const passInput = screen.getByPlaceholderText('••••••••');
     const submitBtn = screen.getByRole('button', { name: /ingresar al sistema/i });
 
@@ -46,7 +46,7 @@ describe('LoginPage', () => {
   it('Login con credenciales incorrectas muestra mensaje de error', async () => {
     renderLoginPage();
 
-    const userInput = screen.getByPlaceholderText('admin');
+    const userInput = await screen.findByPlaceholderText('admin');
     const passInput = screen.getByPlaceholderText('••••••••');
     const submitBtn = screen.getByRole('button', { name: /ingresar al sistema/i });
 
@@ -62,7 +62,7 @@ describe('LoginPage', () => {
   it('Muestra error si se intenta enviar el formulario con campos vacíos', async () => {
     renderLoginPage();
 
-    const userInput = screen.getByPlaceholderText('admin');
+    const userInput = await screen.findByPlaceholderText('admin');
     const passInput = screen.getByPlaceholderText('••••••••');
     const submitBtn = screen.getByRole('button', { name: /ingresar al sistema/i });
 

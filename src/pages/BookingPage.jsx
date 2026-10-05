@@ -59,7 +59,7 @@ export function BookingPage() {
 
   const slug = routeSlug || searchParams.get('slug') || searchParams.get('tenant') || getTenantSlug() || 'admin';
 
-  const { data: salonInfoData, isLoading: isSalonLoading } = useSalonInfo(slug);
+  const { data: salonInfoData, isLoading: isSalonLoading, isError: isSalonError } = useSalonInfo(slug);
   const { data: servicesData, isLoading: isServicesLoading } = usePublicServices(slug);
   const { data: categoriesData } = usePublicCategories(slug);
   const { data: barbersData, isLoading: isBarbersLoading } = usePublicBarbers(slug);
@@ -267,6 +267,26 @@ export function BookingPage() {
       }
     );
   };
+
+  if (isSalonError) {
+    // If tenant doesn't exist (e.g. unknown subdomain), redirect to landing page
+    if (typeof window !== 'undefined') {
+      const isLocal = window.location.hostname.includes('localhost') || 
+                      window.location.hostname.includes('127.0.0.1') || 
+                      window.location.hostname.startsWith('192.168.') ||
+                      window.location.hostname.startsWith('10.');
+      if (isLocal) {
+        const port = window.location.port ? `:${window.location.port}` : '';
+        // If they are on an IP or localhost, just remove any subdomains
+        let baseHost = window.location.hostname;
+        if (baseHost.includes('.localhost')) baseHost = 'localhost';
+        window.location.href = `${window.location.protocol}//${baseHost}${port}`;
+      } else {
+        window.location.href = 'https://agenda.roosty.com.ar';
+      }
+      return null;
+    }
+  }
 
   if (isSalonLoading) {
     return (
@@ -519,12 +539,32 @@ export function BookingPage() {
           {/* PASO 3 */}
           {step === 3 && (
             <div className={`space-y-6 animate-in ${direction === 'forward' ? 'slide-in-from-right-8' : 'slide-in-from-left-8'} fade-in duration-300`}>
-              <div>
-                <h2 className="text-2xl font-black text-white tracking-tight">Seleccioná el día y la hora</h2>
-                <p className="text-sm text-zinc-400 mt-1">
-                  <strong className="text-white">{selectedService?.name}</strong> • {selectedBarber ? selectedBarber.fullName : 'Cualquier barbero'}
-                </p>
-              </div>
+              {salon?.limitReached ? (
+                <div className="bg-zinc-900 border border-red-500/30 rounded-2xl p-6 text-center space-y-4 backdrop-blur-sm">
+                  <CalendarIcon className="w-12 h-12 text-red-500 mx-auto" />
+                  <div>
+                    <h2 className="text-xl font-black text-white tracking-tight">La agenda de este mes está llena</h2>
+                    <p className="text-sm text-zinc-400 mt-2">No se pueden tomar más turnos temporalmente. Anotate en la lista de espera para que te avisemos apenas se libere un lugar.</p>
+                  </div>
+                  {salon?.hasWaitlist !== false && (
+                    <div className="text-left mt-6">
+                      <WaitlistForm 
+                        slug={slug} 
+                        serviceId={selectedServiceId} 
+                        barberId={selectedBarberId} 
+                        date={getLocalISODate()} 
+                      />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <h2 className="text-2xl font-black text-white tracking-tight">Seleccioná el día y la hora</h2>
+                    <p className="text-sm text-zinc-400 mt-1">
+                      <strong className="text-white">{selectedService?.name}</strong> • {selectedBarber ? selectedBarber.fullName : 'Cualquier barbero'}
+                    </p>
+                  </div>
 
               <div className="space-y-2">
                 <div className="text-xs font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-2">
@@ -646,6 +686,8 @@ export function BookingPage() {
                   </div>
                 )}
               </div>
+              </>
+              )}
             </div>
           )}
 

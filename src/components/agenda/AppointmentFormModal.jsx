@@ -5,6 +5,7 @@ import { useSalonServices } from '../../hooks/useSalonServices';
 import { useBarbers } from '../../hooks/useBarbers';
 import { SlotPicker } from './SlotPicker';
 import { useCreateAppointment } from '../../hooks/useAppointments';
+import { useTenantUsage } from '../../hooks/useTenantUsage';
 import { getLocalISODate } from '../../utils/dateUtils';
 
 // Step indicator component
@@ -53,6 +54,9 @@ export function AppointmentFormModal({
   const { services } = useSalonServices();
   const { barbers } = useBarbers();
   const { mutate: createAppointment, isPending } = useCreateAppointment();
+  const { data: usage } = useTenantUsage();
+
+  const isLimitReached = usage?.limitReached;
 
   const selectedServiceObj = services.find(s => s.id === Number(serviceId));
 
@@ -281,10 +285,10 @@ export function AppointmentFormModal({
           <button
             type="submit"
             onClick={handleSubmit}
-            disabled={!selectedClient || !serviceId || !selectedSlot || isPending}
-            className="flex-1 h-12 bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer text-sm shadow-md shadow-amber-500/20 active:scale-[0.98]"
+            disabled={!selectedClient || !serviceId || !selectedSlot || isPending || isLimitReached}
+            className={`flex-1 h-12 font-black rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-sm shadow-md active:scale-[0.98] ${isLimitReached ? 'bg-red-500/20 text-red-500 border border-red-500/50 shadow-none' : 'bg-amber-500 hover:bg-amber-400 text-zinc-950 shadow-amber-500/20'}`}
           >
-            {isPending ? 'Creando...' : 'Crear Turno'}
+            {isPending ? 'Creando...' : isLimitReached ? 'Límite Mensual Alcanzado' : 'Crear Turno'}
           </button>
         </div>
       </div>

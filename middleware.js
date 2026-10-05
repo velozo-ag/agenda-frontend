@@ -115,7 +115,7 @@ export default async function middleware(request) {
   }
 
   // 3. Extract dynamic metadata fields
-  const storeName = branding?.storeName || branding?.name || (slug ? slug.toUpperCase() : 'Carta Digital');
+  const storeName = branding?.storeName || branding?.name || (slug ? slug.toUpperCase() : 'Reservas Online');
   
   let description = branding?.heroSubtitle || branding?.heroTitle || '';
   if (!description) {
@@ -124,8 +124,8 @@ export default async function middleware(request) {
     description = `Mirá nuestra carta digital en vivo, hacé tu pedido y consultá promociones${hours}${address}.`;
   }
 
-  const rawImage = branding?.heroUrl || branding?.logoUrl || branding?.backgroundImageUrl || '';
-  const ogImageUrl = resolveFullImageUrl(rawImage, apiOrigin) || `${url.origin}/logo.png`;
+  const rawImage = branding?.heroUrl || branding?.logoUrl || '';
+  const ogImageUrl = slug ? `${apiBase.replace(/\/+$/, '')}/booking/${encodeURIComponent(slug)}/banner.png` : (resolveFullImageUrl(rawImage, apiOrigin) || `${url.origin}/logo.png`);
   const canonicalUrl = url.href;
 
   // 4. Return custom dynamic HTML with Open Graph & Twitter meta tags
@@ -133,13 +133,13 @@ export default async function middleware(request) {
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>${escapeHtml(storeName)} | Carta Digital</title>
+  <title>${escapeHtml(storeName)} | Reservas Online</title>
   <meta name="description" content="${escapeHtml(description)}">
 
   <!-- Open Graph / WhatsApp / Facebook / Telegram -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="${canonicalUrl}">
-  <meta property="og:title" content="${escapeHtml(storeName)} | Carta Digital">
+  <meta property="og:title" content="${escapeHtml(storeName)} | Reservas Online">
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:image" content="${ogImageUrl}">
   <meta property="og:image:secure_url" content="${ogImageUrl}">
@@ -150,7 +150,7 @@ export default async function middleware(request) {
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${escapeHtml(storeName)} | Carta Digital">
+  <meta name="twitter:title" content="${escapeHtml(storeName)} | Reservas Online">
   <meta name="twitter:description" content="${escapeHtml(description)}">
   <meta name="twitter:image" content="${ogImageUrl}">
 
@@ -163,7 +163,7 @@ export default async function middleware(request) {
   <p>${escapeHtml(description)}</p>
   ${ogImageUrl ? `<img src="${ogImageUrl}" alt="${escapeHtml(storeName)}" style="max-width: 100%; height: auto; border-radius: 1rem; margin: 1rem 0;" />` : ''}
   <br>
-  <a href="${canonicalUrl}" style="display: inline-block; padding: 0.75rem 1.5rem; background: #f59e0b; color: #000; font-weight: bold; border-radius: 9999px; text-decoration: none;">Ver Carta Digital</a>
+  <a href="${canonicalUrl}" style="display: inline-block; padding: 0.75rem 1.5rem; background: #f59e0b; color: #000; font-weight: bold; border-radius: 9999px; text-decoration: none;">Ver Reservas Online</a>
 </body>
 </html>`;
 

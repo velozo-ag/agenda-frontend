@@ -126,7 +126,7 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
               required
               value={formData.fullName}
               onChange={handleChange}
-              placeholder="Ej: Carlos Rodríguez"
+              placeholder="Ej: Carlos RodrÃ­guez"
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500/60 transition-colors"
             />
           </div>
@@ -134,23 +134,23 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
           {/* Email */}
           <div>
             <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
-              Email (usuario de acceso) *
+              Usuario de acceso *
             </label>
             <input
-              type="email"
+              type="text"
               name="email"
               required
               value={formData.email}
               onChange={handleChange}
-              placeholder="barbero@ejemplo.com"
+              placeholder="ej. agustin, o correo"
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-indigo-500/60 transition-colors"
             />
           </div>
 
-          {/* Contraseña */}
+          {/* ContraseÃ±a */}
           <div>
             <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
-              {barberToEdit ? 'Cambiar Contraseña (opcional)' : 'Contraseña Inicial *'}
+              {barberToEdit ? 'Cambiar ContraseÃ±a (opcional)' : 'ContraseÃ±a Inicial *'}
             </label>
             <input
               type="password"
@@ -158,12 +158,12 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
               required={!barberToEdit}
               value={formData.password}
               onChange={handleChange}
-              placeholder={barberToEdit ? 'Dejá vacío para no cambiarla' : 'Contraseña inicial'}
+              placeholder={barberToEdit ? 'DejÃ¡ vacÃ­o para no cambiarla' : 'ContraseÃ±a inicial'}
               className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500/60 transition-colors"
             />
           </div>
 
-          {/* Color + Comisión */}
+          {/* Color + ComisiÃ³n */}
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
@@ -193,7 +193,7 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
             </div>
             <div>
               <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
-                Comisión (%)
+                ComisiÃ³n (%)
               </label>
               <input
                 type="number"
@@ -212,7 +212,7 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
           {/* Bio */}
           <div>
             <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
-              Biografía (visible en el portal de reservas)
+              BiografÃ­a (visible en el portal de reservas)
             </label>
             <textarea
               name="bio"

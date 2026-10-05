@@ -299,3 +299,194 @@
 }
 
 
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LANDING (agenda.roosty.com.ar) - utilidades lp-*
+   Misma linea editorial que Roosty POS (Merriweather + Inter, crema calido,
+   bisel doble, botones tactiles) pero con acento INDIGO (linea Roosty Agenda).
+   ═══════════════════════════════════════════════════════════════════════════ */
+.lp-root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: text;
+}
+
+.lp-serif {
+  font-family: 'Merriweather', Georgia, serif;
+}
+
+.lp-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+.lp-balance {
+  text-wrap: balance;
+}
+
+.lp-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.lp-grid-subtle {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+}
+
+.lp-dots-dark {
+  background-size: 24px 24px;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+}
+
+.lp-bezel-light {
+  border: 1px solid rgba(228, 228, 231, 0.9);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(244, 244, 246, 0.75) 100%);
+  box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.07), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.lp-bezel-dark {
+  border: 1px solid rgba(39, 39, 42, 0.9);
+  background: linear-gradient(180deg, rgba(24, 24, 27, 0.85) 0%, rgba(9, 9, 11, 0.95) 100%);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.lp-btn-indigo {
+  position: relative;
+  background-color: #4f46e5;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 14px -2px rgba(79, 70, 229, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lp-btn-indigo:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12), 0 8px 22px -4px rgba(79, 70, 229, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.lp-btn-indigo:active {
+  transform: scale(0.98) translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.lp-btn-ghost {
+  position: relative;
+  background-color: #ffffff;
+  border: 1px solid rgba(228, 228, 231, 0.9);
+  color: #27272a;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 1);
+  transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lp-btn-ghost:hover {
+  background-color: #fafafa;
+  border-color: rgba(212, 212, 216, 1);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+.lp-btn-ghost:active {
+  transform: scale(0.98) translateY(0);
+}
+
+@keyframes lpCurtainUp {
+  0% { transform: translate3d(0, 100%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes lpCurtainLift {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -100%, 0); }
+}
+
+.lp-curtain-up {
+  will-change: transform;
+  backface-visibility: hidden;
+  animation: lpCurtainUp 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.lp-curtain-lift {
+  will-change: transform;
+  backface-visibility: hidden;
+  animation: lpCurtainLift 330ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes lpFloatA {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes lpFloatB {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(7px); }
+}
+
+.lp-float-a { animation: lpFloatA 5s ease-in-out infinite; }
+.lp-float-b { animation: lpFloatB 5s ease-in-out infinite 0.6s; }
+
+@keyframes lpReveal {
+  0% { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.lp-reveal {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.lp-reveal.lp-in {
+  animation: lpReveal 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-reveal { opacity: 1; }
+  .lp-reveal.lp-in { animation: none; }
+  .lp-float-a, .lp-float-b { animation: none; }
+}
+
+/* 3D Smartphone Floating & Depth Keyframes */
+@keyframes phoneFloat {
+  0%, 100% {
+    transform: translateY(0px) rotateY(-5deg) rotateX(4deg) rotateZ(-1deg);
+  }
+  50% {
+    transform: translateY(-14px) rotateY(-2deg) rotateX(6deg) rotateZ(1deg);
+  }
+}
+
+@keyframes shadowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(0.85);
+    opacity: 0.18;
+  }
+}
+
+.animate-phone-float {
+  animation: phoneFloat 6s ease-in-out infinite;
+}
+
+.animate-shadow-pulse {
+  animation: shadowPulse 6s ease-in-out infinite;
+}
+
+@keyframes bounceSlowPhone {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounceSlowPhone 4s ease-in-out infinite;
+}
+
+.animate-bounce-slow-delayed {
+  animation: bounceSlowPhone 4s ease-in-out infinite 2s;
+}

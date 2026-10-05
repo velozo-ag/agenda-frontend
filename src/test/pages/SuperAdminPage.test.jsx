@@ -37,27 +37,27 @@ describe('SuperAdminPage Component', () => {
     renderComponent();
 
     await waitFor(() => {
-      expect(screen.getByText(/Panel Super-Administrador/i)).toBeInTheDocument();
-      expect(screen.getByText(/SAAS MASTER/i)).toBeInTheDocument();
+      expect(screen.getByText(/Panel Maestro SaaS/i)).toBeInTheDocument();
+      expect(screen.getByText(/SuperAdmin/i)).toBeInTheDocument();
     });
   });
 
-  it('Abre el modal de provisión al hacer clic en "Dar de Alta Nuevo Local" y muestra planes', async () => {
+  it('Abre el modal de provisión al hacer clic en "Dar de Alta Nuevo Salón" y muestra planes', async () => {
     renderComponent();
 
-    const newLocalButton = await screen.findByRole('button', { name: /Dar de Alta Nuevo Local/i });
+    const newLocalButton = await screen.findByRole('button', { name: /Dar de Alta Nuevo Salón/i });
     fireEvent.click(newLocalButton);
 
-    expect(screen.getByRole('heading', { name: /Dar de Alta Nuevo Local/i })).toBeInTheDocument();
-    expect(screen.getAllByText(/Starter Takeaway/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Pro Salón/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Business Enterprise/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole('heading', { name: /Dar de Alta Nuevo Salón/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/Cero/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Navaja/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Crew/i).length).toBeGreaterThan(0);
   });
 
   it('Permite buscar un local en el filtro', async () => {
     renderComponent();
 
-    const searchInput = await screen.findByPlaceholderText(/Buscar por nombre o subdominio/i);
+    const searchInput = await screen.findByPlaceholderText(/Buscar salón por nombre o subdominio/i);
     fireEvent.change(searchInput, { target: { value: 'Demo' } });
 
     expect(searchInput.value).toBe('Demo');
@@ -67,47 +67,46 @@ describe('SuperAdminPage Component', () => {
     it('renderiza la lista de demos con su estado y días restantes', async () => {
       renderComponent();
 
-      const demosTabButton = await screen.findByRole('button', { name: /Demos/i });
+      const demosTabButton = await screen.findByRole('button', { name: /Pipeline Demos/i });
       fireEvent.click(demosTabButton);
 
-      expect(await screen.findByText('Pipeline de Demos')).toBeInTheDocument();
-      expect(await screen.findByText('Demo Burger Bar')).toBeInTheDocument();
-      expect(screen.getByText(/5d restantes/i)).toBeInTheDocument();
-      expect(screen.getByText(/🟢 Activo/i)).toBeInTheDocument();
+      expect(await screen.findByText('Pipeline de Demos de Barberías')).toBeInTheDocument();
+      expect(await screen.findByText('Demo Pizza Local')).toBeInTheDocument();
+      expect(screen.getByText(/3d restantes/i)).toBeInTheDocument();
     });
 
     it('muestra botón "Extender" y abre modal para sumar días', async () => {
       renderComponent();
 
-      const demosTabButton = await screen.findByRole('button', { name: /Demos/i });
+      const demosTabButton = await screen.findByRole('button', { name: /Pipeline Demos/i });
       fireEvent.click(demosTabButton);
 
-      const extendButton = await screen.findByRole('button', { name: /Extender/i });
-      fireEvent.click(extendButton);
+      const extendButtons = await screen.findAllByRole('button', { name: /Extender/i });
+      fireEvent.click(extendButtons[0]);
 
-      expect(await screen.findByText(/Extender Trial/i)).toBeInTheDocument();
+      expect(await screen.findByText(/Extender Período de Prueba/i)).toBeInTheDocument();
     });
 
     it('muestra botón "Convertir a Pago" y abre modal con selector de plan', async () => {
       renderComponent();
 
-      const demosTabButton = await screen.findByRole('button', { name: /Demos/i });
+      const demosTabButton = await screen.findByRole('button', { name: /Pipeline Demos/i });
       fireEvent.click(demosTabButton);
 
-      const convertButton = await screen.findByRole('button', { name: /Convertir a Pago/i });
-      fireEvent.click(convertButton);
+      const convertButtons = await screen.findAllByRole('button', { name: /Convertir a Plan Formal/i });
+      fireEvent.click(convertButtons[0]);
 
-      expect(await screen.findByText(/Elegir el plan real del cliente/i)).toBeInTheDocument();
+      expect(await screen.findByText(/Convertir Demo a Plan Formal/i)).toBeInTheDocument();
     });
 
     it('muestra botón "Reenviar Email" y abre modal de reenvío', async () => {
       renderComponent();
 
-      const demosTabButton = await screen.findByRole('button', { name: /Demos/i });
+      const demosTabButton = await screen.findByRole('button', { name: /Pipeline Demos/i });
       fireEvent.click(demosTabButton);
 
-      const resendButton = await screen.findByRole('button', { name: /Reenviar Email/i });
-      fireEvent.click(resendButton);
+      const resendButtons = await screen.findAllByRole('button', { name: /Reenviar/i });
+      fireEvent.click(resendButtons[0]);
 
       expect(await screen.findByText(/Reenviar Email de Bienvenida/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /Enviar Ahora/i })).toBeInTheDocument();
@@ -118,22 +117,22 @@ describe('SuperAdminPage Component', () => {
     it('muestra KPIs globales de SaaS (total tenants, demos activos, facturación)', async () => {
       renderComponent();
 
-      const statsTabButton = await screen.findByRole('button', { name: /Stats/i });
+      const statsTabButton = await screen.findByRole('button', { name: /Dashboard SaaS/i });
       fireEvent.click(statsTabButton);
 
       expect(await screen.findByText('Dashboard SaaS')).toBeInTheDocument();
-      expect(await screen.findByText('Total Locales')).toBeInTheDocument();
+      expect(await screen.findByText('Total Salones')).toBeInTheDocument();
       expect(screen.getByText('Demos Activos')).toBeInTheDocument();
-      expect(screen.getByText('Facturación Total')).toBeInTheDocument();
+      expect(screen.getByText('Facturación Global')).toBeInTheDocument();
     });
 
     it('muestra lista de tenants sin actividad si existen', async () => {
       renderComponent();
 
-      const statsTabButton = await screen.findByRole('button', { name: /Stats/i });
+      const statsTabButton = await screen.findByRole('button', { name: /Dashboard SaaS/i });
       fireEvent.click(statsTabButton);
 
-      expect(await screen.findByText(/⚠️ Sin Actividad hace más de 14 días/i)).toBeInTheDocument();
+      expect(await screen.findByText(/Sin Actividad en Agenda/i)).toBeInTheDocument();
       expect(screen.getByText(/20d sin actividad/i)).toBeInTheDocument();
     });
   });
@@ -142,21 +141,21 @@ describe('SuperAdminPage Component', () => {
     it('muestra badge "Sin actividad" si daysSinceLastActivity > 14', async () => {
       renderComponent();
 
-      await screen.findByText('Demo Bar');
+      await screen.findByText('Demo Bar & Taphouse');
       expect(screen.getByText(/⚠️ Sin actividad/i)).toBeInTheDocument();
     });
 
-    it('muestra badge "Turno Abierto" si hasOpenShift es true', async () => {
+    it('muestra badge "Caja Abierta" si hasOpenShift es true', async () => {
       renderComponent();
 
-      await screen.findByText('Bar Central');
-      expect(screen.getByText(/🟢 Turno Abierto/i)).toBeInTheDocument();
+      await screen.findByText('Demo Bar & Taphouse');
+      expect(screen.getByText(/Caja Abierta/i)).toBeInTheDocument();
     });
 
     it('abre modal de reset password al hacer click en el botón', async () => {
       renderComponent();
 
-      await screen.findByText('Bar Central');
+      await screen.findByText('Craft Cervecería');
       const resetButtons = screen.getAllByRole('button', { name: /Reset PW/i });
       fireEvent.click(resetButtons[0]);
 
@@ -166,7 +165,7 @@ describe('SuperAdminPage Component', () => {
     it('solo muestra botón "Eliminar" en tenants demo', async () => {
       renderComponent();
 
-      await screen.findByText('Demo Bar');
+      await screen.findByText('Craft Cervecería');
       const deleteButtons = screen.getAllByRole('button', { name: /^Eliminar$/i });
       expect(deleteButtons).toHaveLength(1);
     });

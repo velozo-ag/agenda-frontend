@@ -43,8 +43,8 @@ export function ClientDetailPage() {
   const { mutate: resetNoShows, isPending: isResettingNoShows } = useResetNoShowCount();
   const { data: tenant } = useMyTenant();
 
-  const client = response?.data;
-  const history = response?.data?.appointments || [];
+  const client = response?.data?.client;
+  const history = response?.data?.appointments?.content || [];
 
   useEffect(() => {
     if (client) {
@@ -60,7 +60,13 @@ export function ClientDetailPage() {
 
   const handleNotesBlur = () => {
     if (client && notes !== (client.notes || '')) {
-      updateClient({ id: client.id, notes }, {
+      updateClient({ 
+        id: client.id, 
+        fullName: client.fullName,
+        phone: client.phone,
+        email: client.email,
+        notes 
+      }, {
         onSuccess: () => setHasNotesChanged(false)
       });
     }

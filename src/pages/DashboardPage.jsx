@@ -7,9 +7,12 @@ import {
   UserX,
   Loader2,
   Scissors,
-  Users
+  Users,
+  ChevronDown
 } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
+import { Heatmap } from '../components/dashboard/Heatmap';
+import { useMyTenant } from '../hooks/useTenantBranding';
 
 const formatCurrency = (amount) => {
   if (amount === undefined || amount === null) return '$0';
@@ -21,9 +24,12 @@ const formatCurrency = (amount) => {
 };
 
 export function DashboardPage() {
+  const { data: tenant } = useMyTenant();
   const [period, setPeriod] = useState('MONTH'); 
   const [customFrom, setCustomFrom] = useState('');
   const [customTo, setCustomTo] = useState('');
+  const [isServicesOpen, setIsServicesOpen] = useState(true);
+  const [isBarbersOpen, setIsBarbersOpen] = useState(true);
 
   const { fromDate, toDate } = useMemo(() => {
     const now = new Date();
@@ -61,6 +67,30 @@ export function DashboardPage() {
       };
     }
     
+    if (period === 'LAST_30_DAYS') {
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const past30 = new Date(today);
+      past30.setDate(today.getDate() - 30);
+      const todayLocal = new Date(today.getTime() - (today.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+      const past30Local = new Date(past30.getTime() - (past30.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+      return { 
+        fromDate: past30Local, 
+        toDate: todayLocal 
+      };
+    }
+
+    if (period === 'LAST_60_DAYS') {
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const past60 = new Date(today);
+      past60.setDate(today.getDate() - 60);
+      const todayLocal = new Date(today.getTime() - (today.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+      const past60Local = new Date(past60.getTime() - (past60.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+      return { 
+        fromDate: past60Local, 
+        toDate: todayLocal 
+      };
+    }
+    
     if (period === 'CUSTOM') {
       return { fromDate: customFrom, toDate: customTo };
     }
@@ -94,7 +124,7 @@ export function DashboardPage() {
           
           <div className="flex flex-col xl:flex-row gap-2 w-full lg:w-auto overflow-hidden">
             <div className="flex p-1 bg-zinc-900 border border-zinc-800 rounded-lg overflow-x-auto scrollbar-none">
-              {['TODAY', 'WEEK', 'MONTH', 'CUSTOM'].map((p) => (
+              {['TODAY', 'WEEK', 'MONTH', 'LAST_30_DAYS', 'LAST_60_DAYS', 'CUSTOM'].map((p) => (
                 <button
                   key={p}
                   onClick={() => setPeriod(p)}
@@ -108,6 +138,8 @@ export function DashboardPage() {
                   {p === 'TODAY' && 'Hoy'}
                   {p === 'WEEK' && 'Esta semana'}
                   {p === 'MONTH' && 'Este mes'}
+                  {p === 'LAST_30_DAYS' && 'Últimos 30 días'}
+                  {p === 'LAST_60_DAYS' && 'Últimos 60 días'}
                   {p === 'CUSTOM' && 'Personalizado'}
                 </button>
               ))}
@@ -150,7 +182,7 @@ export function DashboardPage() {
         {!isLoading && !isError && (
           <>
             {/* 4 KPIs */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               <KpiCard 
                 title="Facturación" 
                 value={formatCurrency(kpis.totalRevenue)} 
@@ -182,17 +214,24 @@ export function DashboardPage() {
             </div>
 
             {/* Tables / Ranking */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+            <div className={`grid grid-cols-1 gap-6 mt-8 ${tenant?.maxBarbers !== 1 ? 'lg:grid-cols-2' : ''}`}>
               {/* Top Servicios */}
               <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden flex flex-col">
-                <div className="p-5 border-b border-zinc-800 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[var(--primary-color)]/10 flex items-center justify-center text-[var(--primary-color)]">
-                    <Scissors className="w-4 h-4" />
+                <button 
+                  onClick={() => setIsServicesOpen(!isServicesOpen)}
+                  className="p-5 border-b border-zinc-800 flex items-center justify-between hover:bg-zinc-800/30 transition-colors w-full text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[var(--primary-color)]/10 flex items-center justify-center text-[var(--primary-color)]">
+                      <Scissors className="w-4 h-4" />
+                    </div>
+                    <h3 className="font-medium">Top Servicios</h3>
                   </div>
-                  <h3 className="font-medium">Top Servicios</h3>
-                </div>
+                  <ChevronDown className={`w-5 h-5 text-zinc-500 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`} />
+                </button>
                 
-                <div className="p-0 flex-1">
+                {isServicesOpen && (
+                  <div className="p-0 flex-1 animate-in slide-in-from-top-2 duration-200">
                   {topServices.length === 0 ? (
                     <div className="p-8 text-center text-zinc-500 text-sm">
                       No hay datos de servicios para este período
@@ -216,49 +255,57 @@ export function DashboardPage() {
                     </div>
                   )}
                 </div>
+                )}
               </div>
 
-              {/* Top Barberos */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden flex flex-col">
-                <div className="p-5 border-b border-zinc-800 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[var(--primary-color)]/10 flex items-center justify-center text-[var(--primary-color)]">
-                    <Users className="w-4 h-4" />
+              {/* Top Barberos (Solo si hay más de 1 barbero) */}
+              {tenant?.maxBarbers !== 1 && (
+                <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden flex flex-col">
+                  <div className="p-5 border-b border-zinc-800 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[var(--primary-color)]/10 flex items-center justify-center text-[var(--primary-color)]">
+                      <Users className="w-4 h-4" />
+                    </div>
+                    <h3 className="font-medium">Rendimiento por Barbero</h3>
                   </div>
-                  <h3 className="font-medium">Rendimiento por Barbero</h3>
-                </div>
-                
-                <div className="p-0 flex-1">
-                  {topBarbers.length === 0 ? (
-                    <div className="p-8 text-center text-zinc-500 text-sm">
-                      No hay datos de barberos para este período
-                    </div>
-                  ) : (
-                    <div className="divide-y divide-zinc-800">
-                      {topBarbers.map((barber, i) => (
-                        <div key={i} className="flex items-center justify-between p-4 hover:bg-zinc-800/20 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <div className="w-6 text-center text-zinc-500 font-mono text-sm">{i + 1}</div>
-                            <div>
-                              <div className="font-medium text-sm">{barber.barberName}</div>
-                              <div className="text-xs text-zinc-500 mt-0.5">{barber.count} citas completadas</div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-mono text-sm font-medium text-emerald-400 num-tabular">
-                              {formatCurrency(barber.revenue)}
-                            </div>
-                            {barber.commission > 0 && (
-                              <div className="text-xs text-zinc-500 font-mono num-tabular mt-0.5">
-                                Com: {formatCurrency(barber.commission)}
+                  
+                  <div className="p-0 flex-1">
+                    {topBarbers.length === 0 ? (
+                      <div className="p-8 text-center text-zinc-500 text-sm">
+                        No hay datos de barberos para este período
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-zinc-800">
+                        {topBarbers.map((barber, i) => (
+                          <div key={i} className="flex items-center justify-between p-4 hover:bg-zinc-800/20 transition-colors">
+                            <div className="flex items-center gap-3">
+                              <div className="w-6 text-center text-zinc-500 font-mono text-sm">{i + 1}</div>
+                              <div>
+                                <div className="font-medium text-sm">{barber.barberName}</div>
+                                <div className="text-xs text-zinc-500 mt-0.5">{barber.count} citas completadas</div>
                               </div>
-                            )}
+                            </div>
+                            <div className="text-right">
+                              <div className="font-mono text-sm font-medium text-emerald-400 num-tabular">
+                                {formatCurrency(barber.revenue)}
+                              </div>
+                              {barber.commission > 0 && (
+                                <div className="text-xs text-zinc-500 font-mono num-tabular mt-0.5">
+                                  Com: {formatCurrency(barber.commission)}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
+            </div>
+
+            {/* Heatmap Section */}
+            <div className="mt-8">
+              <Heatmap distribution={data?.heatmap?.distribution} />
             </div>
           </>
         )}

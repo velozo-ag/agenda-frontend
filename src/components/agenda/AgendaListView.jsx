@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, User, CheckCircle, XCircle, AlertCircle, PlayCircle, Ban, ChevronRight, BadgeDollarSign } from 'lucide-react';
+import { Clock, User, CheckCircle, XCircle, AlertCircle, PlayCircle, Ban, ChevronRight, BadgeDollarSign, Palmtree } from 'lucide-react';
 
 const statusConfig = {
   PENDING_REVIEW: {
@@ -43,8 +43,8 @@ const statusConfig = {
 export function AgendaListView({ appointments, onAppointmentClick }) {
   if (appointments.length === 0) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 gap-3">
-        <Clock className="w-12 h-12 opacity-20" />
+      <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 gap-3 bg-zinc-950 p-4 md:p-6">
+        <Palmtree className="w-12 h-12 opacity-20" />
         <p className="text-sm font-medium">No hay turnos agendados en este período.</p>
       </div>
     );

@@ -47,12 +47,12 @@ describe('DemoExpiredPage', () => {
     renderDemoExpiredPage();
 
     await waitFor(() => {
-      expect(screen.getByText(/Tu período de prueba finalizó/i)).toBeInTheDocument();
+      expect(screen.getByText(/Período de prueba finalizado/i)).toBeInTheDocument();
       expect(screen.getByText(/Cafetería Central/i)).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /contratar roosty pos/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /activar roosty pos definitivo/i })).toBeInTheDocument();
     });
 
-    const whatsappLink = screen.getByRole('link', { name: /contratar roosty pos/i });
+    const whatsappLink = screen.getByRole('link', { name: /activar roosty pos definitivo/i });
     expect(whatsappLink.getAttribute('href')).toContain('cafe-central');
   });
 });

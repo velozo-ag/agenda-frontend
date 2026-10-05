@@ -6,6 +6,9 @@ import { server } from '../server';
 import { http, HttpResponse } from 'msw';
 import { DemoBanner } from '../../components/layout/DemoBanner';
 
+import { AuthProvider } from '../../context/AuthContext';
+import { MemoryRouter } from 'react-router-dom';
+
 function renderDemoBanner() {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -13,7 +16,11 @@ function renderDemoBanner() {
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <DemoBanner />
+      <MemoryRouter>
+        <AuthProvider>
+          <DemoBanner />
+        </AuthProvider>
+      </MemoryRouter>
     </QueryClientProvider>
   );
 }
@@ -45,11 +52,11 @@ describe('DemoBanner', () => {
     renderDemoBanner();
 
     await waitFor(() => {
-      expect(screen.getByText(/Modo Playground/i)).toBeInTheDocument();
-      expect(screen.getByText(/Activar mi cuenta/i)).toBeInTheDocument();
+      expect(screen.getByText(/Entorno de Demostración/i)).toBeInTheDocument();
+      expect(screen.getByText(/Activar plan definitivo/i)).toBeInTheDocument();
     });
 
-    const link = screen.getByRole('link', { name: /activar mi cuenta/i });
+    const link = screen.getByRole('link', { name: /activar plan definitivo/i });
     expect(link.getAttribute('href')).toContain('demo-burger');
   });
 
@@ -73,7 +80,7 @@ describe('DemoBanner', () => {
     renderDemoBanner();
 
     await waitFor(() => {
-      expect(screen.queryByText(/Modo Playground/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Entorno de Demostración/i)).not.toBeInTheDocument();
     });
   });
 });

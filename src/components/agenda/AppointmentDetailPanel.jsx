@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { X, MessageCircle, Clock, MapPin, User, Calendar, Phone, CreditCard, AlertTriangle, FileText, CheckCircle2, Scissors, Mail, ScissorsSquare, CalendarClock, Loader2 } from 'lucide-react';
-import { useUpdateAppointmentStatus, useAppointment, useConfirmDeposit, useRejectDeposit, useUndoNoShow, useRescheduleAppointment } from '../../hooks/useAppointments';
+import { X, MessageCircle, Clock, MapPin, User, Calendar, Phone, CreditCard, AlertTriangle, FileText, CheckCircle2, Scissors, Mail, ScissorsSquare, CalendarClock, Loader2, PlayCircle, XCircle, UserX } from 'lucide-react';
+import { useUpdateAppointmentStatus, useAppointment, useConfirmDeposit, useRejectDeposit, useUndoNoShow, useRescheduleAppointment, useCompleteAppointment, useMarkNoShow } from '../../hooks/useAppointments';
 import { useMyTenant } from '../../hooks/useTenantBranding';
 import { useBarbers } from '../../hooks/useBarbers';
+import { useClient } from '../../hooks/useClients';
 import { SlotPicker } from './SlotPicker';
 import { useNavigate } from 'react-router-dom';
 
 const statusConfig = {
-  PENDING_REVIEW: { label: 'Pendiente', color: 'bg-amber-500/20 text-amber-500 border-amber-500/30' },
-  CONFIRMED: { label: 'Confirmado', color: 'bg-blue-500/20 text-blue-500 border-blue-500/30' },
-  IN_PROGRESS: { label: 'En Curso', color: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30' },
-  COMPLETED: { label: 'Cobrado', color: 'bg-emerald-500/20 text-emerald-500 border-emerald-500/30' },
-  NO_SHOW: { label: 'No Show', color: 'bg-orange-500/20 text-orange-500 border-orange-500/30' },
-  CANCELLED: { label: 'Cancelado', color: 'bg-rose-500/20 text-rose-500 border-rose-500/30' },
+  PENDING_REVIEW: { label: 'Pendiente', color: 'bg-zinc-800 text-zinc-300 border-zinc-700', icon: CalendarClock },
+  CONFIRMED: { label: 'Confirmado', color: 'bg-blue-900/50 text-blue-400 border-blue-700/30', icon: CheckCircle2 },
+  IN_PROGRESS: { label: 'En Curso', color: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40', icon: PlayCircle },
+  COMPLETED: { label: 'Completado', color: 'bg-emerald-900/30 text-emerald-500 border-emerald-800/30', icon: CheckCircle2 },
+  NO_SHOW: { label: 'Ausente', color: 'bg-rose-950/30 text-rose-500 border-rose-900/30', icon: UserX },
+  CANCELLED: { label: 'Cancelado', color: 'bg-zinc-900/50 text-zinc-600 border-zinc-800', icon: XCircle },
 };
 
 export function AppointmentDetailPanel({ appointment: initialAppointment, onClose, inline = false }) {
@@ -24,6 +25,8 @@ export function AppointmentDetailPanel({ appointment: initialAppointment, onClos
   const appointment = fetchedData?.data || fetchedData || initialAppointment;
   
   const { mutate: updateStatus } = useUpdateAppointmentStatus();
+  const { mutate: completeAppt } = useCompleteAppointment();
+  const { mutate: markNoShow } = useMarkNoShow();
   const { mutate: confirmDep } = useConfirmDeposit();
   const { mutate: rejectDep } = useRejectDeposit();
   const { mutate: undoNS } = useUndoNoShow();
@@ -41,7 +44,11 @@ export function AppointmentDetailPanel({ appointment: initialAppointment, onClos
     setTimeout(onClose, 300);
   };
 
-  const { id, clientName, clientPhone, clientEmail, serviceNameSnapshot: serviceName, priceSnapshot, durationMinSnapshot, startTime, endTime, status, depositProofUrl, depositPaid, notes, barberId, serviceId } = appointment;
+  const { id, clientName, clientPhone, clientEmail, serviceNameSnapshot: serviceName, priceSnapshot, durationMinSnapshot, startTime, endTime, status, depositAmount, depositProofUrl, depositPaid, notes, barberId, serviceId, clientId } = appointment;
+
+  const { data: clientRes } = useClient(clientId);
+  const clientData = clientRes?.data?.client || clientRes?.data;
+  const requireDepositOverride = clientData?.requireDepositOverride;
 
   const [isRescheduling, setIsRescheduling] = useState(false);
   const [rescheduleDate, setRescheduleDate] = useState(() => {
@@ -112,19 +119,23 @@ export function AppointmentDetailPanel({ appointment: initialAppointment, onClos
       )}
 
       <div className={wrapperClasses}>
-        <div className="flex items-center justify-between p-4 border-b border-zinc-800/80 bg-zinc-900/50">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between p-4 border-b border-zinc-800/80 bg-zinc-900/50 relative overflow-hidden">
+          <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" style={{ backgroundColor: assignedBarber?.color || '#a1a1aa' }} />
+          <div className="absolute top-0 left-0 bottom-0 w-1 z-0" style={{ backgroundColor: assignedBarber?.color || '#a1a1aa' }} />
+          
+          <div className="flex items-center gap-3 relative z-10">
             <h2 className="text-lg font-bold text-zinc-100">Detalle del Turno</h2>
-            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${conf.color}`}>
+            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1 ${conf.color}`}>
+              {conf.icon && <conf.icon className="w-3 h-3" />}
               {conf.label}
             </span>
           </div>
-          <button onClick={handleClose} className="p-2 -mr-2 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 transition-colors">
+          <button onClick={handleClose} className="p-2 -mr-2 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 transition-colors relative z-10">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-thin scrollbar-thumb-zinc-800">
+        <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-thin scrollbar-thumb-zinc-800 relative z-10">
           
           <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 flex items-center justify-between shadow-sm">
             <div className="flex items-center gap-4">
@@ -132,7 +143,14 @@ export function AppointmentDetailPanel({ appointment: initialAppointment, onClos
                 {initials}
               </div>
               <div>
-                <div className="font-bold text-zinc-100 text-lg leading-none mb-1">{clientName}</div>
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <div className="font-bold text-zinc-100 text-lg leading-none">{clientName}</div>
+                  {requireDepositOverride && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-500/15 border border-amber-500/30 text-amber-400">
+                      <AlertTriangle className="w-3 h-3" /> Seña Obligatoria
+                    </span>
+                  )}
+                </div>
                 <div className="text-zinc-400 text-sm font-mono flex items-center gap-1">
                   <Phone className="w-3 h-3" /> {clientPhone || 'Sin teléfono'}
                 </div>
@@ -227,6 +245,14 @@ export function AppointmentDetailPanel({ appointment: initialAppointment, onClos
             />
           </div>
 
+          {depositAmount > 0 && !depositPaid && !depositProofUrl && status !== 'CANCELLED' && (
+            <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-4 flex flex-col items-center justify-center text-center">
+              <AlertTriangle className="w-6 h-6 text-rose-400 mb-2" />
+              <div className="text-sm font-bold text-rose-400">Seña Requerida Pendiente</div>
+              <div className="text-xs text-rose-500/80 mt-1">El cliente aún no ha subido el comprobante por ${depositAmount}.</div>
+            </div>
+          )}
+
           {depositProofUrl && (
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -277,7 +303,10 @@ export function AppointmentDetailPanel({ appointment: initialAppointment, onClos
             </button>
           )}
           {status === 'IN_PROGRESS' && (
-            <button onClick={() => handleStatusChange('COMPLETED')} className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+            <button onClick={() => {
+              completeAppt(id);
+              handleClose();
+            }} className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2">
               <CheckCircle2 className="w-5 h-5" />
               Marcar como Terminado y Cobrado
             </button>
@@ -362,7 +391,8 @@ export function AppointmentDetailPanel({ appointment: initialAppointment, onClos
                 <button 
                   onClick={() => {
                     if (window.confirm('¿Marcar como No-Show? Esto afectará el historial del cliente.')) {
-                      handleStatusChange('NO_SHOW');
+                      markNoShow(id);
+                      handleClose();
                     }
                   }}
                   className="flex-1 h-10 bg-orange-500/10 text-orange-500 hover:bg-orange-500/20 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer"

@@ -5,6 +5,20 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from '../../context/AuthContext';
 import { AutoLoginPage } from '../../pages/AutoLoginPage';
+import { server } from '../server';
+import { http, HttpResponse } from 'msw';
+
+const mockLoginWithToken = vi.fn();
+
+vi.mock('../../context/AuthContext', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    useAuth: () => ({
+      loginWithToken: mockLoginWithToken,
+    }),
+  };
+});
 
 function renderAutoLoginPage(initialEntries = ['/auto-login?token=valid-demo-token-123']) {
   const queryClient = new QueryClient({
@@ -17,7 +31,7 @@ function renderAutoLoginPage(initialEntries = ['/auto-login?token=valid-demo-tok
         <AuthProvider>
           <Routes>
             <Route path="/auto-login" element={<AutoLoginPage />} />
-            <Route path="/tables" element={<div>Pantalla de Mesas</div>} />
+            <Route path="/agenda" element={<div>Pantalla de Agenda</div>} />
             <Route path="/login" element={<div>Pantalla de Login</div>} />
           </Routes>
         </AuthProvider>
@@ -32,12 +46,18 @@ describe('AutoLoginPage', () => {
     vi.clearAllMocks();
   });
 
-  it('con token válido en URL guarda token en localStorage y redirige a /tables', async () => {
+  it('con token válido en URL guarda token en localStorage y redirige a /agenda', async () => {
+    mockLoginWithToken.mockResolvedValue({ id: 1, role: 'ADMIN' });
+
     renderAutoLoginPage(['/auto-login?token=demo-token-abc']);
 
     await waitFor(() => {
-      expect(localStorage.getItem('pos_token')).toBe('demo-token-abc');
-      expect(screen.getByText('Pantalla de Mesas')).toBeInTheDocument();
+      try {
+        expect(mockLoginWithToken).toHaveBeenCalledWith('demo-token-abc');
+        expect(screen.getByText('Pantalla de Agenda')).toBeInTheDocument();
+      } catch (e) {
+        throw e;
+      }
     });
   });
 
@@ -51,6 +71,7 @@ describe('AutoLoginPage', () => {
   });
 
   it('limpia el token de la barra de direcciones tras procesarlo', async () => {
+    mockLoginWithToken.mockResolvedValue({ id: 1, role: 'ADMIN' });
     const replaceStateSpy = vi.spyOn(window.history, 'replaceState');
 
     renderAutoLoginPage(['/auto-login?token=secret-token']);

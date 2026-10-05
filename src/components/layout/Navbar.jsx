@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useMyTenant } from '../../hooks/useTenantBranding';
+import { useTenantUsage } from '../../hooks/useTenantUsage';
 import {
   Calendar,
   ClipboardList,
@@ -16,8 +17,12 @@ import {
   ChevronDown,
   Maximize,
   Minimize,
-  ExternalLink
+  ExternalLink,
+  Activity,
+  AlertTriangle,
+  AlertCircle
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { getImageUrl } from '../../utils/imageUrl';
 
 function LiveClock() {
@@ -49,6 +54,7 @@ export function Navbar() {
   const isSuperAdmin = user?.role === 'SUPER_ADMIN' || user?.role === 'SUPERADMIN' || user?.username === 'superadmin';
   const isAdmin = user?.role === 'ADMIN' || isSuperAdmin;
   const { data: tenant } = useMyTenant({ enabled: !isSuperAdmin });
+  const { data: usage } = useTenantUsage();
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -101,6 +107,31 @@ export function Navbar() {
 
   const currentPath = location.pathname;
 
+  const pct = usage?.maxAppointmentsMonth ? (usage.currentMonthAppointments / usage.maxAppointmentsMonth) * 100 : 0;
+  
+  let usageColorText = 'text-emerald-500';
+  let usageColorBg = 'bg-emerald-500';
+  let UsageIcon = Activity;
+  
+  if (pct >= 100) {
+    usageColorText = 'text-red-500';
+    usageColorBg = 'bg-red-500';
+    UsageIcon = AlertCircle;
+  } else if (pct >= 70) {
+    usageColorText = 'text-amber-500';
+    usageColorBg = 'bg-amber-500';
+    UsageIcon = AlertTriangle;
+  }
+
+  const handleUsageClick = () => {
+    toast((t) => (
+      <div onClick={() => toast.dismiss(t.id)} className="cursor-pointer flex items-center gap-2 block w-full">
+        <UsageIcon className={`w-4 h-4 ${usageColorText}`} />
+        <span>Llevás {usage.currentMonthAppointments} de {usage.maxAppointmentsMonth} turnos este mes.</span>
+      </div>
+    ), { id: 'usage-toast' });
+  };
+
   const handleNav = (path) => {
     setIsUserMenuOpen(false);
     navigate(path);
@@ -113,7 +144,7 @@ export function Navbar() {
     { label: 'Turnos', path: '/appointments', icon: ClipboardList, publicStaff: true },
     { label: 'Clientes', path: '/clients', icon: Users, publicStaff: true },
     { label: 'Servicios', path: '/admin/services', icon: Scissors, adminOnly: true },
-    { label: 'Caja', path: '/cashier', icon: Vault, publicStaff: true },
+    { label: 'Ingresos', path: '/earnings', icon: Vault, publicStaff: true },
     { label: 'Dashboard', path: '/dashboard', icon: BarChart2, adminOnly: true },
   ];
 
@@ -155,20 +186,58 @@ export function Navbar() {
             <span className="text-xs font-bold text-zinc-100 truncate w-full max-w-[130px]">
               {tenant?.storeName || tenant?.name || 'Roosty Agenda'}
             </span>
-            <span className="text-[10px] text-[var(--primary-color,#818cf8)] font-medium truncate opacity-90">
-              {user?.fullName || user?.username || 'Staff'}
-            </span>
+            <div className="flex items-center gap-1.5 mt-[1px]">
+              <span className="text-[10px] text-[var(--primary-color,#818cf8)] font-medium truncate max-w-[70px]">
+                {user?.fullName || user?.username || 'Staff'}
+              </span>
+              {usage?.maxAppointmentsMonth > 0 && !isSuperAdmin && (
+                <button 
+                  onClick={handleUsageClick}
+                  className={`flex items-center gap-1.5 px-1.5 py-[2px] rounded-sm text-[9px] font-mono font-bold border cursor-pointer active:scale-95 transition-all ${
+                  usage.limitReached 
+                    ? 'bg-red-500/10 text-red-400 border-red-500/20' 
+                    : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:border-zinc-700'
+                }`}>
+                  <div className="w-4 h-1 bg-zinc-800 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full ${usageColorBg}`}
+                      style={{ width: `${Math.min(100, pct)}%` }}
+                    />
+                  </div>
+                  <span>{usage.currentMonthAppointments}/{usage.maxAppointmentsMonth}</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Caja & Ingresos shortcut (Desktop Only) */}
           <button
-            onClick={() => handleNav('/cashier')}
+            onClick={() => handleNav('/earnings')}
             className="btn-touch px-2.5 py-1 rounded-lg text-[11px] font-medium border border-zinc-800 bg-zinc-900/90 text-zinc-300 hover:text-white hover:bg-zinc-850 hidden sm:flex items-center gap-1.5 transition-colors cursor-pointer"
-            title="Ver Caja e Ingresos"
+            title="Ver Ingresos"
           >
             <Vault className="w-3.5 h-3.5 text-amber-500" />
-            <span>Caja & Cobros</span>
+            <span>Ingresos</span>
           </button>
+
+          {/* Usage Badge (Desktop) */}
+          {usage?.maxAppointmentsMonth > 0 && !isSuperAdmin && (
+            <button 
+              onClick={handleUsageClick}
+              className="hidden xl:flex items-center gap-1.5 px-2.5 h-6 rounded-md bg-zinc-900 border border-zinc-800 hover:border-zinc-700 cursor-pointer active:scale-95 transition-all" 
+              title={`Turnos este mes: ${usage.currentMonthAppointments} / ${usage.maxAppointmentsMonth}`}
+            >
+              <div className="flex-1 w-16 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full ${usageColorBg}`}
+                  style={{ width: `${Math.min(100, pct)}%` }}
+                />
+              </div>
+              <span className="text-[10px] font-medium text-zinc-400 font-mono">
+                {usage.currentMonthAppointments}/{usage.maxAppointmentsMonth}
+              </span>
+            </button>
+          )}
 
           {/* Live Clock (Desktop Only) */}
           <LiveClock />
@@ -202,8 +271,7 @@ export function Navbar() {
         </nav>
 
         {/* ─── Right: Settings & User Profile ─── */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-auto md:ml-0">
-          {/* Ver Portal Clientes shortcut - Moved here for mobile balance, muted color */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-auto md:ml-0">{isAdmin && (<button onClick={() => handleNav('/dashboard')} className="btn-touch p-1.5 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/80 transition-colors cursor-pointer shrink-0" title="Dashboard"><BarChart2 className="w-4 h-4" /></button>)}{/* Ver Portal Clientes shortcut - Moved here for mobile balance, muted color */}
           <a
             href={tenant?.slug ? `https://${tenant.slug}.agenda.roosty.site` : '/'}
             target="_blank"

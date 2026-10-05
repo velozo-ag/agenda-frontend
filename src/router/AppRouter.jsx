@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
-import { CashierPage } from '../pages/CashierPage';
+import { EarningsPage } from '../pages/EarningsPage';
 import { AdminSettingsPage } from '../pages/AdminSettingsPage';
 import ServicesAdminPage from '../pages/ServicesAdminPage';
 import { SuperAdminPage } from '../pages/SuperAdminPage';
@@ -13,6 +13,7 @@ import { DemoExpiredPage } from '../pages/DemoExpiredPage';
 import { Navbar } from '../components/layout/Navbar';
 import { DemoBanner } from '../components/layout/DemoBanner';
 import { useMyTenant, applyTenantTheme } from '../hooks/useTenantBranding';
+import { getTenantSlug } from '../api/axiosClient';
 import { getImageUrl } from '../utils/imageUrl';
 import { Loader2 } from 'lucide-react';
 import { AgendaPage } from '../pages/AgendaPage';
@@ -20,10 +21,12 @@ import { AppointmentsPage } from '../pages/AppointmentsPage';
 import { ClientsPage } from '../pages/ClientsPage';
 import { ClientDetailPage } from '../pages/ClientDetailPage';
 import { BookingPage } from '../pages/BookingPage';
+import { LandingPage } from '../pages/LandingPage';
 import { BookingConfirmationPage } from '../pages/BookingConfirmationPage';
 import { BookingStatusPage } from '../pages/BookingStatusPage';
 
 function ProtectedLayoutContent() {
+  const tenantSlug = getTenantSlug();
   const { user } = useAuth();
   const isSuperAdmin = user?.role === 'SUPER_ADMIN' || user?.role === 'SUPERADMIN' || user?.username === 'superadmin';
   const { data: tenant } = useMyTenant({ enabled: !isSuperAdmin });
@@ -66,7 +69,7 @@ function ProtectedLayoutContent() {
             <Route path="/clients" element={<ClientsPage />} />
             <Route path="/clients/:id" element={<ClientDetailPage />} />
             
-            <Route path="/cashier" element={<CashierPage />} />
+            <Route path="/earnings" element={<EarningsPage />} />
             <Route path="/dashboard" element={isAdmin ? <DashboardPage /> : <Navigate to={defaultHome} replace />} />
             
             <Route path="/admin" element={isAdmin ? <AdminSettingsPage /> : <Navigate to={defaultHome} replace />} />
@@ -111,16 +114,17 @@ function ProtectedLayout() {
 }
 
 export function AppRouter() {
+  const tenantSlug = getTenantSlug();
   const { isAuthenticated, user } = useAuth();
   const isSuperAdmin = user?.role === 'SUPER_ADMIN' || user?.role === 'SUPERADMIN' || user?.username === 'superadmin';
 
   return (
     <Routes>
       {/* Root Route: Always the public customer booking page (accessible whether logged in or not) */}
-      <Route path="/" element={<BookingPage />} />
+      <Route path="/" element={tenantSlug ? <BookingPage /> : <LandingPage />} />
 
       {/* Public Booking Portal (No auth needed) */}
-      <Route path="/book" element={<BookingPage />} />
+      <Route path="/book" element={tenantSlug ? <BookingPage /> : <LandingPage />} />
       <Route path="/book/:slug" element={<BookingPage />} />
       <Route path="/agenda/:slug" element={<BookingPage />} />
       <Route path="/book/confirmation" element={<BookingConfirmationPage />} />

@@ -49,6 +49,7 @@ export function useUpdateClient() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['clients'] });
       queryClient.invalidateQueries({ queryKey: ['client', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['client-history', variables.id] });
       toast.success('Cliente actualizado correctamente');
     },
     onError: (err) => {
@@ -64,6 +65,7 @@ export function useSetRequireDeposit() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['clients'] });
       queryClient.invalidateQueries({ queryKey: ['client', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['client-history', variables.id] });
       toast.success('Estado de seña actualizado');
     },
     onError: (err) => {
@@ -79,6 +81,7 @@ export function useResetNoShowCount() {
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: ['clients'] });
       queryClient.invalidateQueries({ queryKey: ['client', id] });
+      queryClient.invalidateQueries({ queryKey: ['client-history', id] });
       toast.success('Historial de no-shows reiniciado');
     },
     onError: (err) => {
