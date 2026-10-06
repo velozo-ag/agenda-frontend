@@ -7,25 +7,25 @@ export function WaitlistAdminPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-950 p-3 sm:p-6 gap-4">
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-zinc-950 p-3 sm:p-6 gap-4">
       {/* ─── Top Header ─── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-zinc-900/80 border border-zinc-800/80 backdrop-blur-md p-4 rounded-2xl shrink-0 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800/80 backdrop-blur-md p-4 rounded-2xl shrink-0 shadow-sm">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/agenda')}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 transition-all text-xs font-bold cursor-pointer active:scale-95 shrink-0"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all text-xs font-bold cursor-pointer active:scale-95 shrink-0"
             title="Volver a la Agenda"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Volver a Agenda</span>
           </button>
-          <div className="w-px h-6 bg-zinc-800 hidden sm:block" />
+          <div className="w-px h-6 bg-zinc-200 dark:bg-zinc-800 hidden sm:block" />
           <div>
             <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-amber-400" />
-              <h1 className="text-lg sm:text-xl font-black text-zinc-100 tracking-tight">Lista de Espera</h1>
+              <Clock className="w-5 h-5 text-amber-500 dark:text-amber-400" />
+              <h1 className="text-lg sm:text-xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">Lista de Espera</h1>
             </div>
-            <p className="text-xs text-zinc-500 mt-0.5">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
               Clientes aguardando turnos liberados. Podés asignarles un turno directamente o contactarlos por WhatsApp.
             </p>
           </div>

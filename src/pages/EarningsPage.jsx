@@ -59,11 +59,11 @@ export function EarningsPage() {
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Vault className="w-6 h-6 text-indigo-400" />
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
+            <Vault className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
             Ingresos y Liquidaciones
           </h1>
-          <p className="text-zinc-400 mt-1">Control de facturación y comisiones del equipo.</p>
+          <p className="text-zinc-500 dark:text-zinc-400 mt-1">Control de facturación y comisiones del equipo.</p>
         </div>
         
         <div className="flex flex-wrap gap-2">
@@ -71,10 +71,10 @@ export function EarningsPage() {
             <button
               key={preset.label}
               onClick={() => setSelectedPreset(preset)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                 selectedPreset.label === preset.label 
-                  ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' 
-                  : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-300'
+                  ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 font-bold' 
+                  : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800'
               }`}
             >
               {preset.label}
@@ -84,36 +84,36 @@ export function EarningsPage() {
       </div>
 
       {loadingEarnings ? (
-        <div className="text-zinc-400 animate-pulse">Cargando reporte...</div>
+        <div className="text-zinc-500 dark:text-zinc-400 animate-pulse">Cargando reporte...</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-            <div className="flex items-center gap-3 text-zinc-400 mb-2">
-              <Banknote className="w-5 h-5" />
-              <h3 className="font-medium">Ingresos Brutos</h3>
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
+            <div className="flex items-center gap-3 text-zinc-500 dark:text-zinc-400 mb-2">
+              <Banknote className="w-5 h-5 text-zinc-400 dark:text-zinc-500" />
+              <h3 className="font-medium text-zinc-700 dark:text-zinc-300">Ingresos Brutos</h3>
             </div>
-            <p className="text-3xl font-bold text-white">{formatCurrency(earnings?.grossRevenue)}</p>
-            <p className="text-sm text-zinc-500 mt-1">{earnings?.totalCompletedAppointments} cortes completados</p>
+            <p className="text-3xl font-bold font-mono text-zinc-900 dark:text-white">{formatCurrency(earnings?.grossRevenue)}</p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">{earnings?.totalCompletedAppointments} cortes completados</p>
           </div>
 
           {showCommissions && (
             <>
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-                <div className="flex items-center gap-3 text-zinc-400 mb-2">
-                  <Users className="w-5 h-5" />
-                  <h3 className="font-medium">Comisiones a Pagar</h3>
+              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
+                <div className="flex items-center gap-3 text-zinc-500 dark:text-zinc-400 mb-2">
+                  <Users className="w-5 h-5 text-zinc-400 dark:text-zinc-500" />
+                  <h3 className="font-medium text-zinc-700 dark:text-zinc-300">Comisiones a Pagar</h3>
                 </div>
-                <p className="text-3xl font-bold text-red-400">{formatCurrency(earnings?.totalCommissions)}</p>
-                <p className="text-sm text-zinc-500 mt-1">A repartir entre el equipo</p>
+                <p className="text-3xl font-bold font-mono text-rose-500 dark:text-red-400">{formatCurrency(earnings?.totalCommissions)}</p>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">A repartir entre el equipo</p>
               </div>
 
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 bg-gradient-to-br from-indigo-500/10 to-transparent">
-                <div className="flex items-center gap-3 text-indigo-400 mb-2">
+              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 bg-gradient-to-br from-indigo-500/10 to-transparent shadow-sm">
+                <div className="flex items-center gap-3 text-indigo-600 dark:text-indigo-400 mb-2">
                   <BarChart3 className="w-5 h-5" />
-                  <h3 className="font-medium text-indigo-300">Ingreso Neto (Local)</h3>
+                  <h3 className="font-medium text-indigo-700 dark:text-indigo-300">Ingreso Neto (Local)</h3>
                 </div>
-                <p className="text-3xl font-bold text-indigo-400">{formatCurrency(earnings?.netRevenue)}</p>
-                <p className="text-sm text-indigo-400/60 mt-1">Lo que le queda a la barbería</p>
+                <p className="text-3xl font-bold font-mono text-indigo-600 dark:text-indigo-400">{formatCurrency(earnings?.netRevenue)}</p>
+                <p className="text-sm text-indigo-600/70 dark:text-indigo-400/60 mt-1">Lo que le queda a la barbería</p>
               </div>
             </>
           )}
@@ -122,9 +122,9 @@ export function EarningsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {showCommissions && (
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden flex flex-col">
-            <div className="p-4 border-b border-zinc-800 bg-zinc-900/50">
-              <h2 className="font-medium text-white">Liquidación por Barbero</h2>
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden flex flex-col shadow-sm">
+            <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-zinc-900/50">
+              <h2 className="font-semibold text-zinc-900 dark:text-white">Liquidación por Barbero</h2>
             </div>
             <div className="p-4 overflow-auto flex-1">
               {loadingCommissions ? (
@@ -134,13 +134,13 @@ export function EarningsPage() {
               ) : (
                 <div className="space-y-4">
                   {commissionsData?.commissions?.map(item => (
-                    <div key={item.barberId} className="flex justify-between items-center p-3 rounded-lg border border-zinc-800/50 bg-zinc-950/50">
+                    <div key={item.barberId} className="flex justify-between items-center p-3 rounded-lg border border-zinc-200 dark:border-zinc-800/50 bg-zinc-50/80 dark:bg-zinc-950/50">
                       <div>
-                        <p className="font-medium text-zinc-200">{item.barberName}</p>
+                        <p className="font-medium text-zinc-800 dark:text-zinc-200">{item.barberName}</p>
                         <p className="text-xs text-zinc-500">{item.completedAppointments} turnos ({item.commissionPct}%)</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-mono text-emerald-400 font-bold">{formatCurrency(item.totalCommission)}</p>
+                        <p className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">{formatCurrency(item.totalCommission)}</p>
                         <p className="text-xs text-zinc-500">de {formatCurrency(item.totalRevenue)}</p>
                       </div>
                     </div>
@@ -151,9 +151,9 @@ export function EarningsPage() {
           </div>
         )}
 
-        <div className={`bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden flex flex-col ${!showCommissions ? 'col-span-full' : ''}`}>
-          <div className="p-4 border-b border-zinc-800 bg-zinc-900/50">
-            <h2 className="font-medium text-white">Turnos Cobrados</h2>
+        <div className={`bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden flex flex-col shadow-sm ${!showCommissions ? 'col-span-full' : ''}`}>
+          <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-zinc-900/50">
+            <h2 className="font-semibold text-zinc-900 dark:text-white">Turnos Cobrados</h2>
           </div>
           <div className="p-4 overflow-auto flex-1 max-h-[400px]">
              {appointments?.data?.length === 0 ? (
@@ -161,20 +161,20 @@ export function EarningsPage() {
              ) : (
                 <table className="w-full text-sm text-left">
                   <thead>
-                    <tr className="text-zinc-500 border-b border-zinc-800">
+                    <tr className="text-zinc-500 border-b border-zinc-200 dark:border-zinc-800">
                       <th className="pb-2 font-medium">Cliente</th>
                       <th className="pb-2 font-medium">Servicio</th>
                       <th className="pb-2 font-medium">Barbero</th>
                       <th className="pb-2 font-medium text-right">Monto</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-800/50">
+                  <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/50">
                     {appointments?.data?.map(appt => (
-                      <tr key={appt.id} className="text-zinc-300">
-                        <td className="py-2">{appt.clientName}</td>
-                        <td className="py-2 text-zinc-400 truncate max-w-[120px]">{appt.serviceNameSnapshot}</td>
-                        <td className="py-2">{appt.barberName}</td>
-                        <td className="py-2 text-right font-mono text-zinc-200">{formatCurrency(appt.priceSnapshot)}</td>
+                      <tr key={appt.id} className="text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 transition-colors">
+                        <td className="py-2.5 font-medium text-zinc-800 dark:text-zinc-200">{appt.clientName}</td>
+                        <td className="py-2.5 text-zinc-500 dark:text-zinc-400 truncate max-w-[120px]">{appt.serviceNameSnapshot}</td>
+                        <td className="py-2.5 text-zinc-600 dark:text-zinc-300">{appt.barberName}</td>
+                        <td className="py-2.5 text-right font-mono font-bold text-zinc-900 dark:text-zinc-200">{formatCurrency(appt.priceSnapshot)}</td>
                       </tr>
                     ))}
                   </tbody>

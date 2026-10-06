@@ -78,18 +78,18 @@ export function AppointmentsDayStrip({ selectedDate, onChange, barberId }) {
             onClick={() => onChange(d.iso)}
             className={`relative px-3 py-2 rounded-xl border flex flex-col items-center min-w-[52px] transition-all cursor-pointer shrink-0 snap-center ${
               isSelected
-                ? 'border-amber-500 bg-amber-500 text-zinc-950 font-bold shadow-xs scale-105'
+                ? 'border-amber-500 bg-amber-500 text-zinc-900 dark:text-zinc-950 font-bold shadow-xs scale-105'
                 : d.isToday
-                  ? 'border-amber-500/50 bg-zinc-900 text-amber-500 hover:bg-zinc-800'
-                  : 'border-zinc-800 bg-zinc-900/70 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-850'
+                  ? 'border-amber-500/50 bg-amber-50 dark:bg-zinc-900 text-amber-600 dark:text-amber-500 hover:bg-amber-100 dark:hover:bg-zinc-800'
+                  : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/70 text-zinc-600 dark:text-zinc-300 hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800'
             }`}
           >
-            <span className={`text-[10px] uppercase font-semibold ${isSelected ? 'text-zinc-950' : 'text-zinc-500'}`}>
+            <span className={`text-[10px] uppercase font-semibold ${isSelected ? 'text-zinc-900 dark:text-zinc-950' : 'text-zinc-500 dark:text-zinc-400'}`}>
               {d.dayName}
             </span>
             <span className="text-sm font-black font-mono">{d.dayNumber}</span>
             {hasAppts && (
-              <span className={`absolute bottom-1 w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-zinc-950' : 'bg-amber-500'}`} />
+              <span className={`absolute bottom-1 w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-zinc-900 dark:bg-zinc-950' : 'bg-amber-500'}`} />
             )}
           </button>
         );

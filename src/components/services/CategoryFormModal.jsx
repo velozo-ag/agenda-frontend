@@ -64,51 +64,51 @@ export default function CategoryFormModal({ isOpen, onClose, categoryToEdit }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div 
-        className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200 ${isSlideOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} 
+        className={`absolute inset-0 bg-zinc-900/50 dark:bg-black/70 backdrop-blur-sm transition-opacity duration-200 ${isSlideOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} 
         onClick={handleClose} 
       />
       
-      <div className={`relative bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col transition-all duration-200 ease-out ${isSlideOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'}`}>
-        <div className="flex items-center justify-between p-6 border-b border-zinc-800/80 bg-zinc-900/50">
-          <h2 className="text-xl font-bold text-white">
+      <div className={`relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col transition-all duration-200 ease-out ${isSlideOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'}`}>
+        <div className="flex items-center justify-between p-6 border-b border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/50">
+          <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
             {categoryToEdit ? 'Editar Categoría' : 'Nueva Categoría'}
           </h2>
-          <button onClick={handleClose} className="p-2 -mr-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-xl transition-colors">
+          <button onClick={handleClose} className="p-2 -mr-2 text-zinc-400 hover:text-zinc-700 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-colors cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <div>
-            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Nombre</label>
+            <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-400 uppercase tracking-wider mb-2">Nombre</label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 outline-none transition-all placeholder:text-zinc-600 font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-none transition-all placeholder:text-zinc-400 dark:placeholder:text-zinc-600 font-medium"
               placeholder="Ej. Cortes Clásicos"
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Orden (0 es primero)</label>
+            <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-400 uppercase tracking-wider mb-2">Orden (0 es primero)</label>
             <input
               type="number"
               required
               min="0"
               value={displayOrder}
               onChange={(e) => setDisplayOrder(e.target.value)}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 outline-none transition-all font-mono font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-zinc-900 dark:text-white focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 outline-none transition-all font-mono font-medium"
             />
           </div>
 
-          <div className="pt-4 flex items-center justify-between gap-3">
+          <div className="pt-4 flex items-center justify-between gap-3 border-t border-zinc-100 dark:border-zinc-800/60">
             {categoryToEdit ? (
               <button
                 type="button"
                 onClick={handleDelete}
                 disabled={deleteCategory.isPending}
-                className="text-red-500 hover:text-red-400 text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-red-500/10 transition-colors disabled:opacity-50"
+                className="text-red-500 hover:text-red-600 dark:hover:text-red-400 text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl hover:bg-red-500/10 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 Eliminar
               </button>
@@ -118,14 +118,14 @@ export default function CategoryFormModal({ isOpen, onClose, categoryToEdit }) {
               <button
                 type="button"
                 onClick={handleClose}
-                className="px-5 py-2.5 rounded-xl text-sm font-bold text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
+                className="px-5 py-2.5 rounded-xl text-sm font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-transparent transition-colors cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
                 disabled={createCategory.isPending || updateCategory.isPending}
-                className="px-5 py-2.5 rounded-xl text-sm font-bold bg-amber-500 hover:bg-amber-400 text-zinc-950 transition-all shadow-lg shadow-amber-500/20 active:scale-[0.98] disabled:opacity-50"
+                className="px-5 py-2.5 rounded-xl text-sm font-bold bg-amber-500 hover:bg-amber-400 text-zinc-950 transition-all shadow-lg shadow-amber-500/20 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
               >
                 {createCategory.isPending || updateCategory.isPending ? 'Guardando...' : 'Guardar'}
               </button>

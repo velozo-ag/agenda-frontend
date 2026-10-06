@@ -113,18 +113,18 @@ export function DayView({ appointments, onSlotClick, onAppointmentClick, selecte
   }, [dailyAppointments]);
 
   return (
-    <div className="flex-1 overflow-y-auto bg-zinc-950 flex flex-col relative w-full overflow-x-hidden">
+    <div className="flex-1 overflow-y-auto bg-white dark:bg-zinc-950 flex flex-col relative w-full overflow-x-hidden">
       
       <div className="flex flex-1 relative w-full">
         {/* Time axis */}
-        <div className="w-14 shrink-0 relative z-30 bg-zinc-950 border-r border-zinc-800/50">
+        <div className="w-14 shrink-0 relative z-30 bg-white dark:bg-zinc-950 border-r border-zinc-200/50 dark:border-zinc-800/50">
           {hours.map(h => (
             <div
               key={h}
-              className="flex items-start justify-end pr-3 pt-1 border-b border-zinc-800/40"
+              className="flex items-start justify-end pr-3 pt-1 border-b border-zinc-200/40 dark:border-zinc-800/40"
               style={{ height: `${SLOT_REM}rem`, minHeight: `${SLOT_REM}rem` }}
             >
-              <span className="text-[10px] text-zinc-600 font-mono tabular-nums">{h}:00</span>
+              <span className="text-[10px] text-zinc-400 dark:text-zinc-600 font-mono tabular-nums">{h}:00</span>
             </div>
           ))}
         </div>
@@ -156,10 +156,10 @@ export function DayView({ appointments, onSlotClick, onAppointmentClick, selecte
                 slotTime.setHours(h, 0, 0, 0);
                 onSlotClick(slotTime);
               }}
-              className="border-b border-zinc-800/50 hover:bg-zinc-900/30 cursor-pointer transition-colors group relative w-full"
+              className="border-b border-zinc-200/50 dark:border-zinc-800/50 hover:bg-zinc-100/50 dark:hover:bg-zinc-900/30 cursor-pointer transition-colors group relative w-full"
               style={{ height: `${SLOT_REM}rem`, minHeight: `${SLOT_REM}rem` }}
             >
-              <div className="absolute bottom-0 left-0 right-0 h-px bg-zinc-800/30 top-1/2" />
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-zinc-200/50 dark:bg-zinc-800/30 top-1/2" />
             </div>
           ))}
 

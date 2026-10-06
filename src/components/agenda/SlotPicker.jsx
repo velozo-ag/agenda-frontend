@@ -17,7 +17,7 @@ export function SlotPicker({ serviceId, barberId, date, value, onChange }) {
 
   if (!serviceId || !date) {
     return (
-      <div className="flex flex-col items-center justify-center py-8 text-zinc-500 gap-2 bg-zinc-900/40 rounded-2xl border border-zinc-800/50 border-dashed">
+      <div className="flex flex-col items-center justify-center py-8 text-zinc-500 gap-2 bg-zinc-100/50 dark:bg-zinc-900/40 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50 border-dashed">
         <Clock className="w-6 h-6 opacity-40" />
         <span className="text-xs font-medium">Seleccioná un servicio y una fecha</span>
       </div>
@@ -26,7 +26,7 @@ export function SlotPicker({ serviceId, barberId, date, value, onChange }) {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-10 gap-2 bg-zinc-900/40 rounded-2xl border border-zinc-800/50">
+      <div className="flex flex-col items-center justify-center py-10 gap-2 bg-zinc-100/50 dark:bg-zinc-900/40 rounded-2xl border border-zinc-200/50 dark:border-zinc-800/50">
         <Loader2 className="w-6 h-6 animate-spin text-amber-500" />
         <span className="text-xs text-zinc-500 font-medium">Consultando disponibilidad...</span>
       </div>
@@ -37,10 +37,10 @@ export function SlotPicker({ serviceId, barberId, date, value, onChange }) {
 
   if (slots.length === 0) {
     return (
-      <div className="bg-zinc-900/60 border border-zinc-800 border-dashed rounded-2xl p-6 text-center">
-        <Clock className="w-8 h-8 text-zinc-700 mx-auto mb-2" />
-        <div className="text-sm font-semibold text-zinc-400">Sin turnos disponibles</div>
-        <div className="text-xs text-zinc-600 mt-1">No hay horarios libres para este día</div>
+      <div className="bg-zinc-100/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 border-dashed rounded-2xl p-6 text-center">
+        <Clock className="w-8 h-8 text-zinc-400 dark:text-zinc-700 mx-auto mb-2" />
+        <div className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Sin turnos disponibles</div>
+        <div className="text-xs text-zinc-400 dark:text-zinc-600 mt-1">No hay horarios libres para este día</div>
       </div>
     );
   }
@@ -51,7 +51,7 @@ export function SlotPicker({ serviceId, barberId, date, value, onChange }) {
 
   const SlotGroup = ({ label, items }) => (
     <div className="space-y-2">
-      <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest font-mono">{label}</div>
+      <div className="text-[10px] font-bold text-zinc-500 dark:text-zinc-600 uppercase tracking-widest font-mono">{label}</div>
       <div className="grid grid-cols-3 gap-2.5">
         {items.map(slotIso => {
           const d = new Date(slotIso);
@@ -65,8 +65,8 @@ export function SlotPicker({ serviceId, barberId, date, value, onChange }) {
               onClick={() => onChange(slotIso)}
               className={`py-3 rounded-xl text-sm font-mono font-bold border transition-all cursor-pointer active:scale-[0.97] ${
                 isSelected
-                  ? 'bg-amber-500 border-amber-500 text-zinc-950 shadow-md shadow-amber-500/20'
-                  : 'bg-zinc-900 text-zinc-300 border-zinc-800 hover:border-amber-500/40 hover:bg-zinc-800 hover:text-zinc-100'
+                  ? 'bg-amber-500 border-amber-500 text-zinc-900 dark:text-zinc-950 shadow-md shadow-amber-500/20'
+                  : 'bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:border-amber-500/40 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100'
               }`}
             >
               {timeString}

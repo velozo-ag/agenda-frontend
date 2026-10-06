@@ -82,18 +82,18 @@ export function AdminSettingsPage() {
     <div className="p-4 lg:p-6 max-w-7xl mx-auto min-h-[calc(100vh-4rem)] flex flex-col select-none animate-in fade-in slide-in-from-bottom-4 duration-500">
 
       {/* ─── Header ─── */}
-      <div className="mb-6 pb-4 border-b border-zinc-800/60 flex items-center gap-3">
+      <div className="mb-6 pb-4 border-b border-zinc-200 dark:border-zinc-800/60 flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center shrink-0">
-          <Settings className="w-4 h-4 text-indigo-400" />
+          <Settings className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
         </div>
         <div>
-          <h1 className="text-base font-bold text-zinc-100 flex items-center gap-2 flex-wrap">
+          <h1 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 flex-wrap">
             <span>Configuración</span>
-            <span className="px-2 py-0.5 rounded-lg bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 text-[10px] font-mono font-semibold">
+            <span className="px-2 py-0.5 rounded-lg bg-indigo-500/10 border border-indigo-500/25 text-indigo-600 dark:text-indigo-400 text-[10px] font-mono font-semibold">
               {getPlanName(planType)}
             </span>
           </h1>
-          <p className="text-[11px] text-zinc-500 font-mono mt-0.5">
+          <p className="text-[11px] text-zinc-500 dark:text-zinc-500 font-mono mt-0.5">
             Identidad, agenda, pagos y equipo de tu barbería
           </p>
         </div>
@@ -104,7 +104,7 @@ export function AdminSettingsPage() {
 
         {/* ─── Sidebar navigation ─── */}
         <nav className="md:w-52 lg:w-56 shrink-0">
-          <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest font-mono px-1 mb-2 hidden md:block">
+          <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-600 uppercase tracking-widest font-mono px-1 mb-2 hidden md:block">
             Módulos
           </p>
 
@@ -133,31 +133,31 @@ export function AdminSettingsPage() {
                     px-3 py-2.5 rounded-xl border
                     transition-all duration-150 cursor-pointer
                     ${active
-                      ? 'bg-indigo-500/10 border-indigo-500/30 shadow-sm'
-                      : 'bg-transparent border-transparent hover:bg-zinc-900/60 hover:border-zinc-800/50'}
+                      ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-200 dark:border-indigo-500/30 shadow-sm'
+                      : 'bg-transparent border-transparent hover:bg-zinc-100 dark:hover:bg-zinc-900/60 hover:border-zinc-200 dark:hover:border-zinc-800/50'}
                   `}
                 >
                   <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
-                    active ? 'bg-indigo-500/20 text-indigo-400' : 'bg-zinc-900 text-zinc-600'
+                    active ? 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400' : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-600'
                   }`}>
                     <Icon className="w-3.5 h-3.5" />
                   </div>
 
                   <div className="hidden md:block min-w-0 flex-1">
-                    <div className={`text-xs font-semibold truncate leading-tight ${active ? 'text-indigo-300' : 'text-zinc-400'}`}>
+                    <div className={`text-xs font-semibold truncate leading-tight ${active ? 'text-indigo-600 dark:text-indigo-300' : 'text-zinc-600 dark:text-zinc-400'}`}>
                       {tab.name}
                     </div>
-                    <div className="text-[10px] text-zinc-600 truncate font-mono leading-tight mt-0.5">
+                    <div className="text-[10px] text-zinc-500 dark:text-zinc-600 truncate font-mono leading-tight mt-0.5">
                       {tab.description}
                     </div>
                   </div>
 
-                  <span className={`text-xs font-medium md:hidden whitespace-nowrap ${active ? 'text-indigo-300' : 'text-zinc-400'}`}>
+                  <span className={`text-xs font-medium md:hidden whitespace-nowrap ${active ? 'text-indigo-600 dark:text-indigo-300' : 'text-zinc-600 dark:text-zinc-400'}`}>
                     {tab.name}
                   </span>
 
                   <ChevronRight className={`w-3 h-3 shrink-0 ml-auto hidden md:block transition-colors ${
-                    active ? 'text-indigo-500' : 'text-zinc-700'
+                    active ? 'text-indigo-500' : 'text-zinc-400 dark:text-zinc-700'
                   }`} />
                 </button>
               );

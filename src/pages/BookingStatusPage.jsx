@@ -301,7 +301,7 @@ export function BookingStatusPage() {
             )}
 
             {/* Upload Deposit (Immersive UI) */}
-            {appt.status === 'PENDING_REVIEW' && !appt.depositPaid && appt.depositAmount > 0 && (
+            {appt.status === 'PENDING_REVIEW' && !appt.depositPaid && appt.depositAmount > 0 && salon?.hasDeposit !== false && (
               <>
                 <div className="border-t border-dashed border-white/10 my-1" />
                 <div className="flex flex-col gap-3">

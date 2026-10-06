@@ -8,25 +8,6 @@ import { useCreateAppointment } from '../../hooks/useAppointments';
 import { useTenantUsage } from '../../hooks/useTenantUsage';
 import { getLocalISODate } from '../../utils/dateUtils';
 
-// Step indicator component
-function StepBadge({ number, label, active, done }) {
-  return (
-    <div className={`flex items-center gap-2 ${active ? '' : 'opacity-60'}`}>
-      <span
-        className={`w-6 h-6 rounded-full text-xs font-black flex items-center justify-center shrink-0 border transition-all ${
-          done
-            ? 'bg-emerald-500 border-emerald-500 text-white'
-            : active
-            ? 'bg-indigo-500 border-indigo-500 text-white'
-            : 'bg-zinc-800 border-zinc-700 text-zinc-500'
-        }`}
-      >
-        {done ? '✓' : number}
-      </span>
-      <span className={`text-xs font-semibold ${active ? 'text-zinc-200' : 'text-zinc-500'}`}>{label}</span>
-    </div>
-  );
-}
 
 export function AppointmentFormModal({
   onClose,
@@ -85,45 +66,36 @@ export function AppointmentFormModal({
     );
   };
 
-  // Determine step completeness for visual indicator
-  const s1Done = !!selectedClient;
-  const s2Done = !!serviceId;
-  const s3Done = !!barberId;
-  const s4Done = !!date;
-  const s5Done = !!selectedSlot;
+  const filledCount = [selectedClient, serviceId, date, selectedSlot].filter(Boolean).length;
+  const progressPercent = Math.round((filledCount / 4) * 100);
 
   const inputCls =
-    'w-full bg-zinc-900/80 border border-zinc-800 rounded-xl px-3.5 py-3 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30 transition-all appearance-none';
+    'w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition-all shadow-xs appearance-none';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-sm">
-      <div className="bg-[#0a0a0c] border border-zinc-800/80 rounded-t-3xl sm:rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[88vh]">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-xs">
+      <div className="bg-white dark:bg-[#0a0a0c] border border-zinc-200 dark:border-zinc-800/80 rounded-t-3xl sm:rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-800/60 shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200 dark:border-zinc-800/60 shrink-0">
           <div>
-            <h2 className="text-base font-black text-zinc-100">Nuevo Turno</h2>
-            <p className="text-xs text-zinc-500 mt-0.5">Completá los datos para agendar</p>
+            <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100">Nuevo Turno</h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Completá los datos para agendar</p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-zinc-500 hover:text-zinc-200 rounded-xl hover:bg-zinc-900 transition-colors cursor-pointer"
+            className="p-2 text-zinc-400 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Step indicators */}
-        <div className="flex items-center gap-2 px-5 py-3 border-b border-zinc-800/40 overflow-x-auto no-scrollbar shrink-0">
-          <StepBadge number="1" label="Cliente" active={!s1Done} done={s1Done} />
-          <div className="flex-1 h-px bg-zinc-800/60 min-w-[12px]" />
-          <StepBadge number="2" label="Servicio" active={s1Done && !s2Done} done={s2Done} />
-          <div className="flex-1 h-px bg-zinc-800/60 min-w-[12px]" />
-          <StepBadge number="3" label="Barbero" active={s2Done && !s3Done} done={s3Done} />
-          <div className="flex-1 h-px bg-zinc-800/60 min-w-[12px]" />
-          <StepBadge number="4" label="Fecha" active={s3Done && !s4Done} done={s4Done} />
-          <div className="flex-1 h-px bg-zinc-800/60 min-w-[12px]" />
-          <StepBadge number="5" label="Horario" active={s4Done && !s5Done} done={s5Done} />
+        {/* Minimal Progress Bar (zero text/checkpoint clutter) */}
+        <div className="h-1 w-full bg-zinc-100 dark:bg-zinc-800/80 overflow-hidden shrink-0">
+          <div
+            className="h-full bg-amber-500 transition-all duration-300 ease-out"
+            style={{ width: `${progressPercent}%` }}
+          />
         </div>
 
         {/* Form */}
@@ -132,8 +104,8 @@ export function AppointmentFormModal({
           {/* 1. Cliente */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <User className="w-3.5 h-3.5 text-indigo-400" />
-              <label className="text-xs font-bold text-zinc-300 uppercase tracking-wider">Cliente</label>
+              <User className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+              <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Cliente</label>
             </div>
             <ClientSearchInput value={selectedClient} onChange={setSelectedClient} />
           </div>
@@ -141,8 +113,8 @@ export function AppointmentFormModal({
           {/* 2. Servicio */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Scissors className="w-3.5 h-3.5 text-indigo-400" />
-              <label className="text-xs font-bold text-zinc-300 uppercase tracking-wider">Servicio</label>
+              <Scissors className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+              <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Servicio</label>
             </div>
             <select
               required
@@ -163,8 +135,8 @@ export function AppointmentFormModal({
           {barbers.length > 1 && (
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <User className="w-3.5 h-3.5 text-indigo-400" />
-                <label className="text-xs font-bold text-zinc-300 uppercase tracking-wider">Barbero</label>
+                <User className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+                <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Barbero</label>
               </div>
               <select
                 value={barberId}
@@ -182,17 +154,17 @@ export function AppointmentFormModal({
           {/* 4. Fecha */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Calendar className="w-3.5 h-3.5 text-indigo-400" />
-              <label className="text-xs font-bold text-zinc-300 uppercase tracking-wider">Fecha</label>
+              <Calendar className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+              <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Fecha</label>
             </div>
             <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 pointer-events-none" />
+              <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 dark:text-zinc-500 pointer-events-none" />
               <input
                 type="date"
                 required
                 value={date}
                 onChange={(e) => { setDate(e.target.value); setSelectedSlot(''); }}
-                className={`${inputCls} pl-9`}
+                className={`${inputCls} pl-10`}
               />
             </div>
           </div>
@@ -200,8 +172,8 @@ export function AppointmentFormModal({
           {/* 5. Horario */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Clock className="w-3.5 h-3.5 text-indigo-400" />
-              <label className="text-xs font-bold text-zinc-300 uppercase tracking-wider">Horario Disponible</label>
+              <Clock className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+              <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Horario Disponible</label>
             </div>
             <SlotPicker
               serviceId={serviceId}
@@ -214,26 +186,26 @@ export function AppointmentFormModal({
 
           {/* Notas */}
           <div>
-            <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">Notas internas (opcional)</label>
+            <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider mb-2">Notas internas (opcional)</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-200 min-h-[72px] resize-none focus:outline-none focus:border-indigo-500/60 transition-all placeholder-zinc-600"
+              className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3 text-sm text-zinc-900 dark:text-zinc-100 min-h-[72px] resize-none focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition-all placeholder-zinc-400 dark:placeholder-zinc-500 shadow-xs"
               placeholder="Ej: cliente frecuente, prefiere nuca corta..."
             />
           </div>
 
           {/* Estado del turno */}
           <div>
-            <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Estado del Turno</label>
+            <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider mb-2">Estado del Turno</label>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setStatus('CONFIRMED')}
                 className={`h-11 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                   status === 'CONFIRMED'
-                    ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400 shadow-sm'
-                    : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-zinc-300'
+                    ? 'bg-emerald-50 dark:bg-emerald-500/20 border-emerald-300 dark:border-emerald-500/50 text-emerald-700 dark:text-emerald-400 shadow-xs'
+                    : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
                 }`}
               >
                 <CheckCircle2 className="w-4 h-4" />
@@ -244,15 +216,15 @@ export function AppointmentFormModal({
                 onClick={() => setStatus('PENDING_REVIEW')}
                 className={`h-11 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                   status === 'PENDING_REVIEW'
-                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-400 shadow-sm'
-                    : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-zinc-300'
+                    ? 'bg-amber-50 dark:bg-amber-500/20 border-amber-300 dark:border-amber-500/50 text-amber-700 dark:text-amber-400 shadow-xs'
+                    : 'bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
                 }`}
               >
                 <Clock className="w-4 h-4" />
                 <span>A Confirmar (Pendiente)</span>
               </button>
             </div>
-            <p className="text-[11px] text-zinc-500 mt-1.5">
+            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1.5">
               {status === 'CONFIRMED'
                 ? 'El cliente recibirá el correo de turno confirmado directamente.'
                 : 'Se notificará al cliente la propuesta y el turno quedará pendiente de confirmación.'}
@@ -261,12 +233,12 @@ export function AppointmentFormModal({
 
           {/* Deposit warning */}
           {selectedServiceObj && selectedServiceObj.depositAmount > 0 && (
-            <div className="flex items-start gap-3 bg-amber-500/8 border border-amber-500/25 rounded-xl p-3">
-              <Banknote className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/25 rounded-xl p-3">
+              <Banknote className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
               <div>
-                <div className="text-xs font-bold text-amber-400">Requiere seña</div>
-                <div className="text-[11px] text-amber-400/70 mt-0.5">
-                  El cliente deberá abonar ${selectedServiceObj.depositAmount} para confirmar.
+                <div className="text-xs font-bold text-amber-800 dark:text-amber-400">Requiere seña previa</div>
+                <div className="text-[11px] text-amber-700/80 dark:text-amber-400/80 mt-0.5">
+                  El cliente deberá abonar ${selectedServiceObj.depositAmount} para confirmar la reserva.
                 </div>
               </div>
             </div>
@@ -274,11 +246,11 @@ export function AppointmentFormModal({
         </form>
 
         {/* Footer */}
-        <div className="px-5 py-4 border-t border-zinc-800/60 flex gap-3 shrink-0">
+        <div className="px-5 py-4 border-t border-zinc-200 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-950/40 flex gap-3 shrink-0">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 h-12 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 font-semibold rounded-xl transition-colors cursor-pointer text-sm"
+            className="flex-1 h-12 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 font-bold rounded-xl transition-colors cursor-pointer text-sm border border-zinc-200 dark:border-zinc-800 shadow-xs"
           >
             Cancelar
           </button>
@@ -286,7 +258,11 @@ export function AppointmentFormModal({
             type="submit"
             onClick={handleSubmit}
             disabled={!selectedClient || !serviceId || !selectedSlot || isPending || isLimitReached}
-            className={`flex-1 h-12 font-black rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-sm shadow-md active:scale-[0.98] ${isLimitReached ? 'bg-red-500/20 text-red-500 border border-red-500/50 shadow-none' : 'bg-amber-500 hover:bg-amber-400 text-zinc-950 shadow-amber-500/20'}`}
+            className={`flex-1 h-12 font-black rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-sm shadow-md active:scale-[0.98] ${
+              isLimitReached 
+                ? 'bg-rose-500/15 text-rose-500 border border-rose-500/30 shadow-none' 
+                : 'bg-amber-500 hover:bg-amber-400 text-zinc-950 shadow-amber-500/20'
+            }`}
           >
             {isPending ? 'Creando...' : isLimitReached ? 'Límite Mensual Alcanzado' : 'Crear Turno'}
           </button>

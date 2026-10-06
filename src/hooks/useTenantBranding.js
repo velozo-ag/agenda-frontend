@@ -213,6 +213,19 @@ export const useOnboardingStatus = () => {
   });
 };
 
+export const useCompleteOnboarding = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => tenantService.completeOnboarding(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tenant'] });
+      queryClient.invalidateQueries({ queryKey: ['tenant', 'onboarding-status'] });
+      queryClient.invalidateQueries({ queryKey: ['tenant', 'me'] });
+    },
+  });
+};
+
 export const useDemoInfo = () => {
   const { data: tenant, isLoading } = useMyTenant();
   return {

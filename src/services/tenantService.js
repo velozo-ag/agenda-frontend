@@ -21,6 +21,10 @@ export const tenantService = {
   updateBookingSettings: async (data) => {
     return await axiosClient.put('/tenant/booking-settings', data);
   },
+
+  completeOnboarding: async () => {
+    return await axiosClient.put('/tenant/complete-onboarding');
+  },
 };
 
 export default tenantService;

@@ -77,7 +77,7 @@ export function WaitlistView() {
     <div className="flex flex-col gap-4">
       {/* ─── Success Feedback Alert ─── */}
       {successToast && (
-        <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-2xl flex items-center gap-3 text-sm animate-in fade-in slide-in-from-top-2">
+        <div className="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-300 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-400 px-4 py-3 rounded-2xl flex items-center gap-3 text-sm animate-in fade-in slide-in-from-top-2 shadow-xs">
           <CheckCircle2 className="w-5 h-5 shrink-0" />
           <span className="font-semibold">{successToast}</span>
         </div>
@@ -85,64 +85,64 @@ export function WaitlistView() {
 
       {/* ─── Metric Cards ─── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="bg-zinc-900/70 border border-zinc-800/80 p-4 rounded-2xl flex items-center justify-between">
+        <div className="bg-white dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-800/80 p-4 rounded-2xl flex items-center justify-between shadow-xs">
           <div>
             <div className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">En Espera</div>
-            <div className="text-2xl font-black text-amber-400 mt-1">{waitingCount}</div>
-            <div className="text-xs text-zinc-500 mt-0.5">Aguardando turno</div>
+            <div className="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1">{waitingCount}</div>
+            <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Aguardando turno</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400">
             <Clock className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-zinc-900/70 border border-zinc-800/80 p-4 rounded-2xl flex items-center justify-between">
+        <div className="bg-white dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-800/80 p-4 rounded-2xl flex items-center justify-between shadow-xs">
           <div>
             <div className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">Oferta Enviada</div>
-            <div className="text-2xl font-black text-cyan-400 mt-1">{notifiedCount}</div>
-            <div className="text-xs text-zinc-500 mt-0.5">Notificados por cancelación</div>
+            <div className="text-2xl font-black text-cyan-600 dark:text-cyan-400 mt-1">{notifiedCount}</div>
+            <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Notificados por cancelación</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+          <div className="w-10 h-10 rounded-xl bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/20 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
             <Sparkles className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-zinc-900/70 border border-zinc-800/80 p-4 rounded-2xl flex items-center justify-between">
+        <div className="bg-white dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-800/80 p-4 rounded-2xl flex items-center justify-between shadow-xs">
           <div>
             <div className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">Total en Lista</div>
-            <div className="text-2xl font-black text-zinc-100 mt-1">{totalCount}</div>
-            <div className="text-xs text-zinc-500 mt-0.5">Clientes registrados</div>
+            <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100 mt-1">{totalCount}</div>
+            <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Clientes registrados</div>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-zinc-800 border border-zinc-700/60 flex items-center justify-center text-zinc-400">
+          <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 flex items-center justify-center text-zinc-600 dark:text-zinc-400">
             <Users className="w-5 h-5" />
           </div>
         </div>
       </div>
 
       {/* ─── Main Panel: Search, Filter & Table ─── */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden flex flex-col shadow-sm">
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden flex flex-col shadow-xs">
         {/* Toolbar */}
-        <div className="p-3 sm:p-4 border-b border-zinc-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-zinc-950/40">
+        <div className="p-3 sm:p-4 border-b border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-zinc-50/70 dark:bg-zinc-950/40">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-zinc-400 dark:text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar por cliente, email, servicio o teléfono..."
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-amber-500/50 transition-colors"
+              className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 transition-all shadow-xs"
             />
           </div>
 
           {/* Status Filter */}
-          <div className="flex items-center gap-1.5 bg-zinc-950 p-1 rounded-xl border border-zinc-800 text-xs shrink-0 self-start sm:self-auto">
+          <div className="flex items-center gap-1.5 bg-zinc-100 dark:bg-zinc-950 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs shrink-0 self-start sm:self-auto">
             <button
               onClick={() => setStatusFilter('all')}
               className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                 statusFilter === 'all'
-                  ? 'bg-zinc-800 text-zinc-100 shadow-sm'
-                  : 'text-zinc-500 hover:text-zinc-300'
+                  ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
               }`}
             >
               Todos ({totalCount})
@@ -151,8 +151,8 @@ export function WaitlistView() {
               onClick={() => setStatusFilter('waiting')}
               className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                 statusFilter === 'waiting'
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-sm'
-                  : 'text-zinc-500 hover:text-zinc-300'
+                  ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-500/30 shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
               }`}
             >
               Esperando ({waitingCount})
@@ -161,8 +161,8 @@ export function WaitlistView() {
               onClick={() => setStatusFilter('notified')}
               className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
                 statusFilter === 'notified'
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-sm'
-                  : 'text-zinc-500 hover:text-zinc-300'
+                  ? 'bg-cyan-100 dark:bg-cyan-500/20 text-cyan-800 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-500/30 shadow-xs'
+                  : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
               }`}
             >
               Notificados ({notifiedCount})
@@ -172,8 +172,8 @@ export function WaitlistView() {
 
         {/* Table Content */}
         <div className="flex-1 overflow-x-auto">
-          <table className="w-full text-left text-sm text-zinc-400">
-            <thead className="bg-zinc-950/60 text-zinc-500 border-b border-zinc-800 text-[11px] uppercase tracking-wider font-bold">
+          <table className="w-full text-left text-sm text-zinc-600 dark:text-zinc-400">
+            <thead className="bg-zinc-50 dark:bg-zinc-950/60 text-zinc-500 border-b border-zinc-200 dark:border-zinc-800 text-[11px] uppercase tracking-wider font-bold">
               <tr>
                 <th className="px-4 py-3.5">Cliente</th>
                 <th className="px-4 py-3.5">Contacto</th>
@@ -184,21 +184,21 @@ export function WaitlistView() {
                 <th className="px-4 py-3.5 text-right">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-800/80">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/80">
               {isLoading ? (
                 <tr>
                   <td colSpan="7" className="text-center py-12">
-                    <Loader2 className="w-8 h-8 animate-spin mx-auto text-amber-400 mb-2" />
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto text-amber-500 mb-2" />
                     <span className="text-xs text-zinc-500">Cargando lista de espera...</span>
                   </td>
                 </tr>
               ) : filteredEntries.length === 0 ? (
                 <tr>
                   <td colSpan="7" className="text-center py-16">
-                    <div className="w-12 h-12 rounded-2xl bg-zinc-800/60 border border-zinc-700/50 flex items-center justify-center text-zinc-500 mx-auto mb-3">
+                    <div className="w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700/50 flex items-center justify-center text-zinc-400 dark:text-zinc-500 mx-auto mb-3">
                       <Clock className="w-6 h-6" />
                     </div>
-                    <h3 className="text-sm font-bold text-zinc-200">No hay clientes en esta vista</h3>
+                    <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">No hay clientes en esta vista</h3>
                     <p className="text-xs text-zinc-500 max-w-sm mx-auto mt-1">
                       {searchQuery
                         ? 'No se encontraron resultados para los filtros aplicados.'
@@ -208,11 +208,11 @@ export function WaitlistView() {
                 </tr>
               ) : (
                 filteredEntries.map((entry) => (
-                  <tr key={entry.id} className="hover:bg-zinc-800/40 transition-colors">
+                  <tr key={entry.id} className="hover:bg-zinc-50/60 dark:hover:bg-zinc-800/40 transition-colors">
                     {/* Cliente */}
-                    <td className="px-4 py-3.5 font-bold text-zinc-100">
+                    <td className="px-4 py-3.5 font-bold text-zinc-900 dark:text-zinc-100">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-xl bg-zinc-800 border border-zinc-700/60 flex items-center justify-center text-xs font-black text-amber-400 shrink-0">
+                        <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-xs font-black text-amber-600 dark:text-amber-400 shrink-0">
                           {entry.clientName?.charAt(0)?.toUpperCase() || 'C'}
                         </div>
                         <span className="truncate max-w-[150px] sm:max-w-none">{entry.clientName}</span>
@@ -221,30 +221,30 @@ export function WaitlistView() {
 
                     {/* Contacto */}
                     <td className="px-4 py-3.5">
-                      <div className="font-mono text-xs text-zinc-300">{entry.clientPhone || 'Sin teléfono'}</div>
-                      <div className="text-[11px] text-zinc-500 truncate max-w-[160px]">{entry.clientEmail}</div>
+                      <div className="font-mono text-xs text-zinc-800 dark:text-zinc-300">{entry.clientPhone || 'Sin teléfono'}</div>
+                      <div className="text-[11px] text-zinc-500 dark:text-zinc-400 truncate max-w-[160px]">{entry.clientEmail}</div>
                     </td>
 
                     {/* Servicio */}
                     <td className="px-4 py-3.5">
-                      <span className="inline-block px-2.5 py-1 rounded-lg bg-zinc-800 border border-zinc-700/50 text-xs font-medium text-zinc-200">
+                      <span className="inline-block px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/50 text-xs font-medium text-zinc-800 dark:text-zinc-200">
                         {entry.serviceName || 'Cualquier servicio'}
                       </span>
                     </td>
 
                     {/* Barbero */}
-                    <td className="px-4 py-3.5 text-xs text-zinc-300">
+                    <td className="px-4 py-3.5 text-xs text-zinc-700 dark:text-zinc-300">
                       {entry.barberName ? (
-                        <span className="font-medium text-zinc-200">{entry.barberName}</span>
+                        <span className="font-medium text-zinc-800 dark:text-zinc-200">{entry.barberName}</span>
                       ) : (
-                        <span className="text-zinc-500 italic">Cualquiera</span>
+                        <span className="text-zinc-400 dark:text-zinc-500 italic">Cualquiera</span>
                       )}
                     </td>
 
                     {/* Fecha Pref. */}
                     <td className="px-4 py-3.5">
-                      <div className="flex items-center gap-1.5 text-xs font-mono text-zinc-300">
-                        <Calendar className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
+                      <div className="flex items-center gap-1.5 text-xs font-mono text-zinc-700 dark:text-zinc-300">
+                        <Calendar className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500 shrink-0" />
                         <span>
                           {entry.preferredDate 
                             ? new Date(entry.preferredDate).toLocaleDateString('es-AR', {
@@ -260,13 +260,13 @@ export function WaitlistView() {
                     {/* Estado */}
                     <td className="px-4 py-3.5">
                       {entry.notified ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] uppercase font-black bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] uppercase font-black bg-cyan-50 dark:bg-cyan-500/15 text-cyan-700 dark:text-cyan-400 border border-cyan-300 dark:border-cyan-500/30">
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400 animate-pulse" />
                           Oferta enviada
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] uppercase font-black bg-amber-500/15 text-amber-400 border border-amber-500/30">
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] uppercase font-black bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-300 dark:border-amber-500/30">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400" />
                           En espera
                         </span>
                       )}
@@ -278,7 +278,7 @@ export function WaitlistView() {
                         {/* Botón Asignar Turno */}
                         <button
                           onClick={() => setAssigningEntry(entry)}
-                          className="bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer shrink-0"
+                          className="bg-amber-500 hover:bg-amber-400 text-zinc-950 font-black px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer shrink-0"
                           title="Asignar turno y enviar confirmación por email"
                         >
                           <CalendarPlus className="w-3.5 h-3.5" />
@@ -289,7 +289,7 @@ export function WaitlistView() {
                         {entry.clientPhone && (
                           <button
                             onClick={() => handleWhatsApp(entry)}
-                            className="p-2 text-emerald-400 hover:text-emerald-300 rounded-xl hover:bg-emerald-500/20 transition-colors inline-flex cursor-pointer border border-transparent hover:border-emerald-500/30"
+                            className="p-2 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-500/20 transition-colors inline-flex cursor-pointer border border-transparent hover:border-emerald-200 dark:hover:border-emerald-500/30"
                             title="Contactar por WhatsApp"
                           >
                             <MessageCircle className="w-4 h-4" />
@@ -304,7 +304,7 @@ export function WaitlistView() {
                             }
                           }}
                           disabled={isRemoving}
-                          className="p-2 text-zinc-500 hover:text-rose-400 rounded-xl hover:bg-rose-500/20 transition-colors inline-flex disabled:opacity-50 cursor-pointer"
+                          className="p-2 text-zinc-400 hover:text-rose-600 dark:text-zinc-500 dark:hover:text-rose-400 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-500/20 transition-colors inline-flex disabled:opacity-50 cursor-pointer"
                           title="Eliminar de la lista"
                         >
                           <Trash2 className="w-4 h-4" />

@@ -18,39 +18,39 @@ export function Heatmap({ distribution }) {
   });
 
   const getColor = (count) => {
-    if (!count) return 'bg-zinc-800/40 hover:bg-zinc-800/80';
+    if (!count) return 'bg-zinc-100 dark:bg-zinc-800/40 hover:bg-zinc-200 dark:hover:bg-zinc-800/80 text-transparent';
     const intensity = count / maxCount;
-    // Usamos colores de esmeralda claros y legibles
-    if (intensity > 0.75) return 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.3)] text-zinc-950 font-bold';
-    if (intensity > 0.5) return 'bg-emerald-600 text-white font-medium';
-    if (intensity > 0.25) return 'bg-emerald-800 text-emerald-100';
-    return 'bg-emerald-950 text-emerald-300';
+    // Usamos colores de esmeralda claros y legibles para light y dark mode
+    if (intensity > 0.75) return 'bg-emerald-600 dark:bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.3)] text-white dark:text-zinc-950 font-bold';
+    if (intensity > 0.5) return 'bg-emerald-500 dark:bg-emerald-600 text-white font-medium';
+    if (intensity > 0.25) return 'bg-emerald-200 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-100 font-medium';
+    return 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-medium';
   };
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden flex flex-col">
-      <div className="p-5 border-b border-zinc-800 flex items-center justify-between gap-3 flex-wrap">
+    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden flex flex-col shadow-sm">
+      <div className="p-5 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-500">
             <CalendarDays className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="font-medium text-zinc-100">Mapa de Calor (Horarios Pico)</h3>
-            <p className="text-xs text-zinc-400 mt-0.5">Distribución de turnos por día y hora</p>
+            <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Mapa de Calor (Horarios Pico)</h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Distribución de turnos por día y hora</p>
           </div>
         </div>
         
         {/* Leyenda */}
         <div className="flex items-center gap-2 text-[10px] sm:text-xs">
-          <span className="text-zinc-500">Menos concurrido</span>
+          <span className="text-zinc-500 dark:text-zinc-400">Menos concurrido</span>
           <div className="flex gap-1">
-            <div className="w-4 h-4 rounded-sm bg-zinc-800/40"></div>
-            <div className="w-4 h-4 rounded-sm bg-emerald-950"></div>
-            <div className="w-4 h-4 rounded-sm bg-emerald-800"></div>
-            <div className="w-4 h-4 rounded-sm bg-emerald-600"></div>
-            <div className="w-4 h-4 rounded-sm bg-emerald-500"></div>
+            <div className="w-4 h-4 rounded-sm bg-zinc-100 dark:bg-zinc-800/40 border border-zinc-200 dark:border-transparent"></div>
+            <div className="w-4 h-4 rounded-sm bg-emerald-100 dark:bg-emerald-950 border border-emerald-200 dark:border-transparent"></div>
+            <div className="w-4 h-4 rounded-sm bg-emerald-200 dark:bg-emerald-800"></div>
+            <div className="w-4 h-4 rounded-sm bg-emerald-500 dark:bg-emerald-600"></div>
+            <div className="w-4 h-4 rounded-sm bg-emerald-600 dark:bg-emerald-500"></div>
           </div>
-          <span className="text-zinc-500">Más concurrido</span>
+          <span className="text-zinc-500 dark:text-zinc-400">Más concurrido</span>
         </div>
       </div>
       
@@ -60,7 +60,7 @@ export function Heatmap({ distribution }) {
           <div className="flex mb-2">
             <div className="w-12 shrink-0"></div>
             {HOURS.map(h => (
-              <div key={h} className="flex-1 text-center text-[10px] font-mono text-zinc-500">
+              <div key={h} className="flex-1 text-center text-[10px] font-mono text-zinc-400 dark:text-zinc-500">
                 {h}:00
               </div>
             ))}
@@ -70,7 +70,7 @@ export function Heatmap({ distribution }) {
           <div className="flex flex-col gap-2">
             {DAYS.map((day, idx) => (
               <div key={day} className="flex items-center">
-                <div className="w-12 shrink-0 text-xs font-medium text-zinc-400">
+                <div className="w-12 shrink-0 text-xs font-medium text-zinc-600 dark:text-zinc-400">
                   {DAY_LABELS[idx]}
                 </div>
                 <div className="flex flex-1 gap-1">
@@ -80,7 +80,7 @@ export function Heatmap({ distribution }) {
                       <div 
                         key={h}
                         title={`${count} turnos el ${DAY_LABELS[idx]} a las ${h}:00`}
-                        className={`flex-1 h-8 rounded-md transition-colors cursor-crosshair flex items-center justify-center text-[11px] ${getColor(count)} hover:brightness-110`}
+                        className={`flex-1 h-8 rounded-md transition-colors cursor-crosshair flex items-center justify-center text-[11px] ${getColor(count)} hover:brightness-105`}
                       >
                         {count > 0 && count}
                       </div>

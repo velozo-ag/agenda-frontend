@@ -519,7 +519,7 @@ export function BookingPage() {
                               <Clock className="w-3 h-3 opacity-70" />
                               <span className="text-xs font-mono num-tabular">{s.durationMinutes} min</span>
                             </div>
-                            {s.depositAmount > 0 && (
+                            {s.depositAmount > 0 && salon?.hasDeposit !== false && (
                               <div className="text-sm text-zinc-400 mt-1.5">Requiere seña de ${Number(s.depositAmount).toLocaleString('es-AR')}</div>
                             )}
                           </div>
@@ -729,7 +729,7 @@ export function BookingPage() {
                   </span>
                 </div>
 
-                {selectedService?.depositAmount && Number(selectedService.depositAmount) > 0 && (
+                {selectedService?.depositAmount && Number(selectedService.depositAmount) > 0 && salon?.hasDeposit !== false && (
                   <>
                     <hr className="my-4 border-t border-dashed border-zinc-800" />
                     <div className="flex items-center gap-2 text-sm font-bold text-[var(--primary-color,#818cf8)]">

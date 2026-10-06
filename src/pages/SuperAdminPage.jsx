@@ -697,7 +697,6 @@ export function SuperAdminPage() {
           { id: 'locales', label: 'Locales & Barberías', icon: Building2 },
           { id: 'demos', label: 'Pipeline Demos', icon: FlaskConical },
           { id: 'stats', label: 'Dashboard SaaS', icon: BarChart3 },
-          { id: 'turnos', label: 'Cajas Abiertas', icon: Clock },
           { id: 'auditoria', label: 'Auditoría', icon: Shield },
         ].map((tab) => (
           <button
@@ -905,6 +904,16 @@ export function SuperAdminPage() {
                         <span className="text-amber-400 font-bold num-tabular">$ {Number(tenant.revenueThisMonth || 0).toLocaleString('es-AR')}</span>
                       </div>
                     )}
+                    
+                    {/* Last Activity */}
+                    <div className="flex justify-between items-center text-xs font-mono px-1 mt-1 border-t border-zinc-850 pt-2">
+                      <span className="text-zinc-400">Última cita:</span>
+                      <span className={`font-bold num-tabular ${tenant.daysSinceLastActivity !== null && tenant.daysSinceLastActivity <= 7 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        {tenant.lastAppointmentAt 
+                          ? new Date(tenant.lastAppointmentAt).toLocaleDateString('es-AR') 
+                          : 'Sin actividad'}
+                      </span>
+                    </div>
 
                     {/* Direct Contact */}
                     {(tenant.contactWhatsapp || tenant.contactEmail) && (
@@ -1118,7 +1127,6 @@ export function SuperAdminPage() {
                 { label: 'Facturación Global', value: `$ ${(globalStats.totalRevenue || 0).toLocaleString('es-AR')}` },
                 { label: 'Ticket Promedio', value: `$ ${(globalStats.avgOrderValue || 0).toLocaleString('es-AR')}` },
                 { label: 'Citas Realizadas', value: globalStats.totalAppointmentsCompleted },
-                { label: 'Cajas Abiertas', value: globalStats.tenantsWithOpenShift },
                 { label: 'Servicios en Catálogos', value: globalStats.totalServices },
                 { label: 'Usuarios / Staff', value: globalStats.totalUsers },
               ].map((stat) => (

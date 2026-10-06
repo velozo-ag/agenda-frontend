@@ -24,6 +24,8 @@ import { BookingPage } from '../pages/BookingPage';
 import { LandingPage } from '../pages/LandingPage';
 import { BookingConfirmationPage } from '../pages/BookingConfirmationPage';
 import { BookingStatusPage } from '../pages/BookingStatusPage';
+import { SetupChecklistWidget } from '../components/onboarding/SetupChecklistWidget';
+import { OnboardingTour } from '../components/onboarding/OnboardingTour';
 
 function ProtectedLayoutContent() {
   const tenantSlug = getTenantSlug();
@@ -44,7 +46,7 @@ function ProtectedLayoutContent() {
 
   return (
     <div 
-      className="h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans overflow-hidden relative"
+      className="h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans overflow-hidden relative transition-colors duration-150"
       style={{
         backgroundImage: bgImg ? `url(${bgImg})` : undefined,
         backgroundSize: 'cover',
@@ -54,7 +56,7 @@ function ProtectedLayoutContent() {
     >
       {/* Modern subtle overlay */}
       {bgImg && (
-        <div className="fixed inset-0 pointer-events-none z-0 bg-zinc-950/75" />
+        <div className="fixed inset-0 pointer-events-none z-0 bg-white/75 dark:bg-zinc-950/75" />
       )}
 
       <div className="flex flex-col h-full w-full relative z-10">
@@ -83,6 +85,10 @@ function ProtectedLayoutContent() {
             <Route path="*" element={<Navigate to={defaultHome} replace />} />
           </Routes>
         </main>
+
+        {/* Onboarding Assistant & Guided Tour */}
+        <SetupChecklistWidget />
+        <OnboardingTour />
       </div>
     </div>
   );

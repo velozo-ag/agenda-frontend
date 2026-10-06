@@ -20,10 +20,16 @@ import {
   ExternalLink,
   Activity,
   AlertTriangle,
-  AlertCircle
+  AlertCircle,
+  Sun,
+  Moon,
+  Monitor,
+  Compass
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { getImageUrl } from '../../utils/imageUrl';
+import { useTheme } from '../../context/ThemeContext';
+import { useOnboarding } from '../../context/OnboardingContext';
 
 function LiveClock() {
   const [time, setTime] = useState(new Date());
@@ -40,9 +46,9 @@ function LiveClock() {
   });
 
   return (
-    <div className="hidden xl:flex items-center gap-1.5 text-xs font-mono text-zinc-500 pl-2.5 border-l border-zinc-800/80">
-      <Clock className="w-3.5 h-3.5 text-zinc-600" />
-      <span className="num-tabular font-bold text-zinc-300">{formattedTime}</span>
+    <div className="hidden xl:flex items-center gap-1.5 text-xs font-mono text-zinc-500 pl-2.5 border-l border-zinc-200 dark:border-zinc-800/80">
+      <Clock className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-600" />
+      <span className="num-tabular font-bold text-zinc-700 dark:text-zinc-300">{formattedTime}</span>
     </div>
   );
 }
@@ -59,6 +65,9 @@ export function Navbar() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
+
+  const { theme, resolvedTheme, isDark, setTheme, toggleTheme } = useTheme();
+  const { startTour } = useOnboarding();
 
   const userMenuRef = useRef(null);
 
@@ -150,7 +159,7 @@ export function Navbar() {
 
   return (
     <>
-      <header className="h-14 w-full max-w-full bg-zinc-950 border-b border-zinc-800/80 px-3 sm:px-4 flex items-center justify-between sticky top-0 z-40 select-none overflow-visible">
+      <header className="h-14 w-full max-w-full bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800/80 px-3 sm:px-4 flex items-center justify-between sticky top-0 z-40 select-none overflow-visible transition-colors">
         {/* ─── Left: Dynamic Brand Logo & Status ─── */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0 min-w-0">
           {/* LOGO */}
@@ -183,7 +192,7 @@ export function Navbar() {
 
           {/* MOBILE INFO (Store Name & Staff) - Takes advantage of the empty top space */}
           <div className="flex flex-col justify-center min-w-0 md:hidden ml-1">
-            <span className="text-xs font-bold text-zinc-100 truncate w-full max-w-[130px]">
+            <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate w-full max-w-[130px]">
               {tenant?.storeName || tenant?.name || 'Roosty Agenda'}
             </span>
             <div className="flex items-center gap-1.5 mt-[1px]">
@@ -195,10 +204,10 @@ export function Navbar() {
                   onClick={handleUsageClick}
                   className={`flex items-center gap-1.5 px-1.5 py-[2px] rounded-sm text-[9px] font-mono font-bold border cursor-pointer active:scale-95 transition-all ${
                   usage.limitReached 
-                    ? 'bg-red-500/10 text-red-400 border-red-500/20' 
-                    : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:border-zinc-700'
+                    ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' 
+                    : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700'
                 }`}>
-                  <div className="w-4 h-1 bg-zinc-800 rounded-full overflow-hidden">
+                  <div className="w-4 h-1 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
                     <div 
                       className={`h-full ${usageColorBg}`}
                       style={{ width: `${Math.min(100, pct)}%` }}
@@ -213,7 +222,7 @@ export function Navbar() {
           {/* Caja & Ingresos shortcut (Desktop Only) */}
           <button
             onClick={() => handleNav('/earnings')}
-            className="btn-touch px-2.5 py-1 rounded-lg text-[11px] font-medium border border-zinc-800 bg-zinc-900/90 text-zinc-300 hover:text-white hover:bg-zinc-850 hidden sm:flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="btn-touch px-2.5 py-1 rounded-lg text-[11px] font-medium border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-850 hidden sm:flex items-center gap-1.5 transition-colors cursor-pointer"
             title="Ver Ingresos"
           >
             <Vault className="w-3.5 h-3.5 text-amber-500" />
@@ -224,16 +233,16 @@ export function Navbar() {
           {usage?.maxAppointmentsMonth > 0 && !isSuperAdmin && (
             <button 
               onClick={handleUsageClick}
-              className="hidden xl:flex items-center gap-1.5 px-2.5 h-6 rounded-md bg-zinc-900 border border-zinc-800 hover:border-zinc-700 cursor-pointer active:scale-95 transition-all" 
+              className="hidden xl:flex items-center gap-1.5 px-2.5 h-6 rounded-md bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 cursor-pointer active:scale-95 transition-all" 
               title={`Turnos este mes: ${usage.currentMonthAppointments} / ${usage.maxAppointmentsMonth}`}
             >
-              <div className="flex-1 w-16 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+              <div className="flex-1 w-16 h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
                 <div 
                   className={`h-full ${usageColorBg}`}
                   style={{ width: `${Math.min(100, pct)}%` }}
                 />
               </div>
-              <span className="text-[10px] font-medium text-zinc-400 font-mono">
+              <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400 font-mono">
                 {usage.currentMonthAppointments}/{usage.maxAppointmentsMonth}
               </span>
             </button>
@@ -244,7 +253,7 @@ export function Navbar() {
         </div>
 
         {/* ─── Center: Main Navigation Segmented Control (Desktop Only) ─── */}
-        <nav className="flex-1 hidden md:flex items-center justify-start lg:justify-center gap-0.5 sm:gap-1 bg-zinc-900/50 lg:bg-zinc-900 p-1 rounded-xl border-none lg:border lg:border-zinc-800 mx-1 lg:mx-2 overflow-x-auto scrollbar-none min-w-0">
+        <nav className="flex-1 hidden md:flex items-center justify-start lg:justify-center gap-0.5 sm:gap-1 bg-zinc-100 dark:bg-zinc-900/50 lg:bg-zinc-100 dark:lg:bg-zinc-900 p-1 rounded-xl border-none lg:border lg:border-zinc-200 dark:lg:border-zinc-800 mx-1 lg:mx-2 overflow-x-auto scrollbar-none min-w-0">
           {navItems
             .filter((item) => (item.adminOnly ? isAdmin : true))
             .map((item) => {
@@ -259,8 +268,8 @@ export function Navbar() {
                   onClick={() => handleNav(item.path)}
                   className={`btn-touch px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-colors cursor-pointer shrink-0 ${
                     isActive
-                      ? 'bg-zinc-800 text-zinc-100 shadow-sm border border-zinc-700 font-bold'
-                      : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850/50'
+                      ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-xs border border-zinc-300 dark:border-zinc-700 font-bold'
+                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-200/60 dark:hover:bg-zinc-850/50'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -271,12 +280,12 @@ export function Navbar() {
         </nav>
 
         {/* ─── Right: Settings & User Profile ─── */}
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-auto md:ml-0">{isAdmin && (<button onClick={() => handleNav('/dashboard')} className="btn-touch p-1.5 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/80 transition-colors cursor-pointer shrink-0" title="Dashboard"><BarChart2 className="w-4 h-4" /></button>)}{/* Ver Portal Clientes shortcut - Moved here for mobile balance, muted color */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0 ml-auto md:ml-0">{isAdmin && (<button onClick={() => handleNav('/dashboard')} className="btn-touch p-1.5 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 transition-colors cursor-pointer shrink-0" title="Dashboard"><BarChart2 className="w-4 h-4" /></button>)}{/* Ver Portal Clientes shortcut - Moved here for mobile balance, muted color */}
           <a
             href={tenant?.slug ? `https://${tenant.slug}.agenda.roosty.site` : '/'}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-touch px-2 py-1 rounded-lg text-[10px] font-medium border border-zinc-800/50 bg-zinc-900/40 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+            className="btn-touch px-2 py-1 rounded-lg text-[10px] font-medium border border-zinc-200 dark:border-zinc-800/50 bg-zinc-100 dark:bg-zinc-900/40 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-800 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
             title="Abrir Portal Público"
           >
             <span className="md:hidden">Portal</span>
@@ -292,12 +301,12 @@ export function Navbar() {
               onClick={() => handleNav('/superadmin')}
               className={`btn-touch px-2 py-1.5 rounded-xl text-xs font-bold items-center gap-1.5 transition-colors cursor-pointer border hidden lg:flex ${
                 currentPath === '/superadmin'
-                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                  : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850'
+                  ? 'bg-amber-500/20 text-amber-600 dark:text-amber-300 border-amber-500/40'
+                  : 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-850'
               }`}
               title="Panel Maestro Super-Admin"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
               <span>SuperAdmin</span>
             </button>
           )}
@@ -308,8 +317,8 @@ export function Navbar() {
               onClick={() => handleNav('/admin/settings')}
               className={`btn-touch w-8 h-8 rounded-lg items-center justify-center transition-colors cursor-pointer hidden sm:flex ${
                 currentPath.startsWith('/admin/settings')
-                  ? 'text-zinc-100 bg-zinc-800 border border-zinc-700 shadow-xs'
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900 border border-transparent'
+                  ? 'text-zinc-900 dark:text-zinc-100 bg-zinc-200 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 shadow-xs'
+                  : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent'
               }`}
               title="Configuración del Salón"
             >
@@ -317,40 +326,49 @@ export function Navbar() {
             </button>
           )}
 
+          {/* Quick Theme Toggle Icon */}
+          <button
+            onClick={toggleTheme}
+            className="btn-touch w-8 h-8 rounded-lg items-center justify-center transition-colors cursor-pointer hidden sm:flex text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-transparent"
+            title={`Tema: ${theme === 'system' ? 'Sistema' : isDark ? 'Oscuro' : 'Claro'}. Click para alternar`}
+          >
+            {isDark ? <Moon className="w-4 h-4 text-amber-400" /> : <Sun className="w-4 h-4 text-amber-500" />}
+          </button>
+
           {/* User Menu Dropdown */}
           <div className="relative" ref={userMenuRef}>
           <button
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
             className={`btn-touch flex items-center gap-2 pl-1.5 pr-1.5 md:pr-2.5 py-1 rounded-xl border transition-all cursor-pointer ${
               isUserMenuOpen
-                ? 'bg-zinc-850 border-zinc-700 text-zinc-100 shadow-xs'
-                : 'bg-zinc-900/90 hover:bg-zinc-850 border-zinc-800 text-zinc-300'
+                ? 'bg-zinc-200 dark:bg-zinc-850 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-xs'
+                : 'bg-zinc-100 dark:bg-zinc-900/90 hover:bg-zinc-200 dark:hover:bg-zinc-850 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300'
             }`}
             title="Perfil de Usuario y Opciones"
           >
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/10 text-amber-300 text-[10px] font-bold flex items-center justify-center border border-amber-500/30 font-mono shrink-0">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/10 text-amber-600 dark:text-amber-300 text-[10px] font-bold flex items-center justify-center border border-amber-500/30 font-mono shrink-0">
               {user?.username ? user.username.slice(0, 2).toUpperCase() : 'AD'}
             </div>
-            <span className="text-xs font-semibold text-zinc-200 hidden md:inline max-w-[100px] truncate">
+            <span className="text-xs font-semibold text-zinc-800 dark:text-zinc-200 hidden md:inline max-w-[100px] truncate">
               {user?.fullName || user?.username || 'Usuario'}
             </span>
             <ChevronDown
               className={`w-3.5 h-3.5 text-zinc-500 transition-transform duration-200 hidden md:block ${
-                isUserMenuOpen ? 'rotate-180 text-zinc-300' : ''
+                isUserMenuOpen ? 'rotate-180 text-zinc-800 dark:text-zinc-300' : ''
               }`}
             />
           </button>
 
           {isUserMenuOpen && (
-            <div className="absolute right-0 mt-2 w-64 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
+            <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
               {/* User Summary Header */}
-              <div className="p-2.5 bg-zinc-950/70 rounded-xl border border-zinc-800/80 mb-1.5">
+              <div className="p-2.5 bg-zinc-50 dark:bg-zinc-950/70 rounded-xl border border-zinc-200 dark:border-zinc-800/80 mb-1.5">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500/30 to-amber-600/10 text-amber-300 text-xs font-bold flex items-center justify-center border border-amber-500/40 font-mono shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500/30 to-amber-600/10 text-amber-600 dark:text-amber-300 text-xs font-bold flex items-center justify-center border border-amber-500/40 font-mono shrink-0">
                     {user?.username ? user.username.slice(0, 2).toUpperCase() : 'AD'}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-xs font-bold text-zinc-100 truncate">
+                    <div className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate">
                       {user?.fullName || 'Usuario'}
                     </div>
                     <div className="text-[10px] text-zinc-500 font-mono truncate">
@@ -359,9 +377,9 @@ export function Navbar() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between mt-2 pt-2 border-t border-zinc-800/60 text-[10px]">
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-zinc-200 dark:border-zinc-800/60 text-[10px]">
                   <span className="text-zinc-500">Rol:</span>
-                  <span className="px-1.5 py-0.2 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-300 font-mono font-bold uppercase">
+                  <span className="px-1.5 py-0.2 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-300 font-mono font-bold uppercase">
                     {user?.role || 'BARBER'}
                   </span>
                 </div>
@@ -373,26 +391,37 @@ export function Navbar() {
                   <>
                     <button
                       onClick={() => handleNav('/dashboard')}
-                      className="w-full px-2.5 py-2 rounded-xl text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors cursor-pointer"
+                      className="w-full px-2.5 py-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors cursor-pointer"
                     >
-                      <BarChart2 className="w-4 h-4 text-zinc-400" />
+                      <BarChart2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
                       <span>Métricas & Dashboard</span>
                     </button>
 
                     <button
                       onClick={() => handleNav('/admin/waitlist')}
-                      className="w-full px-2.5 py-2 rounded-xl text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors cursor-pointer"
+                      className="w-full px-2.5 py-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors cursor-pointer"
                     >
-                      <Clock className="w-4 h-4 text-zinc-400" />
+                      <Clock className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
                       <span>Lista de Espera</span>
                     </button>
 
                     <button
                       onClick={() => handleNav('/admin/settings')}
-                      className="w-full px-2.5 py-2 rounded-xl text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors cursor-pointer"
+                      className="w-full px-2.5 py-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors cursor-pointer"
                     >
-                      <Settings className="w-4 h-4 text-zinc-400" />
+                      <Settings className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
                       <span>Configuración del Salón</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
+                        startTour();
+                      }}
+                      className="w-full px-2.5 py-2 rounded-xl text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-500/10 flex items-center gap-2.5 transition-colors cursor-pointer font-medium"
+                    >
+                      <Compass className="w-4 h-4 text-amber-500 dark:text-amber-400" />
+                      <span>Tour de la Plataforma</span>
                     </button>
                   </>
                 )}
@@ -400,45 +429,88 @@ export function Navbar() {
                 {isSuperAdmin && (
                   <button
                     onClick={() => handleNav('/superadmin')}
-                    className="w-full px-2.5 py-2 rounded-xl text-amber-300 hover:text-amber-100 hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors font-medium cursor-pointer"
+                    className="w-full px-2.5 py-2 rounded-xl text-amber-600 dark:text-amber-300 hover:text-amber-700 dark:hover:text-amber-100 hover:bg-amber-50 dark:hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors font-medium cursor-pointer"
                   >
-                    <ShieldCheck className="w-4 h-4 text-amber-400" />
+                    <ShieldCheck className="w-4 h-4 text-amber-500 dark:text-amber-400" />
                     <span>Panel Super-Admin</span>
                   </button>
                 )}
 
                 <button
                   onClick={() => handleNav(tenant?.slug ? `/?slug=${tenant?.slug}` : '/')}
-                  className="w-full px-2.5 py-2 rounded-xl text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors cursor-pointer"
+                  className="w-full px-2.5 py-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 flex items-center gap-2.5 transition-colors cursor-pointer"
                 >
-                  <ExternalLink className="w-4 h-4 text-cyan-400" />
+                  <ExternalLink className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
                   <span>Ver Portal de Clientes (/)</span>
                 </button>
               </div>
 
-              <div className="my-1.5 border-t border-zinc-800/80" />
+              <div className="my-1.5 border-t border-zinc-200 dark:border-zinc-800/80" />
+
+              {/* Theme Switcher Segmented Control */}
+              <div className="p-2 bg-zinc-50 dark:bg-zinc-950/70 rounded-xl border border-zinc-200 dark:border-zinc-800/80 mb-1.5">
+                <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mb-1.5 px-0.5 flex items-center justify-between">
+                  <span>Tema visual</span>
+                  <span className="text-[10px] font-mono text-zinc-400 dark:text-zinc-500 uppercase">{theme}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1 bg-zinc-200/70 dark:bg-zinc-900 p-0.5 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                  <button
+                    onClick={() => setTheme('light')}
+                    className={`flex items-center justify-center gap-1.5 py-1 px-1.5 rounded-md text-[11px] font-medium transition-all cursor-pointer ${
+                      theme === 'light'
+                        ? 'bg-white text-zinc-900 shadow-xs font-semibold'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                    }`}
+                  >
+                    <Sun className="w-3 h-3 text-amber-500" />
+                    <span>Claro</span>
+                  </button>
+                  <button
+                    onClick={() => setTheme('dark')}
+                    className={`flex items-center justify-center gap-1.5 py-1 px-1.5 rounded-md text-[11px] font-medium transition-all cursor-pointer ${
+                      theme === 'dark'
+                        ? 'bg-zinc-800 text-zinc-100 shadow-xs font-semibold'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                    }`}
+                  >
+                    <Moon className="w-3 h-3 text-amber-400" />
+                    <span>Oscuro</span>
+                  </button>
+                  <button
+                    onClick={() => setTheme('system')}
+                    className={`flex items-center justify-center gap-1.5 py-1 px-1.5 rounded-md text-[11px] font-medium transition-all cursor-pointer ${
+                      theme === 'system'
+                        ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-xs font-semibold'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                    }`}
+                  >
+                    <Monitor className="w-3 h-3 text-indigo-400" />
+                    <span>Auto</span>
+                  </button>
+                </div>
+              </div>
 
               {/* Utility Tools */}
               <div className="space-y-0.5 text-xs">
                 <button
                   onClick={toggleFullscreen}
-                  className="w-full px-2.5 py-2 rounded-xl text-zinc-300 hover:text-zinc-100 hover:bg-zinc-800/80 flex items-center justify-between transition-colors cursor-pointer"
+                  className="w-full px-2.5 py-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 flex items-center justify-between transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-2.5">
                     {isFullscreen ? (
-                      <Minimize className="w-4 h-4 text-amber-400" />
+                      <Minimize className="w-4 h-4 text-amber-500 dark:text-amber-400" />
                     ) : (
-                      <Maximize className="w-4 h-4 text-zinc-400" />
+                      <Maximize className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
                     )}
                     <span>{isFullscreen ? 'Salir de Pantalla Completa' : 'Pantalla Completa'}</span>
                   </div>
-                  <kbd className="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 text-[10px] font-mono font-bold">
+                  <kbd className="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-[10px] font-mono font-bold">
                     F11
                   </kbd>
                 </button>
               </div>
 
-              <div className="my-1.5 border-t border-zinc-800/80" />
+              <div className="my-1.5 border-t border-zinc-200 dark:border-zinc-800/80" />
 
               {/* Logout */}
               <button
@@ -446,9 +518,9 @@ export function Navbar() {
                   setIsUserMenuOpen(false);
                   logout();
                 }}
-                className="w-full px-2.5 py-2 rounded-xl text-rose-400 hover:text-rose-200 hover:bg-rose-500/10 flex items-center gap-2.5 transition-colors font-medium text-xs cursor-pointer"
+                className="w-full px-2.5 py-2 rounded-xl text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-200 hover:bg-rose-50 dark:hover:bg-rose-500/10 flex items-center gap-2.5 transition-colors font-medium text-xs cursor-pointer"
               >
-                <LogOut className="w-4 h-4 text-rose-400" />
+                <LogOut className="w-4 h-4 text-rose-500 dark:text-rose-400" />
                 <span>Cerrar Sesión</span>
               </button>
             </div>
@@ -458,7 +530,7 @@ export function Navbar() {
     </header>
 
       {/* ─── Bottom Tab Bar (Mobile Only) ─── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-zinc-950 border-t border-zinc-800 z-50 flex items-center justify-around px-1 pb-safe">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 z-50 flex items-center justify-around px-1 pb-safe transition-colors">
         {navItems
           .filter((item) => (item.adminOnly ? isAdmin : true))
           .slice(0, 5) // Show max 5 items to prevent overflow
@@ -473,7 +545,7 @@ export function Navbar() {
                 key={item.path}
                 onClick={() => handleNav(item.path)}
                 className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${
-                  isActive ? 'text-amber-500' : 'text-zinc-500 hover:text-zinc-300'
+                  isActive ? 'text-amber-500' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
                 }`}
               >
                 <Icon className={`w-5 h-5 ${isActive ? 'fill-amber-500/20' : ''}`} />

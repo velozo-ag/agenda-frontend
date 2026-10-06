@@ -82,23 +82,23 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/60 dark:bg-black/75 backdrop-blur-xs" onClick={onClose} />
 
-      <div className="relative bg-zinc-900 border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 sm:zoom-in-95 duration-200">
+      <div className="relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 sm:zoom-in-95 duration-200">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-800/70">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200 dark:border-zinc-800/70">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center">
-              <Scissors className="w-4 h-4 text-indigo-400" />
+              <Scissors className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
             </div>
-            <h2 className="text-sm font-bold text-white">
+            <h2 className="text-sm font-bold text-zinc-900 dark:text-white">
               {barberToEdit ? 'Editar Barbero' : 'Nuevo Barbero'}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+            className="p-1.5 text-zinc-400 hover:text-zinc-700 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -117,7 +117,7 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
 
           {/* Nombre */}
           <div>
-            <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
+            <label className="block text-[11px] font-medium text-zinc-700 dark:text-zinc-400 font-mono mb-1.5">
               Nombre Completo *
             </label>
             <input
@@ -126,14 +126,14 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
               required
               value={formData.fullName}
               onChange={handleChange}
-              placeholder="Ej: Carlos RodrÃ­guez"
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500/60 transition-colors"
+              placeholder="Ej: Carlos Rodríguez"
+              className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-indigo-500/60 transition-colors"
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
+            <label className="block text-[11px] font-medium text-zinc-700 dark:text-zinc-400 font-mono mb-1.5">
               Usuario de acceso *
             </label>
             <input
@@ -143,14 +143,14 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
               value={formData.email}
               onChange={handleChange}
               placeholder="ej. agustin, o correo"
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-indigo-500/60 transition-colors"
+              className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white font-mono placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-indigo-500/60 transition-colors"
             />
           </div>
 
-          {/* ContraseÃ±a */}
+          {/* Contraseña */}
           <div>
-            <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
-              {barberToEdit ? 'Cambiar ContraseÃ±a (opcional)' : 'ContraseÃ±a Inicial *'}
+            <label className="block text-[11px] font-medium text-zinc-700 dark:text-zinc-400 font-mono mb-1.5">
+              {barberToEdit ? 'Cambiar Contraseña (opcional)' : 'Contraseña Inicial *'}
             </label>
             <input
               type="password"
@@ -158,15 +158,15 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
               required={!barberToEdit}
               value={formData.password}
               onChange={handleChange}
-              placeholder={barberToEdit ? 'DejÃ¡ vacÃ­o para no cambiarla' : 'ContraseÃ±a inicial'}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500/60 transition-colors"
+              placeholder={barberToEdit ? 'Dejá vacío para no cambiarla' : 'Contraseña inicial'}
+              className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-indigo-500/60 transition-colors"
             />
           </div>
 
-          {/* Color + ComisiÃ³n */}
+          {/* Color + Comisión */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
+              <label className="block text-[11px] font-medium text-zinc-700 dark:text-zinc-400 font-mono mb-1.5">
                 Color en Agenda
               </label>
               {/* Color presets */}
@@ -177,7 +177,7 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
                     type="button"
                     onClick={() => setFormData((prev) => ({ ...prev, color: c }))}
                     className={`w-5 h-5 rounded-full border-2 transition-all cursor-pointer ${
-                      formData.color === c ? 'border-white scale-110' : 'border-transparent'
+                      formData.color === c ? 'border-zinc-900 dark:border-white scale-110 shadow-xs' : 'border-transparent'
                     }`}
                     style={{ backgroundColor: c }}
                   />
@@ -188,12 +188,12 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
                 name="color"
                 value={formData.color}
                 onChange={handleChange}
-                className="w-full h-9 bg-zinc-950 border border-zinc-800 rounded-xl p-1 cursor-pointer"
+                className="w-full h-9 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-1 cursor-pointer"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
-                ComisiÃ³n (%)
+              <label className="block text-[11px] font-medium text-zinc-700 dark:text-zinc-400 font-mono mb-1.5">
+                Comisión (%)
               </label>
               <input
                 type="number"
@@ -203,16 +203,16 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
                 step="0.5"
                 value={formData.commissionPct}
                 onChange={handleChange}
-                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-indigo-500/60 transition-colors"
+                className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white font-mono focus:outline-none focus:border-indigo-500/60 transition-colors"
               />
-              <p className="text-[10px] text-zinc-600 font-mono mt-1">% sobre sus citas</p>
+              <p className="text-[10px] text-zinc-500 dark:text-zinc-600 font-mono mt-1">% sobre sus citas</p>
             </div>
           </div>
 
           {/* Bio */}
           <div>
-            <label className="block text-[11px] font-medium text-zinc-400 font-mono mb-1.5">
-              BiografÃ­a (visible en el portal de reservas)
+            <label className="block text-[11px] font-medium text-zinc-700 dark:text-zinc-400 font-mono mb-1.5">
+              Biografía (visible en el portal de reservas)
             </label>
             <textarea
               name="bio"
@@ -220,23 +220,23 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
               value={formData.bio}
               onChange={handleChange}
               placeholder="Ej: Especialista en cortes fade y barbas..."
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500/60 transition-colors resize-none"
+              className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-indigo-500/60 transition-colors resize-none"
             />
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-3 pt-2 border-t border-zinc-800/60">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-zinc-200 dark:border-zinc-800/60">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-sm font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+              className="px-4 py-2 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-transparent transition-colors cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="px-5 py-2 rounded-xl text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="px-5 py-2 rounded-xl text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white transition-colors disabled:opacity-50 flex items-center gap-2 cursor-pointer shadow-xs"
             >
               {isPending && (
                 <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none">

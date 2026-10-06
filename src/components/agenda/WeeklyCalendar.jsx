@@ -12,9 +12,14 @@ export function WeeklyCalendar({ appointments, onSlotClick, onAppointmentClick, 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // A rolling view starting from the selected date
+  // When in desktop week view, always align Monday to Sunday to match header and fetched range
   const startOfWeek = new Date(selectedDate);
-  startOfWeek.setHours(0,0,0,0);
+  if (!isMobile) {
+    const day = startOfWeek.getDay();
+    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
+    startOfWeek.setDate(diff);
+  }
+  startOfWeek.setHours(0, 0, 0, 0);
 
   const daysToShow = isMobile ? 1 : 7;
   const days = Array.from({ length: daysToShow }).map((_, i) => {
@@ -33,17 +38,17 @@ export function WeeklyCalendar({ appointments, onSlotClick, onAppointmentClick, 
   }, []);
 
   return (
-    <div className={`flex-1 overflow-auto bg-zinc-950 flex flex-col relative ${!isMobile && 'min-w-[800px]'}`}>
-      <div className="flex border-b border-zinc-800 sticky top-0 bg-zinc-950 z-30">
-        <div className="w-16 shrink-0 border-r border-zinc-800"></div>
+    <div className={`flex-1 overflow-auto bg-white dark:bg-zinc-950 flex flex-col relative ${!isMobile && 'min-w-[800px]'}`}>
+      <div className="flex border-b border-zinc-200 dark:border-zinc-800 sticky top-0 bg-slate-50 dark:bg-zinc-950 z-30">
+        <div className="w-16 shrink-0 border-r border-zinc-200 dark:border-zinc-800"></div>
         {days.map(d => {
           const isToday = d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
           return (
-            <div key={d.toISOString()} className={`flex-1 p-3 text-center border-r border-zinc-800 last:border-0 ${isToday ? 'bg-zinc-900/40' : ''}`}>
-              <div className={`text-[11px] font-semibold ${isToday ? 'text-amber-500' : 'text-zinc-400'}`}>
+            <div key={d.toISOString()} className={`flex-1 p-3 text-center border-r border-zinc-200 dark:border-zinc-800 last:border-0 ${isToday ? 'bg-zinc-100/50 dark:bg-zinc-900/40' : ''}`}>
+              <div className={`text-[11px] font-semibold ${isToday ? 'text-amber-500' : 'text-zinc-500 dark:text-zinc-400'}`}>
                 {d.toLocaleDateString('es-AR', { weekday: 'short' }).toUpperCase()}
               </div>
-              <div className={`text-2xl font-bold mt-0.5 ${isToday ? 'text-amber-500' : 'text-zinc-100'}`}>
+              <div className={`text-2xl font-bold mt-0.5 ${isToday ? 'text-amber-500' : 'text-zinc-900 dark:text-zinc-100'}`}>
                 {d.getDate()}
               </div>
             </div>
@@ -52,15 +57,15 @@ export function WeeklyCalendar({ appointments, onSlotClick, onAppointmentClick, 
       </div>
 
       <div className="flex flex-1 relative">
-        <div className="w-16 shrink-0 relative z-10 bg-zinc-950">
+        <div className="w-16 shrink-0 relative z-10 bg-slate-50 dark:bg-zinc-950">
           {hours.map(h => (
-            <div key={h} className="h-[4rem] min-h-[4rem] border-b border-zinc-800 flex items-start justify-center pt-1">
-              <span className="text-[10px] font-mono text-zinc-600">{h}:00</span>
+            <div key={h} className="h-[4rem] min-h-[4rem] border-b border-zinc-200 dark:border-zinc-800 flex items-start justify-center pt-1">
+              <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-600">{h}:00</span>
             </div>
           ))}
         </div>
 
-        <div className="flex-1 flex relative border-l border-zinc-800">
+        <div className="flex-1 flex relative border-l border-zinc-200 dark:border-zinc-800">
           
           {/* Global Time Pill on the left axis (only if today is visible in the current view) */}
           {days.some(d => d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) && 
@@ -84,7 +89,7 @@ export function WeeklyCalendar({ appointments, onSlotClick, onAppointmentClick, 
             const isToday = d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
 
             return (
-              <div key={d.toISOString()} className={`flex-1 border-r border-zinc-800 last:border-0 relative ${isToday ? 'bg-zinc-900/10' : ''}`}>
+              <div key={d.toISOString()} className={`flex-1 border-r border-zinc-200 dark:border-zinc-800 last:border-0 relative ${isToday ? 'bg-zinc-100/30 dark:bg-zinc-900/10' : ''}`}>
                 {hours.map(h => (
                   <div 
                     key={h} 
@@ -93,7 +98,7 @@ export function WeeklyCalendar({ appointments, onSlotClick, onAppointmentClick, 
                       slotTime.setHours(h, 0, 0, 0);
                       onSlotClick(slotTime);
                     }}
-                    className="h-[4rem] min-h-[4rem] border-b border-zinc-800 hover:bg-zinc-800/40 cursor-pointer transition-colors"
+                    className="h-[4rem] min-h-[4rem] border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100/60 dark:hover:bg-zinc-800/40 cursor-pointer transition-colors"
                   />
                 ))}
                 

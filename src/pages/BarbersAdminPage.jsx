@@ -32,8 +32,8 @@ export default function BarbersAdminPage() {
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8 animate-in fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight">Staff de Barberos</h1>
-          <p className="text-zinc-400 mt-1">Administra los barberos y los servicios que ofrecen.</p>
+          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white tracking-tight">Staff de Barberos</h1>
+          <p className="text-zinc-600 dark:text-zinc-400 mt-1">Administra los barberos y los servicios que ofrecen.</p>
         </div>
         <button
           onClick={() => { setSelectedBarber(null); setFormOpen(true); }}
@@ -41,7 +41,7 @@ export default function BarbersAdminPage() {
           title={isLimitReached ? `Límite de ${maxBarbers || 1} barbero alcanzado para tu plan` : 'Agregar barbero'}
           className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 ${
             isLimitReached
-              ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700/50'
+              ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 cursor-not-allowed border border-zinc-200 dark:border-zinc-700/50'
               : 'bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold shadow-md shadow-amber-500/20 cursor-pointer'
           }`}
         >
@@ -51,11 +51,11 @@ export default function BarbersAdminPage() {
       </div>
 
       {isLimitReached && (
-        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-start gap-3">
-          <Sparkles className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+        <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs flex items-start gap-3">
+          <Sparkles className="w-5 h-5 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
           <div>
-            <div className="font-bold text-white text-sm">Límite de staff alcanzado ({maxBarbers || 1} barbero)</div>
-            <p className="mt-1 text-zinc-300 leading-relaxed">
+            <div className="font-bold text-zinc-900 dark:text-white text-sm">Límite de staff alcanzado ({maxBarbers || 1} barbero)</div>
+            <p className="mt-1 text-zinc-700 dark:text-zinc-300 leading-relaxed">
               Tu plan actual ({planType === 'CERO' ? 'Plan Cero' : 'Plan Navaja'}) permite 1 solo barbero. Para sumar múltiples barberos en tu local y que tus clientes elijan con quién cortarse, pasate al <strong>Plan Crew ($24.900/mes)</strong>.
             </p>
           </div>
@@ -64,7 +64,7 @@ export default function BarbersAdminPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {barbers.map((barber) => (
-          <div key={barber.id} className={`bg-zinc-900 border border-zinc-800 rounded-2xl p-6 transition-all ${!barber.active ? 'opacity-60' : ''}`}>
+          <div key={barber.id} className={`bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 transition-all shadow-sm ${!barber.active ? 'opacity-60' : ''}`}>
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-4">
                 <div 
@@ -78,26 +78,26 @@ export default function BarbersAdminPage() {
                   )}
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-white">{barber.fullName}</h3>
-                  <p className="text-sm text-zinc-400">{barber.email}</p>
+                  <h3 className="text-lg font-medium text-zinc-900 dark:text-white">{barber.fullName}</h3>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">{barber.email}</p>
                 </div>
               </div>
               <button
                 onClick={() => toggleBarber.mutate(barber.id)}
-                className={`p-2 rounded-lg transition-colors ${barber.active ? 'text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20' : 'text-zinc-500 bg-zinc-800 hover:bg-zinc-700'}`}
+                className={`p-2 rounded-lg transition-colors cursor-pointer ${barber.active ? 'text-emerald-600 dark:text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20' : 'text-zinc-400 dark:text-zinc-500 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700'}`}
               >
                 <Power className="w-4 h-4" />
               </button>
             </div>
 
-            <p className="text-sm text-zinc-300 line-clamp-2 mb-6 min-h-[40px]">
+            <p className="text-sm text-zinc-600 dark:text-zinc-300 line-clamp-2 mb-6 min-h-[40px]">
               {barber.bio || 'Sin descripción'}
             </p>
 
-            <div className="flex items-center justify-between pt-4 border-t border-zinc-800/50">
+            <div className="flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-zinc-800/50">
               <button
                 onClick={() => handleServices(barber)}
-                className="flex items-center gap-2 text-sm font-medium text-zinc-300 hover:text-white transition-colors"
+                className="flex items-center gap-2 text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer"
               >
                 <Scissors className="w-4 h-4" />
                 {barber.serviceIds?.length || 0} Servicios
@@ -105,7 +105,7 @@ export default function BarbersAdminPage() {
               
               <button
                 onClick={() => handleEdit(barber)}
-                className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+                className="p-2 text-zinc-400 hover:text-zinc-700 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors cursor-pointer"
               >
                 <Settings2 className="w-4 h-4" />
               </button>

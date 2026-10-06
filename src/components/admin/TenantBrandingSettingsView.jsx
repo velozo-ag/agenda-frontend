@@ -50,11 +50,17 @@ const PRESET_COLORS = [
 ];
 
 const PRESET_BACKGROUNDS = [
-  { name: 'Cálido Vintage / Cuero', hex: '#140e0c' },
-  { name: 'Carbón / Pitch Black', hex: '#09090b' },
-  { name: 'Azul Noche / Midnight', hex: '#0a0f1d' },
-  { name: 'Verde Botánico / Forest', hex: '#0a140f' },
-  { name: 'Espresso Profundo', hex: '#181412' },
+  // Modos Oscuros
+  { name: 'Carbón / Pitch Black', hex: '#09090b', mode: 'Oscuro' },
+  { name: 'Cálido Vintage / Cuero', hex: '#140e0c', mode: 'Oscuro' },
+  { name: 'Azul Noche / Midnight', hex: '#0a0f1d', mode: 'Oscuro' },
+  { name: 'Verde Botánico / Forest', hex: '#0a140f', mode: 'Oscuro' },
+  { name: 'Espresso Profundo', hex: '#181412', mode: 'Oscuro' },
+  // Modos Claros
+  { name: 'Blanco Puro', hex: '#ffffff', mode: 'Claro' },
+  { name: 'Gris Platino Moderno', hex: '#f4f4f5', mode: 'Claro' },
+  { name: 'Perla / Soft Light', hex: '#f8fafc', mode: 'Claro' },
+  { name: 'Marfil / Crema Suave', hex: '#fbfbfa', mode: 'Claro' },
 ];
 
 const PRESET_FONTS = [
@@ -149,19 +155,19 @@ export function TenantBrandingSettingsView() {
     <div className="space-y-6 max-w-5xl">
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="fixed top-16 right-6 z-50 bg-zinc-900 border border-zinc-700 text-zinc-100 px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-semibold flex items-center gap-2 animate-in slide-in-from-top-2 duration-150">
-          <Check className="w-4 h-4 text-emerald-400" />
+        <div className="fixed top-16 right-6 z-50 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 px-4 py-2.5 rounded-2xl shadow-2xl text-xs font-semibold flex items-center gap-2 animate-in slide-in-from-top-2 duration-150">
+          <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Header */}
-      <div className="pb-4 border-b border-zinc-800/80">
-        <h2 className="text-base font-bold text-zinc-100 flex items-center gap-2">
-          <Palette className="w-4 h-4 text-amber-400" />
+      <div className="pb-4 border-b border-zinc-200 dark:border-zinc-800/80">
+        <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+          <Palette className="w-4 h-4 text-amber-500 dark:text-amber-400" />
           <span>Identidad Visual & Portal de Reservas</span>
         </h2>
-        <p className="text-xs text-zinc-400 mt-0.5">
+        <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
           Personalizá el logo, portada, wallpaper de fondo, tipografía, color de acentuación global y datos de contacto de tu salón.
         </p>
       </div>
@@ -171,15 +177,15 @@ export function TenantBrandingSettingsView() {
           {/* Left Column: Form Fields with Clean Hierarchy */}
           <div className="lg:col-span-7 space-y-6">
             {/* Section 1: Marca & Textos */}
-            <div className="space-y-3 pb-6 border-b border-zinc-850">
-              <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                <Store className="w-3.5 h-3.5 text-amber-400" />
+            <div className="space-y-3 pb-6 border-b border-zinc-200 dark:border-zinc-850">
+              <h3 className="text-xs font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
+                <Store className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
                 <span>Textos de Portada</span>
               </h3>
 
               <div className="space-y-3 pt-1">
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium text-zinc-400 font-mono">
+                  <label className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 font-mono">
                     Nombre Comercial de la Barbería
                   </label>
                   <input
@@ -187,13 +193,13 @@ export function TenantBrandingSettingsView() {
                     value={formData.storeName}
                     onChange={(e) => handleChange('storeName', e.target.value)}
                     placeholder="Ej: Roosty Barbería"
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-zinc-700"
+                    className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-300 dark:focus:border-zinc-700"
                     required
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium text-zinc-400 font-mono">
+                  <label className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 font-mono">
                     Título Destacado del Portal
                   </label>
                   <input
@@ -201,12 +207,12 @@ export function TenantBrandingSettingsView() {
                     value={formData.heroTitle}
                     onChange={(e) => handleChange('heroTitle', e.target.value)}
                     placeholder="Ej: Cortes de Autor & Barbería Clásica"
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-zinc-700"
+                    className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-300 dark:focus:border-zinc-700"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium text-zinc-400 font-mono">
+                  <label className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 font-mono">
                     Subtítulo / Bajada del Portal
                   </label>
                   <textarea
@@ -214,16 +220,16 @@ export function TenantBrandingSettingsView() {
                     value={formData.heroSubtitle}
                     onChange={(e) => handleChange('heroSubtitle', e.target.value)}
                     placeholder="Ej: Reservá tu turno online en segundos con tu profesional de confianza"
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-zinc-700 resize-none font-sans"
+                    className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-300 dark:focus:border-zinc-700 resize-none font-sans"
                   />
                 </div>
               </div>
             </div>
 
             {/* Section 2: Tipografía del Menú Digital */}
-            <div className="space-y-3 pb-6 border-b border-zinc-850">
-              <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                <Type className="w-3.5 h-3.5 text-amber-400" />
+            <div className="space-y-3 pb-6 border-b border-zinc-200 dark:border-zinc-850">
+              <h3 className="text-xs font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
+                <Type className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
                 <span>Tipografía del Portal de Reservas</span>
               </h3>
 
@@ -235,8 +241,8 @@ export function TenantBrandingSettingsView() {
                     onClick={() => handleChange('fontFamily', font.id)}
                     className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                       formData.fontFamily === font.id
-                        ? 'border-zinc-200 bg-zinc-800 text-white shadow-md'
-                        : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                        ? 'border-zinc-400 dark:border-zinc-200 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-md'
+                        : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-700 dark:hover:text-zinc-200'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -249,7 +255,7 @@ export function TenantBrandingSettingsView() {
                       )}
                     </div>
                     <span 
-                      className="text-sm font-bold text-zinc-100 mt-2 truncate"
+                      className="text-sm font-bold text-zinc-900 dark:text-zinc-100 mt-2 truncate"
                       style={{ fontFamily: font.id }}
                     >
                       {font.sample}
@@ -263,15 +269,15 @@ export function TenantBrandingSettingsView() {
             </div>
 
             {/* Section 3: Color Primario (Global) & Fondo */}
-            <div className="space-y-6 pb-6 border-b border-zinc-850">
+            <div className="space-y-6 pb-6 border-b border-zinc-200 dark:border-zinc-850">
               {/* Color Primario / Acentuación Global */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                    <Palette className="w-3.5 h-3.5 text-indigo-400" />
+                  <h3 className="text-xs font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
+                    <Palette className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
                     <span>Color de Acentuación Global (Toda la App)</span>
                   </h3>
-                  <span className="text-[10px] font-mono text-indigo-400/90 font-semibold bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
+                  <span className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400/90 font-semibold bg-indigo-100 dark:bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-200 dark:border-indigo-500/20">
                     Toda la interfaz
                   </span>
                 </div>
@@ -285,8 +291,8 @@ export function TenantBrandingSettingsView() {
                         onClick={() => handleChange('primaryColor', color.hex)}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                           formData.primaryColor.toLowerCase() === color.hex.toLowerCase()
-                            ? 'border-zinc-300 bg-zinc-800 text-zinc-100 shadow-sm'
-                            : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:text-zinc-200'
+                            ? 'border-zinc-400 dark:border-zinc-300 bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm'
+                            : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-700 dark:hover:text-zinc-200'
                         }`}
                       >
                         <span
@@ -299,7 +305,7 @@ export function TenantBrandingSettingsView() {
                   </div>
 
                   <div className="flex items-center gap-3 pt-1">
-                    <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5">
+                    <div className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-1.5">
                       <input
                         type="color"
                         value={formData.primaryColor}
@@ -310,7 +316,7 @@ export function TenantBrandingSettingsView() {
                         type="text"
                         value={formData.primaryColor}
                         onChange={(e) => handleChange('primaryColor', e.target.value)}
-                        className="w-20 bg-transparent text-xs font-mono text-zinc-200 uppercase focus:outline-none"
+                        className="w-20 bg-transparent text-xs font-mono text-zinc-900 dark:text-zinc-200 uppercase focus:outline-none"
                       />
                     </div>
                     <span className="text-[11px] text-zinc-500 font-mono">
@@ -320,12 +326,38 @@ export function TenantBrandingSettingsView() {
                 </div>
               </div>
 
-              {/* Color de Fondo de el portal (Solo Menú QR) */}
+              {/* Color de Fondo y Tema del Portal Público */}
               <div className="space-y-3">
-                <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                  <Palette className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Color de Fondo del Portal de Reservas</span>
-                </h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xs font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
+                    <Palette className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
+                    <span>Tema & Fondo del Portal de Reservas</span>
+                  </h3>
+                  <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-0.5 rounded-lg text-[10px] font-mono">
+                    <button
+                      type="button"
+                      onClick={() => handleChange('backgroundColor', '#09090b')}
+                      className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                        ['#09090b', '#140e0c', '#0a0f1d', '#0a140f', '#181412'].includes(formData.backgroundColor.toLowerCase())
+                          ? 'bg-zinc-300 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-bold'
+                          : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
+                      }`}
+                    >
+                      🌙 Oscuro
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleChange('backgroundColor', '#ffffff')}
+                      className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                        ['#ffffff', '#f4f4f5', '#f8fafc', '#fbfbfa'].includes(formData.backgroundColor.toLowerCase())
+                          ? 'bg-white dark:bg-zinc-200 text-zinc-900 font-bold shadow-sm'
+                          : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
+                      }`}
+                    >
+                      ☀️ Claro
+                    </button>
+                  </div>
+                </div>
 
                 <div className="space-y-3 pt-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -336,21 +368,22 @@ export function TenantBrandingSettingsView() {
                         onClick={() => handleChange('backgroundColor', bg.hex)}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                           formData.backgroundColor.toLowerCase() === bg.hex.toLowerCase()
-                            ? 'border-zinc-300 bg-zinc-800 text-zinc-100 shadow-sm'
-                            : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:text-zinc-200'
+                            ? 'border-zinc-400 dark:border-zinc-300 bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm'
+                            : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-700 dark:hover:text-zinc-200'
                         }`}
                       >
                         <span
-                          className="w-3 h-3 rounded-full shrink-0 border border-white/20"
+                          className="w-3 h-3 rounded-full shrink-0 border border-black/10 dark:border-white/20"
                           style={{ backgroundColor: bg.hex }}
                         />
                         <span>{bg.name}</span>
+                        <span className="text-[9px] font-mono opacity-50 ml-0.5">({bg.mode})</span>
                       </button>
                     ))}
                   </div>
 
                   <div className="flex items-center gap-3 pt-1">
-                    <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-1.5">
+                    <div className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-1.5">
                       <input
                         type="color"
                         value={formData.backgroundColor}
@@ -361,11 +394,11 @@ export function TenantBrandingSettingsView() {
                         type="text"
                         value={formData.backgroundColor}
                         onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                        className="w-20 bg-transparent text-xs font-mono text-zinc-200 uppercase focus:outline-none"
+                        className="w-20 bg-transparent text-xs font-mono text-zinc-900 dark:text-zinc-200 uppercase focus:outline-none"
                       />
                     </div>
                     <span className="text-[11px] text-zinc-500 font-mono">
-                      Hex personalizado para el fondo
+                      Hex personalizado para el fondo del portal
                     </span>
                   </div>
                 </div>
@@ -373,9 +406,9 @@ export function TenantBrandingSettingsView() {
             </div>
 
             {/* Section 4: Imágenes, Portadas & Fondos */}
-            <div className="space-y-3 pb-6 border-b border-zinc-850">
-              <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
+            <div className="space-y-3 pb-6 border-b border-zinc-200 dark:border-zinc-850">
+              <h3 className="text-xs font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
+                <ImageIcon className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
                 <span>Logo, Portada & Wallpaper de Fondo</span>
               </h3>
 
@@ -407,15 +440,15 @@ export function TenantBrandingSettingsView() {
             </div>
 
             {/* Section 5: Datos de Contacto & Horarios */}
-            <div className="space-y-3 pb-6 border-b border-zinc-850">
-              <h3 className="text-xs font-bold text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-amber-400" />
+            <div className="space-y-3 pb-6 border-b border-zinc-200 dark:border-zinc-850">
+              <h3 className="text-xs font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
                 <span>Contacto & Horarios de Atención</span>
               </h3>
 
               <div className="space-y-3 pt-1">
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium text-zinc-400 font-mono">
+                  <label className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 font-mono">
                     Dirección Física (Enlaza directo con Google Maps)
                   </label>
                   <input
@@ -423,13 +456,13 @@ export function TenantBrandingSettingsView() {
                     value={formData.address}
                     onChange={(e) => handleChange('address', e.target.value)}
                     placeholder="Ej: Avenida Armenia 4032, CABA"
-                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-zinc-700"
+                    className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-300 dark:focus:border-zinc-700"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-zinc-400 font-mono">
+                    <label className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 font-mono">
                       Email de Contacto / Notificaciones
                     </label>
                     <input
@@ -437,12 +470,12 @@ export function TenantBrandingSettingsView() {
                       value={formData.contactEmail}
                       onChange={(e) => handleChange('contactEmail', e.target.value)}
                       placeholder="contacto@local.com"
-                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-zinc-700 font-mono"
+                      className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-300 dark:focus:border-zinc-700 font-mono"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-zinc-400 font-mono">
+                    <label className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 font-mono">
                       Teléfono de Contacto
                     </label>
                     <input
@@ -450,12 +483,12 @@ export function TenantBrandingSettingsView() {
                       value={formData.phone}
                       onChange={(e) => handleChange('phone', e.target.value)}
                       placeholder="+54 3482 123456"
-                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-zinc-700 font-mono"
+                      className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-300 dark:focus:border-zinc-700 font-mono"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-zinc-400 font-mono">
+                    <label className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 font-mono">
                       Horarios de Atención (Barra Superior)
                     </label>
                     <input
@@ -463,12 +496,12 @@ export function TenantBrandingSettingsView() {
                       value={formData.openingHours}
                       onChange={(e) => handleChange('openingHours', e.target.value)}
                       placeholder="Jue-Dom 19:00-02:00"
-                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-zinc-700 font-mono"
+                      className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-300 dark:focus:border-zinc-700 font-mono"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-zinc-400 font-mono">
+                    <label className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 font-mono">
                       WhatsApp para Pedidos Web
                     </label>
                     <input
@@ -476,12 +509,12 @@ export function TenantBrandingSettingsView() {
                       value={formData.whatsappPhone}
                       onChange={(e) => handleChange('whatsappPhone', e.target.value)}
                       placeholder="Ej: 5493482123456"
-                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-zinc-700 font-mono"
+                      className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-300 dark:focus:border-zinc-700 font-mono"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-zinc-400 font-mono">
+                    <label className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 font-mono">
                       Enlace de Instagram
                     </label>
                     <input
@@ -489,7 +522,7 @@ export function TenantBrandingSettingsView() {
                       value={formData.instagramUrl}
                       onChange={(e) => handleChange('instagramUrl', e.target.value)}
                       placeholder="https://instagram.com/tubarberia"
-                      className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:border-zinc-700 font-mono"
+                      className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-300 dark:focus:border-zinc-700 font-mono"
                     />
                   </div>
                 </div>
@@ -501,7 +534,7 @@ export function TenantBrandingSettingsView() {
               <button
                 type="submit"
                 disabled={updateBrandingMutation.isPending}
-                className="btn-touch px-5 py-2.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-950 text-xs font-bold flex items-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer disabled:opacity-50 font-mono"
+                className="btn-touch px-5 py-2.5 rounded-lg bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 text-xs font-bold flex items-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer disabled:opacity-50 font-mono"
               >
                 {updateBrandingMutation.isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -515,13 +548,13 @@ export function TenantBrandingSettingsView() {
 
           {/* Right Column: Live Sticky Preview */}
           <div className="lg:col-span-5 space-y-3">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-400 uppercase tracking-wider font-mono">
-              <Eye className="w-4 h-4 text-amber-400" />
+            <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">
+              <Eye className="w-4 h-4 text-amber-500 dark:text-amber-400" />
               <span>Vista Previa en Tiempo Real</span>
             </div>
 
             <div 
-              className="border border-zinc-800 rounded-xl overflow-hidden shadow-2xl sticky top-24 transition-colors relative"
+              className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-2xl sticky top-24 transition-colors relative"
               style={{ 
                 backgroundColor: formData.backgroundColor,
                 fontFamily: formData.fontFamily,
@@ -697,21 +730,21 @@ export function TenantBrandingSettingsView() {
                 : window.location.origin;
 
               return (
-                <div className="p-4 rounded-3xl bg-zinc-900/90 border border-zinc-800 space-y-3 shadow-xl select-none">
+                <div className="p-4 rounded-3xl bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 space-y-3 shadow-xl select-none">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
+                    <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-500 dark:text-amber-400 flex items-center justify-center shrink-0">
                       <QrCode className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
-                      <h4 className="text-xs font-bold text-zinc-100">Código QR de Reservas Online</h4>
-                      <span className="text-[10px] text-zinc-400 font-mono truncate block">
+                      <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">Código QR de Reservas Online</h4>
+                      <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono truncate block">
                         {publicUrl}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3.5 bg-zinc-950/80 p-3 rounded-2xl border border-zinc-850">
-                    <div className="bg-white p-1.5 rounded-xl shrink-0 shadow-md">
+                  <div className="flex items-center gap-3.5 bg-zinc-50 dark:bg-zinc-950/80 p-3 rounded-2xl border border-zinc-200 dark:border-zinc-850">
+                    <div className="bg-white p-1.5 rounded-xl shrink-0 shadow-md border border-zinc-100 dark:border-transparent">
                       <img
                         src={`https://api.qrserver.com/v1/create-qr-code/?size=140x140&format=svg&data=${encodeURIComponent(publicUrl)}`}
                         alt="Código QR de Reservas"
@@ -720,7 +753,7 @@ export function TenantBrandingSettingsView() {
                     </div>
 
                     <div className="space-y-2 flex-1 min-w-0">
-                      <p className="text-[11px] text-zinc-400 leading-tight">
+                      <p className="text-[11px] text-zinc-600 dark:text-zinc-400 leading-tight">
                         Tus clientes escanean este código con la cámara de su celular para reservar turnos directamente sin instalar apps.
                       </p>
 
@@ -731,9 +764,9 @@ export function TenantBrandingSettingsView() {
                             navigator.clipboard.writeText(publicUrl);
                             showToast('¡Link de Reservas copiado al portapapeles!');
                           }}
-                          className="btn-touch px-3 py-1.5 rounded-xl bg-zinc-850 hover:bg-zinc-800 border border-zinc-750 text-zinc-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                          className="btn-touch px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-850 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-750 text-zinc-800 dark:text-zinc-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
                         >
-                          <Copy className="w-3.5 h-3.5 text-amber-400" />
+                          <Copy className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
                           <span>Copiar Link</span>
                         </button>
 
@@ -741,9 +774,9 @@ export function TenantBrandingSettingsView() {
                           href={publicUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="btn-touch px-3 py-1.5 rounded-xl bg-zinc-850 hover:bg-zinc-800 border border-zinc-750 text-zinc-200 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                          className="btn-touch px-3 py-1.5 rounded-xl bg-white dark:bg-zinc-850 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-750 text-zinc-800 dark:text-zinc-200 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
                         >
-                          <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
+                          <ExternalLink className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
                           <span>Abrir Portal</span>
                         </a>
                       </div>

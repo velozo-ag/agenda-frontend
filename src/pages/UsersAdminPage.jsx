@@ -99,23 +99,23 @@ export function UsersAdminPage() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden select-none">
+    <div className="h-full flex flex-col bg-transparent text-zinc-900 dark:text-zinc-100 overflow-hidden select-none">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-16 right-6 z-50 bg-zinc-900 border border-zinc-700 text-zinc-100 px-4 py-2.5 rounded-xl shadow-2xl text-xs font-semibold flex items-center gap-2 animate-in slide-in-from-top-2 duration-150">
-          <Check className="w-4 h-4 text-emerald-400" />
+        <div className="fixed top-16 right-6 z-50 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 px-4 py-2.5 rounded-xl shadow-2xl text-xs font-semibold flex items-center gap-2 animate-in slide-in-from-top-2 duration-150">
+          <Check className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Top Header & New Button */}
-      <div className="pb-4 border-b border-zinc-800/80 flex flex-wrap items-center justify-between gap-3 shrink-0">
+      <div className="pb-4 border-b border-zinc-200 dark:border-zinc-800/80 flex flex-wrap items-center justify-between gap-3 shrink-0">
         <div>
-          <h1 className="text-base font-bold text-zinc-100 flex items-center gap-2">
-            <Users className="w-4 h-4 text-amber-400" />
-            <span>Personal & Equipo del Bar</span>
+          <h1 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+            <Users className="w-4 h-4 text-amber-500 dark:text-amber-400" />
+            <span>Personal & Staff de la Barbería</span>
           </h1>
-          <p className="text-xs text-zinc-400 font-mono">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
             {users.length} miembros registrados con acceso al sistema
           </p>
         </div>
@@ -126,27 +126,27 @@ export function UsersAdminPage() {
             setUserToEdit(null);
             setIsUserModalOpen(true);
           }}
-          className="btn-touch px-3.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-zinc-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer active:scale-95"
+          className="btn-touch px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm cursor-pointer active:scale-95"
         >
           <Plus className="w-4 h-4" />
-          <span>Nuevo Empleado</span>
+          <span>Nuevo Usuario</span>
         </button>
       </div>
 
       {/* Search & Role Filters */}
       <div className="py-3 flex flex-wrap items-center justify-between gap-3 shrink-0">
         <div className="relative flex-1 max-w-sm">
-          <Search className="w-4 h-4 text-zinc-500 absolute left-3 top-2.5 pointer-events-none" />
+          <Search className="w-4 h-4 text-zinc-400 dark:text-zinc-500 absolute left-3 top-2.5 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por nombre o usuario..."
-            className="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-9 pr-4 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-zinc-700 font-sans"
+            className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg pl-9 pr-4 py-2 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-zinc-300 dark:focus:border-zinc-700 font-sans"
           />
         </div>
 
-        <div className="flex items-center gap-1 bg-zinc-900 p-1 rounded-lg border border-zinc-800">
+        <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-900 p-1 rounded-lg border border-zinc-200 dark:border-zinc-800">
           {['ALL', 'ADMIN', 'BARBER'].map((r) => (
             <button
               key={r}
@@ -154,8 +154,8 @@ export function UsersAdminPage() {
               onClick={() => setRoleFilter(r)}
               className={`px-3 py-1 rounded-md text-xs font-mono font-medium transition-colors cursor-pointer ${
                 roleFilter === r
-                  ? 'bg-zinc-800 text-zinc-100 font-bold shadow-xs'
-                  : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-bold shadow-xs'
+                  : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
               }`}
             >
               {r === 'ALL' ? 'Todos' : r === 'ADMIN' ? 'Admins' : r === 'BARBER' ? 'Barberos' : 'Desconocido'}
@@ -165,9 +165,9 @@ export function UsersAdminPage() {
       </div>
 
       {/* Users Stacked Table */}
-      <div className="flex-1 overflow-y-auto divide-y divide-zinc-850/80 pr-1">
+      <div className="flex-1 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-850/80 pr-1">
         {filteredUsers.length === 0 ? (
-          <div className="h-48 flex flex-col items-center justify-center text-zinc-500 text-xs space-y-2">
+          <div className="h-48 flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 text-xs space-y-2">
             <Users className="w-7 h-7 opacity-30" />
             <span>No se encontraron empleados con los filtros aplicados</span>
           </div>
@@ -179,19 +179,19 @@ export function UsersAdminPage() {
             return (
               <div
                 key={u.id}
-                className={`py-3 px-2 flex items-center justify-between gap-4 transition-colors hover:bg-zinc-900/40 rounded-lg ${
-                  !isActive ? 'opacity-60 bg-zinc-950/40' : ''
+                className={`py-3 px-2 flex items-center justify-between gap-4 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-900/40 rounded-lg ${
+                  !isActive ? 'opacity-60 bg-zinc-100/50 dark:bg-zinc-950/40' : ''
                 }`}
               >
                 {/* Left: Avatar & Info */}
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className="w-10 h-10 rounded-lg bg-zinc-900 border border-zinc-800 text-amber-400 font-bold flex items-center justify-center font-mono text-xs shrink-0 shadow-inner">
+                  <div className="w-10 h-10 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-amber-600 dark:text-amber-400 font-bold flex items-center justify-center font-mono text-xs shrink-0 shadow-inner">
                     {u.username ? u.username.slice(0, 2).toUpperCase() : 'US'}
                   </div>
 
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-xs sm:text-sm font-bold text-zinc-100 truncate">
+                      <h3 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate">
                         {u.fullName}
                       </h3>
                       <span className="text-[11px] text-zinc-500 font-mono">
@@ -201,7 +201,7 @@ export function UsersAdminPage() {
 
                     <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-mono mt-0.5">
                       <span className="flex items-center gap-1">
-                        <KeyRound className="w-3 h-3 text-zinc-600" />
+                        <KeyRound className="w-3 h-3 text-zinc-400 dark:text-zinc-600" />
                         <span>{u.pin ? 'PIN configurado' : 'Sin PIN'}</span>
                       </span>
                     </div>
@@ -231,7 +231,7 @@ export function UsersAdminPage() {
                         setUserForPassword(u);
                         setIsPasswordModalOpen(true);
                       }}
-                      className="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-amber-300 transition-colors cursor-pointer border border-zinc-800 active:scale-95"
+                      className="p-1.5 rounded-lg bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors cursor-pointer border border-zinc-200 dark:border-zinc-800 active:scale-95 shadow-xs"
                       title="Cambiar contraseña"
                     >
                       <Lock className="w-3.5 h-3.5" />
@@ -243,7 +243,7 @@ export function UsersAdminPage() {
                         setUserToEdit(u);
                         setIsUserModalOpen(true);
                       }}
-                      className="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer border border-zinc-800 active:scale-95"
+                      className="p-1.5 rounded-lg bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors cursor-pointer border border-zinc-200 dark:border-zinc-800 active:scale-95 shadow-xs"
                       title="Editar empleado"
                     >
                       <Edit3 className="w-3.5 h-3.5" />

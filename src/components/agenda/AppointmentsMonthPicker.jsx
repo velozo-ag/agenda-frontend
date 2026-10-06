@@ -66,17 +66,17 @@ export function AppointmentsMonthPicker({ selectedDate, onChange }) {
   };
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 shadow-sm w-full">
+    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm w-full">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-zinc-100 font-semibold capitalize flex items-center gap-2">
+        <h2 className="text-zinc-900 dark:text-zinc-100 font-semibold capitalize flex items-center gap-2">
           <CalendarIcon className="w-4 h-4 text-amber-500" />
           {currentMonth.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}
         </h2>
         <div className="flex items-center gap-1">
-          <button onClick={prevMonth} className="p-1.5 hover:bg-zinc-800 text-zinc-400 hover:text-white rounded-md transition-colors">
+          <button onClick={prevMonth} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-md transition-colors">
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <button onClick={nextMonth} className="p-1.5 hover:bg-zinc-800 text-zinc-400 hover:text-white rounded-md transition-colors">
+          <button onClick={nextMonth} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-md transition-colors">
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
@@ -105,15 +105,15 @@ export function AppointmentsMonthPicker({ selectedDate, onChange }) {
               className={`
                 relative h-10 rounded-lg text-sm font-medium transition-all duration-200 flex flex-col items-center justify-center
                 ${selected 
-                  ? 'bg-amber-500 text-zinc-950 shadow-md scale-105' 
+                  ? 'bg-amber-500 text-zinc-900 dark:text-zinc-950 shadow-md scale-105' 
                   : today 
-                    ? 'bg-zinc-800/50 text-amber-500 border border-amber-500/30 hover:bg-zinc-800' 
-                    : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}
+                    ? 'bg-amber-50 dark:bg-zinc-800/50 text-amber-600 dark:text-amber-500 border border-amber-500/30 hover:bg-amber-100 dark:hover:bg-zinc-800' 
+                    : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white'}
               `}
             >
               <span>{day}</span>
               {hasAppts && (
-                <span className={`absolute bottom-1.5 w-1 h-1 rounded-full ${selected ? 'bg-zinc-950' : 'bg-amber-500'}`} />
+                <span className={`absolute bottom-1.5 w-1 h-1 rounded-full ${selected ? 'bg-zinc-900 dark:bg-zinc-950' : 'bg-amber-500'}`} />
               )}
             </button>
           );
