@@ -14,7 +14,7 @@ export default function BarbersAdminPage() {
   
   const [isServicesOpen, setServicesOpen] = useState(false);
 
-  if (isLoading) return <div className="p-8 text-center text-zinc-500">Cargando barberos...</div>;
+  if (isLoading) return <div className="p-8 text-center text-zinc-500">Cargando profesionales...</div>;
 
   const isLimitReached = isSoloBarber && barbers.length >= (maxBarbers || 1);
 
@@ -32,13 +32,13 @@ export default function BarbersAdminPage() {
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-8 animate-in fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white tracking-tight">Staff de Barberos</h1>
-          <p className="text-zinc-600 dark:text-zinc-400 mt-1">Administra los barberos y los servicios que ofrecen.</p>
+          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white tracking-tight">Staff de profesionales</h1>
+          <p className="text-zinc-600 dark:text-zinc-400 mt-1">Administra los profesionales y los servicios que ofrecen.</p>
         </div>
         <button
           onClick={() => { setSelectedBarber(null); setFormOpen(true); }}
           disabled={isLimitReached}
-          title={isLimitReached ? `Límite de ${maxBarbers || 1} barbero alcanzado para tu plan` : 'Agregar barbero'}
+          title={isLimitReached ? `Límite de ${maxBarbers || 1} profesional alcanzado para tu plan` : 'Agregar profesional'}
           className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 ${
             isLimitReached
               ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 cursor-not-allowed border border-zinc-200 dark:border-zinc-700/50'
@@ -46,7 +46,7 @@ export default function BarbersAdminPage() {
           }`}
         >
           <Plus className="w-4 h-4" />
-          Nuevo Barbero
+          Nuevo profesional
         </button>
       </div>
 
@@ -54,9 +54,9 @@ export default function BarbersAdminPage() {
         <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs flex items-start gap-3">
           <Sparkles className="w-5 h-5 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
           <div>
-            <div className="font-bold text-zinc-900 dark:text-white text-sm">Límite de staff alcanzado ({maxBarbers || 1} barbero)</div>
+            <div className="font-bold text-zinc-900 dark:text-white text-sm">Límite de staff alcanzado ({maxBarbers || 1} profesional)</div>
             <p className="mt-1 text-zinc-700 dark:text-zinc-300 leading-relaxed">
-              Tu plan actual ({planType === 'CERO' ? 'Plan Cero' : 'Plan Navaja'}) permite 1 solo barbero. Para sumar múltiples barberos en tu local y que tus clientes elijan con quién cortarse, pasate al <strong>Plan Crew ($24.900/mes)</strong>.
+              Tu plan actual ({planType === 'CERO' ? 'Plan Cero' : 'Plan Navaja'}) permite 1 solo profesional. Para sumar múltiples profesionales en tu local y que tus clientes elijan con quién atenderse, pasate al <strong>Plan Crew ($24.900/mes)</strong>.
             </p>
           </div>
         </div>

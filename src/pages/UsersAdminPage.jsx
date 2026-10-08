@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
   Users, 
@@ -92,7 +92,7 @@ export function UsersAdminPage() {
       case 'BARBER':
       default:
         return {
-          label: 'Mozo',
+          label: 'Profesional',
           classes: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
         };
     }
@@ -113,7 +113,7 @@ export function UsersAdminPage() {
         <div>
           <h1 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
             <Users className="w-4 h-4 text-amber-500 dark:text-amber-400" />
-            <span>Personal & Staff de la Barbería</span>
+            <span>Personal & Staff de la BarberÃ­a</span>
           </h1>
           <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
             {users.length} miembros registrados con acceso al sistema
@@ -158,7 +158,7 @@ export function UsersAdminPage() {
                   : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
               }`}
             >
-              {r === 'ALL' ? 'Todos' : r === 'ADMIN' ? 'Admins' : r === 'BARBER' ? 'Barberos' : 'Desconocido'}
+              {r === 'ALL' ? 'Todos' : r === 'ADMIN' ? 'Admins' : r === 'BARBER' ? 'Profesionales' : 'Desconocido'}
             </button>
           ))}
         </div>
@@ -232,7 +232,7 @@ export function UsersAdminPage() {
                         setIsPasswordModalOpen(true);
                       }}
                       className="p-1.5 rounded-lg bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-amber-600 dark:hover:text-amber-300 transition-colors cursor-pointer border border-zinc-200 dark:border-zinc-800 active:scale-95 shadow-xs"
-                      title="Cambiar contraseña"
+                      title="Cambiar contraseÃ±a"
                     >
                       <Lock className="w-3.5 h-3.5" />
                     </button>

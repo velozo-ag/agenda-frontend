@@ -267,7 +267,7 @@ export default function ServiceFormModal({ isOpen, onClose, serviceToEdit, categ
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-400 uppercase tracking-wider">
-                    Barberos que realizan este servicio ({selectedBarberIds.length === 0 ? 'Todos' : `${selectedBarberIds.length}/${barbers.length}`})
+                    Profesionales que realizan este servicio ({selectedBarberIds.length === 0 ? 'Todos' : `${selectedBarberIds.length}/${barbers.length}`})
                   </label>
                   <button
                     type="button"
@@ -317,7 +317,7 @@ export default function ServiceFormModal({ isOpen, onClose, serviceToEdit, categ
                   })}
                 </div>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
-                  Por defecto, si no seleccionás ninguno específico, todos los barberos del staff estarán habilitados para realizar este servicio.
+                  Por defecto, si no seleccionás ninguno específico, todos los profesionales del staff estarán habilitados para realizar este servicio.
                 </p>
               </div>
             )}

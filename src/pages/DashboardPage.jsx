@@ -265,13 +265,13 @@ export function DashboardPage() {
                     <div className="w-8 h-8 rounded-lg bg-[var(--primary-color)]/10 flex items-center justify-center text-[var(--primary-color)]">
                       <Users className="w-4 h-4" />
                     </div>
-                    <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Rendimiento por Barbero</h3>
+                    <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Rendimiento por Profesional</h3>
                   </div>
                   
                   <div className="p-0 flex-1">
                     {topBarbers.length === 0 ? (
                       <div className="p-8 text-center text-zinc-500 dark:text-zinc-400 text-sm">
-                        No hay datos de barberos para este período
+                        No hay datos de profesionales para este período
                       </div>
                     ) : (
                       <div className="divide-y divide-zinc-100 dark:divide-zinc-800">

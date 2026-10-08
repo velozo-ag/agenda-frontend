@@ -66,8 +66,8 @@ VERSION:2.0
 BEGIN:VEVENT
 DTSTART:${start}
 DTEND:${end}
-SUMMARY:Turno de ${serviceTitle} en ${salon.storeName || salon.name || 'Barbería'}
-DESCRIPTION:Barbero: ${barberNameStr}\\nEstado: ${appt.status}
+SUMMARY:Turno de ${serviceTitle} en ${salon.storeName || salon.name || 'nuestro local'}
+DESCRIPTION:Profesional: ${barberNameStr}\\nEstado: ${appt.status}
 END:VEVENT
 END:VCALENDAR`;
 

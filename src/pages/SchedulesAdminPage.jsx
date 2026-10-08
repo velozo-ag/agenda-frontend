@@ -10,7 +10,7 @@ export default function SchedulesAdminPage() {
   const [selectedBarberForSchedule, setSelectedBarberForSchedule] = useState(null);
   const [selectedBarberForTimeOff, setSelectedBarberForTimeOff] = useState(null);
 
-  if (isLoading) return <div className="p-8 text-center text-zinc-500">Cargando barberos...</div>;
+  if (isLoading) return <div className="p-8 text-center text-zinc-500">Cargando profesionales...</div>;
 
   const activeBarbers = barbers.filter(b => b.active);
 
@@ -73,8 +73,8 @@ export default function SchedulesAdminPage() {
 
         {activeBarbers.length === 0 && (
           <div className="col-span-full text-center p-12 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 border-dashed rounded-2xl">
-            <h3 className="text-lg font-medium text-zinc-900 dark:text-white mb-2">No hay barberos activos</h3>
-            <p className="text-zinc-500 dark:text-zinc-400">Ve a la sección de Barberos para dar de alta a tu equipo.</p>
+            <h3 className="text-lg font-medium text-zinc-900 dark:text-white mb-2">No hay profesionales activos</h3>
+            <p className="text-zinc-500 dark:text-zinc-400">Ve a la sección de Staff para dar de alta a tu equipo.</p>
           </div>
         )}
       </div>

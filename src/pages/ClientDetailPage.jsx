@@ -348,7 +348,7 @@ export function ClientDetailPage() {
               placeholder="Anotá preferencias del cliente, detalles del corte, productos recomendados o indicaciones para el staff..."
             />
             <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-              Las notas son 100% privadas y solo visibles para los barberos y administradores.
+              Las notas son 100% privadas y solo visibles para los profesionales y administradores.
             </p>
           </div>
         </div>
@@ -376,7 +376,7 @@ export function ClientDetailPage() {
                 <tr>
                   <th className="px-4 sm:px-5 py-3.5">Fecha & Hora</th>
                   <th className="px-4 sm:px-5 py-3.5">Servicio</th>
-                  <th className="px-4 sm:px-5 py-3.5">Barbero</th>
+                  <th className="px-4 sm:px-5 py-3.5">Profesional</th>
                   <th className="px-4 sm:px-5 py-3.5 text-right">Monto</th>
                   <th className="px-4 sm:px-5 py-3.5 text-right">Estado</th>
                 </tr>

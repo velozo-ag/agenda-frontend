@@ -433,7 +433,7 @@ export function BookingPage() {
                   <button onClick={() => setSelectedBarberId('any')} className={`w-full h-16 px-4 rounded-xl flex items-center justify-between transition-all cursor-pointer backdrop-blur-md border active:scale-[0.99] ${selectedBarberId === 'any' ? 'bg-zinc-800/40 border-[var(--primary-color,#6366f1)] ring-1 ring-[var(--primary-color,#6366f1)]' : 'bg-zinc-900/50 border-white/10 hover:bg-zinc-800/60'}`}>
                     <div className="flex items-center gap-3">
                       <Sparkles className="w-5 h-5 text-[var(--primary-color,#6366f1)]" />
-                      <span className={`font-bold text-sm ${selectedBarberId === 'any' ? 'text-[var(--primary-color,#818cf8)]' : 'text-white'}`}>Cualquier barbero disponible</span>
+                      <span className={`font-bold text-sm ${selectedBarberId === 'any' ? 'text-[var(--primary-color,#818cf8)]' : 'text-white'}`}>Cualquier profesional</span>
                     </div>
                     {selectedBarberId === 'any' ? (
                       <Check className="w-5 h-5 text-[var(--primary-color,#6366f1)]" />

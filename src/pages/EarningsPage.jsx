@@ -124,7 +124,7 @@ export function EarningsPage() {
         {showCommissions && (
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden flex flex-col shadow-sm">
             <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-zinc-900/50">
-              <h2 className="font-semibold text-zinc-900 dark:text-white">Liquidación por Barbero</h2>
+              <h2 className="font-semibold text-zinc-900 dark:text-white">Liquidación por Profesional</h2>
             </div>
             <div className="p-4 overflow-auto flex-1">
               {loadingCommissions ? (
@@ -164,7 +164,7 @@ export function EarningsPage() {
                     <tr className="text-zinc-500 border-b border-zinc-200 dark:border-zinc-800">
                       <th className="pb-2 font-medium">Cliente</th>
                       <th className="pb-2 font-medium">Servicio</th>
-                      <th className="pb-2 font-medium">Barbero</th>
+                      <th className="pb-2 font-medium">Profesional</th>
                       <th className="pb-2 font-medium text-right">Monto</th>
                     </tr>
                   </thead>
