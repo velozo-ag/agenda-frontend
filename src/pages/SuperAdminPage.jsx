@@ -992,21 +992,19 @@ export function SuperAdminPage() {
                         <Power className="w-4 h-4" />
                       </button>
 
-                      {tenant.isDemo && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setResendEmailTenant(tenant);
-                            setResendTargetEmail(tenant.contactEmail || '');
-                            setResendStatusMsg(null);
-                            setResendEmailOpen(true);
-                          }}
-                          className="btn-touch p-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-semibold flex items-center justify-center transition-colors cursor-pointer"
-                          title="Reenviar email de bienvenida demo"
-                        >
-                          <Mail className="w-4 h-4" />
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setResendEmailTenant(tenant);
+                          setResendTargetEmail(tenant.contactEmail || '');
+                          setResendStatusMsg(null);
+                          setResendEmailOpen(true);
+                        }}
+                        className="btn-touch p-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-semibold flex items-center justify-center transition-colors cursor-pointer"
+                        title="Reenviar email con autologin"
+                      >
+                        <Mail className="w-4 h-4" />
+                      </button>
 
                       {tenant.isDemo && (
                         <button
@@ -2005,3 +2003,4 @@ export function SuperAdminPage() {
   );
 }
 export default SuperAdminPage;
+

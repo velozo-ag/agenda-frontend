@@ -19,7 +19,10 @@ export default function BarberScheduleEditor({ isOpen, onClose, barber }) {
   // Estado para la aplicación rápida en bloque
   const [bulkDays, setBulkDays] = useState([1, 2, 3, 4, 5]); // Lun-Vie por defecto
   const [bulkStart, setBulkStart] = useState('09:00');
-  const [bulkEnd, setBulkEnd] = useState('18:00');
+  const [bulkEnd, setBulkEnd] = useState('13:00');
+  const [bulkStart2, setBulkStart2] = useState('15:00');
+  const [bulkEnd2, setBulkEnd2] = useState('19:00');
+  const [useBulkSplit, setUseBulkSplit] = useState(false);
 
   useEffect(() => {
     if (schedule?.length > 0) {
@@ -31,7 +34,9 @@ export default function BarberScheduleEditor({ isOpen, onClose, barber }) {
           name: d.name,
           isActive: existing?.isActive || false,
           startTime: existing?.startTime || '09:00',
-          endTime: existing?.endTime || '18:00'
+          endTime: existing?.endTime || '18:00',
+          startTime2: existing?.startTime2 || '',
+          endTime2: existing?.endTime2 || ''
         };
       });
       setFormData(mapped);
@@ -41,7 +46,9 @@ export default function BarberScheduleEditor({ isOpen, onClose, barber }) {
         name: d.name,
         isActive: false,
         startTime: '09:00',
-        endTime: '18:00'
+        endTime: '18:00',
+        startTime2: '',
+        endTime2: ''
       })));
     }
   }, [schedule, isOpen]);
@@ -72,7 +79,9 @@ export default function BarberScheduleEditor({ isOpen, onClose, barber }) {
           ...d,
           isActive: true,
           startTime: bulkStart,
-          endTime: bulkEnd
+          endTime: bulkEnd,
+          startTime2: useBulkSplit ? bulkStart2 : '',
+          endTime2: useBulkSplit ? bulkEnd2 : ''
         };
       }
       return d;
@@ -85,7 +94,9 @@ export default function BarberScheduleEditor({ isOpen, onClose, barber }) {
         dayOfWeek: d.dayOfWeek,
         isActive: d.isActive,
         startTime: d.startTime,
-        endTime: d.endTime
+        endTime: d.endTime,
+        startTime2: d.startTime2 || null,
+        endTime2: d.endTime2 || null
       }))
     };
     
@@ -164,34 +175,70 @@ export default function BarberScheduleEditor({ isOpen, onClose, barber }) {
             </div>
 
             {/* Time Pickers and Apply Button */}
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              <div className="flex items-center gap-2 text-xs">
-                <span className="text-zinc-500 dark:text-zinc-400">De:</span>
-                <input
-                  type="time"
-                  value={bulkStart}
-                  onChange={(e) => setBulkStart(e.target.value)}
-                  className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1 text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-violet-500 outline-none"
-                />
+            <div className="flex flex-col gap-2 pt-1">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-zinc-500 dark:text-zinc-400">De:</span>
+                  <input
+                    type="time"
+                    value={bulkStart}
+                    onChange={(e) => setBulkStart(e.target.value)}
+                    className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1 text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-violet-500 outline-none"
+                  />
+                </div>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-zinc-500 dark:text-zinc-400">A:</span>
+                  <input
+                    type="time"
+                    value={bulkEnd}
+                    onChange={(e) => setBulkEnd(e.target.value)}
+                    className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1 text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-violet-500 outline-none"
+                  />
+                </div>
+                <div className="flex items-center gap-2 ml-2">
+                  <label className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400 cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      checked={useBulkSplit}
+                      onChange={(e) => setUseBulkSplit(e.target.checked)}
+                      className="rounded border-zinc-300 text-violet-600 focus:ring-violet-500"
+                    />
+                    Turno partido
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleApplyBulk}
+                  disabled={bulkDays.length === 0}
+                  className="ml-auto px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+                >
+                  <CheckCheck className="w-3.5 h-3.5" />
+                  <span>Aplicar a {bulkDays.length} días</span>
+                </button>
               </div>
-              <div className="flex items-center gap-2 text-xs">
-                <span className="text-zinc-500 dark:text-zinc-400">A:</span>
-                <input
-                  type="time"
-                  value={bulkEnd}
-                  onChange={(e) => setBulkEnd(e.target.value)}
-                  className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1 text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-violet-500 outline-none"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handleApplyBulk}
-                disabled={bulkDays.length === 0}
-                className="ml-auto px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
-              >
-                <CheckCheck className="w-3.5 h-3.5" />
-                <span>Aplicar a {bulkDays.length} días</span>
-              </button>
+              
+              {useBulkSplit && (
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-zinc-500 dark:text-zinc-400">De:</span>
+                    <input
+                      type="time"
+                      value={bulkStart2}
+                      onChange={(e) => setBulkStart2(e.target.value)}
+                      className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1 text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-violet-500 outline-none"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-zinc-500 dark:text-zinc-400">A:</span>
+                    <input
+                      type="time"
+                      value={bulkEnd2}
+                      onChange={(e) => setBulkEnd2(e.target.value)}
+                      className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg px-2.5 py-1 text-xs text-zinc-900 dark:text-white focus:ring-1 focus:ring-violet-500 outline-none"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -221,21 +268,62 @@ export default function BarberScheduleEditor({ isOpen, onClose, barber }) {
                     </span>
                   </div>
                   
-                  <div className="col-span-8 grid grid-cols-2 gap-4">
-                    <input
-                      type="time"
-                      disabled={!day.isActive}
-                      value={day.startTime}
-                      onChange={(e) => handleChange(day.dayOfWeek, 'startTime', e.target.value)}
-                      className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-zinc-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none disabled:opacity-50 text-sm"
-                    />
-                    <input
-                      type="time"
-                      disabled={!day.isActive}
-                      value={day.endTime}
-                      onChange={(e) => handleChange(day.dayOfWeek, 'endTime', e.target.value)}
-                      className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-zinc-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none disabled:opacity-50 text-sm"
-                    />
+                  <div className="col-span-8 flex flex-col gap-2">
+                    <div className="grid grid-cols-2 gap-4">
+                      <input
+                        type="time"
+                        disabled={!day.isActive}
+                        value={day.startTime}
+                        onChange={(e) => handleChange(day.dayOfWeek, 'startTime', e.target.value)}
+                        className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-zinc-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none disabled:opacity-50 text-sm"
+                      />
+                      <input
+                        type="time"
+                        disabled={!day.isActive}
+                        value={day.endTime}
+                        onChange={(e) => handleChange(day.dayOfWeek, 'endTime', e.target.value)}
+                        className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-zinc-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none disabled:opacity-50 text-sm"
+                      />
+                    </div>
+                    {/* Shift 2 */}
+                    {day.startTime2 || day.endTime2 ? (
+                      <div className="grid grid-cols-2 gap-4 items-center">
+                        <input
+                          type="time"
+                          disabled={!day.isActive}
+                          value={day.startTime2}
+                          onChange={(e) => handleChange(day.dayOfWeek, 'startTime2', e.target.value)}
+                          className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-zinc-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none disabled:opacity-50 text-sm"
+                        />
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="time"
+                            disabled={!day.isActive}
+                            value={day.endTime2}
+                            onChange={(e) => handleChange(day.dayOfWeek, 'endTime2', e.target.value)}
+                            className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-zinc-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none disabled:opacity-50 text-sm"
+                          />
+                          <button 
+                            onClick={() => { handleChange(day.dayOfWeek, 'startTime2', ''); handleChange(day.dayOfWeek, 'endTime2', ''); }}
+                            className="p-1.5 text-zinc-400 hover:text-rose-500 rounded-md hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors"
+                            title="Quitar turno"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex justify-start">
+                        <button
+                          type="button"
+                          disabled={!day.isActive}
+                          onClick={() => { handleChange(day.dayOfWeek, 'startTime2', '15:00'); handleChange(day.dayOfWeek, 'endTime2', '19:00'); }}
+                          className="text-xs text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 font-medium disabled:opacity-50 transition-colors cursor-pointer"
+                        >
+                          + Agregar turno partido
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
