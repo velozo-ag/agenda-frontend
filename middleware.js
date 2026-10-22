@@ -43,7 +43,7 @@ function resolveFullImageUrl(url, apiOrigin) {
   if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
     return trimmed;
   }
-  const cleanOrigin = (apiOrigin || 'https://api-pos.roosty.site').replace(/\/+$/, '');
+  const cleanOrigin = (apiOrigin || '').replace(/\/+$/, '');
   const cleanPath = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
   return `${cleanOrigin}${cleanPath}`;
 }
@@ -73,14 +73,18 @@ export default async function middleware(request) {
     const parts = hostname.split('.');
     if (parts.length >= 2) {
       const first = parts[0].toLowerCase().trim();
-      if (!['www', 'localhost', '127', '192', '10', '172'].includes(first)) {
+      if (!['www', 'agenda', 'localhost', '127', '192', '10', '172'].includes(first)) {
         slug = first;
       }
     }
   }
 
   // 2. Determine API base URL
-  const envApiUrl = process.env.VITE_API_URL || process.env.API_URL || 'https://api-pos.roosty.site/api/v1';
+  const envApiUrl = process.env.VITE_API_URL || process.env.API_URL || '';
+  // Sin slug de tenant o sin API configurada: dejamos pasar al index.html estático (og-roosty-agenda.png)
+  if (!slug || !envApiUrl.trim()) {
+    return;
+  }
   let apiBase = envApiUrl.trim();
   if (!apiBase.startsWith('http://') && !apiBase.startsWith('https://')) {
     apiBase = `https://${apiBase}`;
@@ -114,6 +118,11 @@ export default async function middleware(request) {
     }
   }
 
+  // Tenant inexistente (o API caída/timeout): preview genérico de Roosty Agenda desde index.html
+  if (!branding) {
+    return;
+  }
+
   // 3. Extract dynamic metadata fields
   const storeName = branding?.storeName || branding?.name || (slug ? slug.toUpperCase() : 'Reservas Online');
   
@@ -121,7 +130,7 @@ export default async function middleware(request) {
   if (!description) {
     const hours = branding?.openingHours ? ` • Horario: ${branding.openingHours}` : '';
     const address = branding?.address ? ` • ${branding.address}` : '';
-    description = `Mirá nuestra carta digital en vivo, hacé tu pedido y consultá promociones${hours}${address}.`;
+    description = `Reservá tu turno online 24/7, elegí tu profesional y servicio en segundos${hours}${address}.`;
   }
 
   const rawImage = branding?.heroUrl || branding?.logoUrl || '';
@@ -143,6 +152,7 @@ export default async function middleware(request) {
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:image" content="${ogImageUrl}">
   <meta property="og:image:secure_url" content="${ogImageUrl}">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="${escapeHtml(storeName)}">
