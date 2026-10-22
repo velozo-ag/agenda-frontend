@@ -35,6 +35,19 @@ export function CatalogCardsPage() {
   const [downloadingId, setDownloadingId] = useState(null);
   const [capturingId, setCapturingId] = useState(null);
 
+  React.useEffect(() => {
+    const robotsMeta = document.querySelector('meta[name="robots"]');
+    const googlebotMeta = document.querySelector('meta[name="googlebot"]');
+    const prevRobots = robotsMeta?.getAttribute('content');
+    const prevGooglebot = googlebotMeta?.getAttribute('content');
+    if (robotsMeta) robotsMeta.setAttribute('content', 'noindex, nofollow');
+    if (googlebotMeta) googlebotMeta.setAttribute('content', 'noindex, nofollow');
+    return () => {
+      if (robotsMeta && prevRobots) robotsMeta.setAttribute('content', prevRobots);
+      if (googlebotMeta && prevGooglebot) googlebotMeta.setAttribute('content', prevGooglebot);
+    };
+  }, []);
+
   const exportCardAsPng = async (elementId, fileName, width = 1080, height = 1080, pixelRatio = 3) => {
     flushSync(() => {
       setCapturingId(elementId);

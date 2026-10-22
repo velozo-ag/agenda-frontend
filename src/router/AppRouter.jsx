@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { LoginPage } from '../pages/LoginPage';
@@ -121,9 +121,28 @@ function ProtectedLayout() {
 }
 
 export function AppRouter() {
+  const location = useLocation();
   const tenantSlug = getTenantSlug();
   const { isAuthenticated, user } = useAuth();
   const isSuperAdmin = user?.role === 'SUPER_ADMIN' || user?.role === 'SUPERADMIN' || user?.username === 'superadmin';
+
+  useEffect(() => {
+    const cleanPath = (location.pathname || '/').replace(/\/+$/, '') || '/';
+    const isPublicIndexable =
+      cleanPath === '/' ||
+      cleanPath === '/book' ||
+      cleanPath.startsWith('/book/') && !cleanPath.startsWith('/book/confirmation') && !cleanPath.startsWith('/book/status') ||
+      cleanPath.startsWith('/agenda/');
+
+    const policy = isPublicIndexable
+      ? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+      : 'noindex, nofollow';
+
+    const robotsMeta = document.querySelector('meta[name="robots"]');
+    const googlebotMeta = document.querySelector('meta[name="googlebot"]');
+    if (robotsMeta) robotsMeta.setAttribute('content', policy);
+    if (googlebotMeta) googlebotMeta.setAttribute('content', policy);
+  }, [location.pathname]);
 
   return (
     <Routes>

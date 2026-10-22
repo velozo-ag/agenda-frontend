@@ -1,5 +1,4 @@
 import { ArrowRight, Globe, Zap, MessageCircle, Scissors } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { WHATSAPP_SALES_LINK } from './landingConfig';
 
 /**
@@ -98,9 +97,6 @@ export function FooterCTA({ onOpenWizard }) {
             <a href={WHATSAPP_SALES_LINK} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
               Contacto
             </a>
-            <Link to="/catalog-cards" className="hover:text-indigo-400 transition-colors font-medium">
-              Catálogo Cards
-            </Link>
           </div>
 
           <div className="text-xs text-zinc-500">
