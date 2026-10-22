@@ -314,9 +314,9 @@ export function RegistrationWizard({ onClose }) {
           <div className="relative flex items-center justify-between z-10">
             <button type="button" onClick={onClose} className="flex items-center gap-2 group cursor-pointer" aria-label="Volver">
               <img
-                src="/roosty2.png"
+                src="/inspo/roostylogoname.png"
                 alt="Roosty"
-                className="h-7 w-auto object-contain invert opacity-90 transition-opacity group-hover:opacity-70"
+                className="h-7 w-auto object-contain transition-opacity group-hover:opacity-70"
               />
             </button>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.02] border border-white/5 text-[10px] uppercase tracking-[0.15em] font-bold text-zinc-400">
@@ -352,7 +352,7 @@ export function RegistrationWizard({ onClose }) {
           <div>
             {/* Top bar movil + cerrar */}
             <div className="flex items-center justify-between mb-6 lg:mb-4">
-              <img src="/roosty2.png" alt="Roosty" className="h-6 w-auto lg:hidden invert opacity-90" />
+              <img src="/inspo/roostylogoname.png" alt="Roosty" className="h-6 w-auto lg:hidden object-contain" />
               <span className="hidden lg:block" />
               <button
                 type="button"
@@ -696,7 +696,7 @@ export function RegistrationWizard({ onClose }) {
               <Lock className="w-3.5 h-3.5 text-indigo-500" />
               <span className="text-[10px] uppercase tracking-widest">Conexión Segura</span>
             </div>
-            <img src="/roosty2.png" alt="Roosty" className="h-4 w-auto opacity-50 invert" />
+            <img src="/inspo/roostylogoname.png" alt="Roosty" className="h-4 w-auto opacity-70 object-contain" />
           </div>
         </div>
       </div>

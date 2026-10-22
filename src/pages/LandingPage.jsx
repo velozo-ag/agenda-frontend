@@ -33,7 +33,7 @@ export function LandingPage() {
     const html = document.documentElement;
     const prev = html.style.scrollBehavior;
     html.style.scrollBehavior = 'smooth';
-    document.title = 'Roosty Agenda | Software de turnos para Barberías y Salones';
+    document.title = 'Roosty Agenda | Software de Turnos Online para Barberías, Peluquerías y Salones';
     return () => {
       html.style.scrollBehavior = prev;
       clearTimers();
@@ -104,7 +104,11 @@ export function LandingPage() {
               curtain === 'loading' || curtain === 'loading_close' || curtain === 'lifting' ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
             }`}
           >
-            <img src="/roosty2.png" alt="Roosty" className="h-9 w-auto mb-5 invert opacity-90" />
+            <img
+              src="/inspo/roostylogoname.png"
+              alt="Roosty Agenda - Software de Turnos Online"
+              className="h-9 w-auto mb-5 object-contain"
+            />
             <div className="w-48 h-1.5 bg-white/10 rounded-full overflow-hidden mb-3.5">
               <div className="h-full bg-indigo-500 rounded-full w-full animate-pulse" />
             </div>

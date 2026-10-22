@@ -183,8 +183,8 @@ export function Navbar() {
               title={tenant?.name || 'Roosty Agenda'}
             >
               <img
-                src="/icon-R.png"
-                alt="Roosty Logo"
+                src="/inspo/roostylogo.png"
+                alt="Roosty Agenda Logo"
                 className="w-7 h-7 object-contain drop-shadow-sm"
               />
             </button>

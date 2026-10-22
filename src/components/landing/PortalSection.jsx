@@ -3,10 +3,10 @@ import { Reveal } from './Reveal';
 import { BookingPortalPhoneDemo } from './BookingPortalPhoneDemo';
 
 const PORTAL_POINTS = [
-  'Elegí servicio y barbero en segundos.',
-  'Seña con comprobante adjunto.',
-  'Confirmación por WhatsApp, sin descargar nada.',
-  'Tu propio link con la marca de tu local.',
+  'Elegí servicio, profesional y horario disponible en segundos.',
+  'Solicitud de seña por transferencia con comprobante adjunto.',
+  'Confirmación y recordatorios automáticos por correo electrónico.',
+  'Tu propio link personalizado para la bio de Instagram y WhatsApp.',
 ];
 
 export function PortalSection({ onOpenWizard }) {

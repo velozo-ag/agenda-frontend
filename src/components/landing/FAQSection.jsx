@@ -5,32 +5,32 @@ import { getWhatsAppLink } from './landingConfig';
 
 const FAQS = [
   {
-    q: 'Límites del Plan Base',
-    a: 'Operativa gratuita permanente. Incluye portal público, gestión de agenda, CRM y auditoría de caja. Límite de 40 turnos mensuales para un profesional. Sin tarjeta requerida.',
+    q: '¿Qué incluye el Plan Cero gratuito y cuántos turnos permite?',
+    a: 'El Plan Cero es 100% gratis para siempre y no pide tarjeta de crédito. Incluye tu link público de reservas 24/7, agenda online, recordatorios automáticos por correo, base de datos de clientes (CRM) y control de caja diaria para 1 profesional con hasta 40 turnos mensuales.',
   },
   {
-    q: 'Gestión de dominio',
-    a: 'Asignación automática de subdominio personalizado (ej. marca.agenda.roosty.site). Listo para integración en redes sociales con identidad visual propia.',
+    q: '¿Roosty Agenda cobra comisión por cada turno o reserva?',
+    a: 'No. Roosty Agenda tiene 0% de comisión por turno. Todo lo que cobres en señas por transferencia o en el salón queda 100% en tu cuenta sin intermediarios.',
   },
   {
-    q: 'Procesamiento de señas',
-    a: 'Motor de validación integrado. Confirmación de turnos condicionada a verificación manual de comprobantes. Disponible en planes superiores.',
+    q: '¿Cómo funciona el cobro de señas para evitar ausencias?',
+    a: 'Podés configurar qué servicios requieren seña y definir el importe fijo. Cuando el cliente reserva desde tu link, visualiza tu Alias o CBU, realiza la transferencia y adjunta el comprobante en el mismo flujo para que el turno quede asegurado.',
   },
   {
-    q: 'Requisitos de infraestructura',
-    a: 'Arquitectura 100% cloud. Accesible vía navegador web desde cualquier dispositivo. Cero instalaciones o actualizaciones locales requeridas.',
+    q: '¿Cómo pongo mi link de turnos en Instagram y WhatsApp?',
+    a: 'Al crear tu cuenta recibís un subdominio exclusivo con el nombre de tu local (ej. tubarberia.agenda.roosty.site). Lo pegás en tu biografía de Instagram o en el mensaje de bienvenida de WhatsApp Business para que tus clientes reserven solos las 24 horas sin descargar ninguna aplicación.',
   },
   {
-    q: 'Soporte multi-usuario',
-    a: 'Gestión de hasta 10 profesionales en plan Scale. Aislamiento de datos, liquidación algorítmica de comisiones y control de acceso granular.',
+    q: '¿Cómo calcula el sistema las comisiones de cada barbero?',
+    a: 'En el Plan Crew podés registrar hasta 10 profesionales y asignarle un porcentaje de comisión individual a cada uno. Cada servicio finalizado suma automáticamente a su liquidación y podés consultar o exportar el cierre exacto en un clic.',
   },
   {
-    q: 'Políticas de escalamiento',
-    a: 'Alertas proactivas previas al límite de turnos. Escalabilidad transparente sin interrupción de servicio ni migración de datos.',
+    q: '¿Envía recordatorios automáticos a los clientes antes del turno?',
+    a: 'Sí. El sistema envía confirmaciones y recordatorios automáticos por correo electrónico antes de cada cita con el detalle del horario, profesional asignado y un botón directo para consultar el estado o reprogramar con anticipación.',
   },
   {
-    q: 'Despliegue inicial',
-    a: 'Configuración de servicios y franjas horarias en minutos. Interfaz de administración optimizada. Soporte directo vía WhatsApp disponible.',
+    q: '¿Tengo que instalar algún programa en la PC o el celular?',
+    a: 'No. Roosty Agenda es 100% web en la nube. Podés abrir tu agenda y cobrar desde el navegador de cualquier celular, tablet o computadora en tiempo real.',
   },
 ];
 
@@ -38,14 +38,18 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section id="faq" className="scroll-mt-24 py-32 bg-zinc-950 relative border-b border-white/5">
+    <section
+      id="faq"
+      aria-label="Preguntas frecuentes sobre Roosty Agenda"
+      className="scroll-mt-24 py-32 bg-zinc-950 relative border-b border-white/5"
+    >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal className="text-center mb-16">
           <h2 className="font-sans text-4xl lg:text-5xl font-bold tracking-tighter text-white mb-5 leading-tight">
-            Resolución operativa.
+            Preguntas frecuentes.
           </h2>
           <p className="text-base sm:text-lg text-zinc-400 font-normal tracking-tight leading-relaxed">
-            Especificaciones técnicas y funcionales del sistema.
+            Todo lo que necesitás saber sobre turnos online, señas, comisiones y planes.
           </p>
         </Reveal>
 

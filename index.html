@@ -1,29 +1,356 @@
 <!doctype html>
-<html lang="es" class="dark overflow-x-clip w-full max-w-full">
+<html lang="es-AR" class="dark overflow-x-clip w-full max-w-full">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/icon-R.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Roosty Agenda | Software para Barberías & Salones</title>
-    <meta name="description" content="Agenda online, gestión de turnos, barberos y clientes en tiempo real." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="theme-color" content="#09090b" />
+    <meta name="color-scheme" content="dark light" />
 
-    <!-- Default Open Graph / WhatsApp / Facebook -->
+    <!-- Primary SEO Meta Tags -->
+    <title>Roosty Agenda — Software de Turnos Online para Barberías, Peluquerías y Salones</title>
+    <meta
+      name="title"
+      content="Roosty Agenda — Software de Turnos Online para Barberías, Peluquerías y Salones"
+    />
+    <meta
+      name="description"
+      content="Roosty Agenda es el software de turnos online 24/7 y gestión 100% web para barberías, peluquerías y salones en Argentina. Automatizá reservas desde Instagram y WhatsApp con 0% comisiones, cobro de señas por transferencia, recordatorios por correo, liquidación de comisiones por barbero y caja diaria."
+    />
+    <meta
+      name="keywords"
+      content="Roosty Agenda, Roosty, software para barberías, sistema de turnos online, agenda para barberías, app de turnos peluquería, turnos online barbería Argentina, gestión de barbería, liquidación de comisiones barberos, cobro de señas turnos, link de reservas Instagram, software para salones de belleza, agenda web peluquería, turnos 24/7"
+    />
+    <meta name="author" content="Roosty Agenda" />
+    <meta name="creator" content="Roosty Agenda" />
+    <meta name="publisher" content="Roosty Agenda" />
+    <meta name="application-name" content="Roosty Agenda" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+    <!-- Canonical & Internationalization (GEO / Local SEO) -->
+    <link rel="canonical" href="https://agenda.roosty.com.ar" />
+    <link rel="alternate" hreflang="es-AR" href="https://agenda.roosty.com.ar" />
+    <link rel="alternate" hreflang="es" href="https://agenda.roosty.com.ar" />
+    <link rel="alternate" hreflang="x-default" href="https://agenda.roosty.com.ar" />
+    <meta name="geo.region" content="AR" />
+    <meta name="geo.placename" content="Argentina" />
+    <meta name="language" content="Spanish" />
+    <meta name="coverage" content="Argentina, Latinoamérica" />
+    <meta name="distribution" content="global" />
+
+    <!-- Favicons 1:1 múltiplos exactos de 48px (Requisito oficial Google Search) & Apple Touch Icon -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/icon-48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/icon-96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/roostyicon.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+    <link rel="shortcut icon" type="image/png" href="/roostyicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="/apple-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Open Graph / WhatsApp / Facebook / Instagram / LinkedIn (1200x630 sólido #faf9f8) -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Roosty Agenda | Software para Barberías & Salones" />
-    <meta property="og:description" content="Agenda online, gestión de turnos, barberos y clientes en tiempo real." />
-    <meta property="og:image" content="/icon-R.png" />
+    <meta property="og:site_name" content="Roosty Agenda" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:url" content="https://agenda.roosty.com.ar" />
+    <meta
+      property="og:title"
+      content="Roosty Agenda — Software de Turnos Online 24/7 para Barberías y Salones"
+    />
+    <meta
+      property="og:description"
+      content="Automatizá tus reservas desde Instagram y WhatsApp. Cobro de señas, recordatorios automáticos por correo, agenda multi-barbero y cálculo de comisiones con 0% comisión por turno."
+    />
+    <meta property="og:image" content="https://agenda.roosty.com.ar/og-roosty-agenda.png" />
+    <meta property="og:image:secure_url" content="https://agenda.roosty.com.ar/og-roosty-agenda.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Roosty Agenda — Software de Turnos Online y Gestión para Barberías y Salones"
+    />
+
+    <!-- Twitter / X Cards -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://agenda.roosty.com.ar" />
+    <meta
+      name="twitter:title"
+      content="Roosty Agenda — Software de Turnos Online para Barberías y Salones"
+    />
+    <meta
+      name="twitter:description"
+      content="Tu propio link de reservas 24/7, cobro de señas, recordatorios automáticos por correo, comisiones por profesional y caja diaria. Empezá gratis en 2 minutos."
+    />
+    <meta name="twitter:image" content="https://agenda.roosty.com.ar/og-roosty-agenda.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Roosty Agenda — Software de Turnos Online para Barberías y Salones"
+    />
+
+    <!-- Structured Data (JSON-LD) for Google Rich Results, Sitelinks & AI / GEO Search Engines -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://agenda.roosty.com.ar/#website",
+            "name": "Roosty Agenda",
+            "alternateName": [
+              "Roosty",
+              "Roosty Turnos",
+              "Roosty Software para Barberías"
+            ],
+            "url": "https://agenda.roosty.com.ar",
+            "inLanguage": "es-AR",
+            "publisher": {
+              "@id": "https://agenda.roosty.com.ar/#organization"
+            }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://agenda.roosty.com.ar/#organization",
+            "name": "Roosty Agenda",
+            "legalName": "Roosty Agenda",
+            "alternateName": "Roosty",
+            "url": "https://agenda.roosty.com.ar",
+            "logo": {
+              "@type": "ImageObject",
+              "@id": "https://agenda.roosty.com.ar/#logo",
+              "url": "https://agenda.roosty.com.ar/icon-512.png",
+              "contentUrl": "https://agenda.roosty.com.ar/icon-512.png",
+              "width": 512,
+              "height": 512,
+              "caption": "Roosty Agenda"
+            },
+            "image": [
+              "https://agenda.roosty.com.ar/og-roosty-agenda.png",
+              "https://agenda.roosty.com.ar/roostylogoname.png",
+              "https://agenda.roosty.com.ar/icon-512.png"
+            ],
+            "description": "Desarrolladores de Roosty Agenda, el software de turnos online 24/7 y sistema de gestión 100% web en la nube para barberías, peluquerías, salones unisex y centros de estética en Argentina y Latinoamérica.",
+            "areaServed": [
+              {
+                "@type": "Country",
+                "name": "Argentina"
+              },
+              {
+                "@type": "Place",
+                "name": "Latinoamérica"
+              }
+            ],
+            "contactPoint": [
+              {
+                "@type": "ContactPoint",
+                "telephone": "+54-9-3482-626653",
+                "contactType": "sales",
+                "areaServed": "AR",
+                "availableLanguage": ["Spanish"]
+              },
+              {
+                "@type": "ContactPoint",
+                "telephone": "+54-9-3482-626653",
+                "contactType": "customer support",
+                "areaServed": "AR",
+                "availableLanguage": ["Spanish"]
+              }
+            ],
+            "sameAs": [
+              "https://roosty.com.ar",
+              "https://pos.roosty.com.ar",
+              "https://agenda.roosty.com.ar"
+            ]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://agenda.roosty.com.ar/#software",
+            "name": "Roosty Agenda",
+            "applicationCategory": "BusinessApplication",
+            "applicationSubCategory": "Appointment Scheduling & Barber Shop Management Software",
+            "operatingSystem": "Web, Cloud SaaS, Windows, macOS, Android, iOS",
+            "description": "Software de gestión y agenda de turnos online 24/7 para barberías, peluquerías y salones de estética. Incluye subdominio propio para reservas desde Instagram y WhatsApp con 0% comisiones por turno, cobro de señas con validación de comprobantes, recordatorios automáticos por correo electrónico, agenda multi-profesional, liquidación automática de comisiones por barbero, CRM de clientes y cierre de caja diario.",
+            "url": "https://agenda.roosty.com.ar",
+            "image": "https://agenda.roosty.com.ar/og-roosty-agenda.png",
+            "screenshot": "https://agenda.roosty.com.ar/og-roosty-agenda.png",
+            "inLanguage": "es-AR",
+            "publisher": {
+              "@id": "https://agenda.roosty.com.ar/#organization"
+            },
+            "featureList": [
+              "Portal de reservas online 24/7 con subdominio propio personalizado y 0% de comisiones por turno",
+              "Solicitud y validación de señas por transferencia bancaria o billetera virtual con carga de comprobante",
+              "Recordatorios automáticos por correo electrónico antes de cada turno para reducir ausencias",
+              "Agenda multi-barbero con colores por profesional y visualización por grilla diaria o lista",
+              "Cálculo y liquidación automática de comisiones por profesional con exportación a CSV",
+              "Perfiles de clientes CRM con historial de visitas, gasto acumulado y notas operativas",
+              "Control y cierre de caja diario detallado por método de pago",
+              "Lista de espera inteligente para recuperar turnos ante cancelaciones de último momento",
+              "Cuentas de personal con roles y permisos diferenciados para cada profesional"
+            ],
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "ARS",
+              "lowPrice": "0",
+              "highPrice": "24900",
+              "offerCount": "3",
+              "offers": [
+                {
+                  "@type": "Offer",
+                  "name": "Plan Cero Gratis",
+                  "price": "0",
+                  "priceCurrency": "ARS",
+                  "description": "Ideal para profesionales independientes que arrancan. Gratis para siempre sin tarjeta de crédito. Hasta 40 turnos por mes, 1 profesional, link de reservas propio, agenda online, ficha de clientes y caja diaria.",
+                  "url": "https://agenda.roosty.com.ar/#precios"
+                },
+                {
+                  "@type": "Offer",
+                  "name": "Plan Navaja",
+                  "price": "14900",
+                  "priceCurrency": "ARS",
+                  "description": "Ideal para barberos con agenda llena. Turnos ilimitados para 1 profesional, cobro de señas con comprobante, lista de espera automática y métricas de ingresos por $14.900 ARS mensuales sin permanencia.",
+                  "url": "https://agenda.roosty.com.ar/#precios"
+                },
+                {
+                  "@type": "Offer",
+                  "name": "Plan Crew",
+                  "price": "24900",
+                  "priceCurrency": "ARS",
+                  "description": "Ideal para barberías y salones con equipo. Turnos ilimitados hasta 10 profesionales, elección de barbero por el cliente, agenda multi-barbero, liquidación automática de comisiones y permisos por rol por $24.900 ARS mensuales.",
+                  "url": "https://agenda.roosty.com.ar/#precios"
+                }
+              ]
+            }
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://agenda.roosty.com.ar/#navigation",
+            "name": "Navegación Principal de Roosty Agenda",
+            "itemListElement": [
+              {
+                "@type": "SiteNavigationElement",
+                "position": 1,
+                "name": "Cómo Funciona",
+                "description": "Alta en 2 minutos, link propio para redes y cobro de señas.",
+                "url": "https://agenda.roosty.com.ar/#como-funciona"
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 2,
+                "name": "Módulos y Funcionalidades",
+                "description": "Portal de marca, agenda multi-barbero, señas, lista de espera, CRM y caja.",
+                "url": "https://agenda.roosty.com.ar/#funciones"
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 3,
+                "name": "Equipo y Comisiones",
+                "description": "Liquidación automática de comisiones por barbero y permisos por rol.",
+                "url": "https://agenda.roosty.com.ar/#equipo"
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 4,
+                "name": "Portal de Reservas 24/7",
+                "description": "Link propio optimizado para Instagram y WhatsApp sin descargar apps.",
+                "url": "https://agenda.roosty.com.ar/#portal"
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 5,
+                "name": "Planes y Precios",
+                "description": "Plan Cero gratis para siempre, Plan Navaja y Plan Crew en pesos argentinos.",
+                "url": "https://agenda.roosty.com.ar/#precios"
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 6,
+                "name": "Preguntas Frecuentes",
+                "description": "Respuestas sobre turnos online, cobro de señas, recordatorios y comisiones.",
+                "url": "https://agenda.roosty.com.ar/#faq"
+              }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://agenda.roosty.com.ar/#faq-schema",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "¿Qué incluye el Plan Cero gratuito y cuántos turnos permite?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "El Plan Cero es 100% gratis para siempre y no pide tarjeta de crédito. Incluye tu link público de reservas 24/7, agenda online, recordatorios automáticos por correo, base de datos de clientes CRM y control de caja diaria para 1 profesional con hasta 40 turnos mensuales."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Roosty Agenda cobra comisión por cada turno o reserva?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Roosty Agenda tiene 0% de comisión por turno. Todo lo que cobres en señas por transferencia o en el salón queda 100% en tu cuenta sin intermediarios."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cómo funciona el cobro de señas para evitar ausencias?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Podés configurar qué servicios requieren seña y definir el importe fijo. Cuando el cliente reserva desde tu link, visualiza tu Alias o CBU, realiza la transferencia y adjunta el comprobante en el mismo flujo para que el turno quede asegurado."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cómo pongo mi link de turnos en Instagram y WhatsApp?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Al crear tu cuenta recibís un subdominio exclusivo con el nombre de tu local como tubarberia.agenda.roosty.site. Lo pegás en tu biografía de Instagram o en el mensaje de bienvenida de WhatsApp Business para que tus clientes reserven solos las 24 horas sin descargar ninguna aplicación."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cómo calcula el sistema las comisiones de cada barbero?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "En el Plan Crew podés registrar hasta 10 profesionales y asignarle un porcentaje de comisión individual a cada uno. Cada servicio finalizado suma automáticamente a su liquidación y podés consultar o exportar el cierre exacto en un clic."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Envía recordatorios automáticos a los clientes antes del turno?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Sí. El sistema envía confirmaciones y recordatorios automáticos por correo electrónico antes de cada cita con el detalle del horario, profesional asignado y un botón directo para consultar el estado o reprogramar con anticipación."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Tengo que instalar algún programa en la PC o el celular?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Roosty Agenda es 100% web en la nube. Podés abrir tu agenda y cobrar desde el navegador de cualquier celular, tablet o computadora en tiempo real."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
 
     <!-- Google Fonts: Inter, JetBrains Mono, Merriweather, Montserrat, Roboto, Playfair Display -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600;1,700&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600;1,700&family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
     <script>
-      (function() {
+      (function () {
         try {
           var saved = localStorage.getItem('roosty_theme');
           var theme = saved || 'dark';
-          var isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          var isDark =
+            theme === 'dark' ||
+            (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
           if (isDark) {
             document.documentElement.classList.add('dark');
           } else {

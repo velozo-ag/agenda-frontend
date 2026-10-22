@@ -17,42 +17,54 @@ import {
   PieChart
 } from 'lucide-react';
 
-export function AgendaPhoneDemo() {
-  const [activeTab, setActiveTab] = useState('list');
+export function AgendaPhoneDemo({
+  forcedTab = null,
+  isStatic = false,
+  hideFloatingKpis = false,
+} = {}) {
+  const [internalTab, setInternalTab] = useState('list');
 
   useEffect(() => {
+    if (forcedTab !== null || isStatic) return;
     const timer = setInterval(() => {
-      setActiveTab(prev => prev === 'list' ? 'day' : 'list');
+      setInternalTab(prev => prev === 'list' ? 'day' : 'list');
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [forcedTab, isStatic]);
+
+  const activeTab = forcedTab !== null ? forcedTab : internalTab;
+  const setActiveTab = setInternalTab;
   
   return (
     <div className="relative w-[285px] sm:w-[310px] [perspective:1200px] group mx-auto">
       
       {/* Floating KPI: Seña */}
-      <div className="hidden sm:flex absolute -left-12 lg:-left-28 top-20 z-50 items-center gap-2 p-1.5 pr-3 rounded-xl bg-white/95 backdrop-blur-md border border-zinc-200/80 shadow-2xl animate-bounce-slow pointer-events-none">
-        <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-sm">
-          <Wallet className="w-3.5 h-3.5" />
+      {!hideFloatingKpis && (
+        <div className="hidden sm:flex absolute -left-12 lg:-left-28 top-20 z-50 items-center gap-2 p-1.5 pr-3 rounded-xl bg-white/95 backdrop-blur-md border border-zinc-200/80 shadow-2xl animate-bounce-slow pointer-events-none">
+          <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-sm">
+            <Wallet className="w-3.5 h-3.5" />
+          </div>
+          <div className="text-left">
+            <div className="text-[10px] font-black text-zinc-900 leading-tight">Seña asegurada</div>
+            <div className="text-[9px] text-zinc-500 font-medium leading-tight mt-0.5">MercadoPago • $5.000</div>
+          </div>
         </div>
-        <div className="text-left">
-          <div className="text-[10px] font-black text-zinc-900 leading-tight">Seña asegurada</div>
-          <div className="text-[9px] text-zinc-500 font-medium leading-tight mt-0.5">MercadoPago • $5.000</div>
-        </div>
-      </div>
+      )}
 
       {/* Floating KPI: Comisiones */}
-      <div className="hidden sm:flex absolute -right-8 lg:-right-24 bottom-32 z-50 items-center gap-2 p-1.5 pr-3 rounded-xl bg-[#18181b] backdrop-blur-md border border-zinc-800 shadow-2xl animate-bounce-slow-delayed pointer-events-none">
-        <div className="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center shadow-sm border border-indigo-500/30">
-          <PieChart className="w-3.5 h-3.5" />
+      {!hideFloatingKpis && (
+        <div className="hidden sm:flex absolute -right-8 lg:-right-24 bottom-32 z-50 items-center gap-2 p-1.5 pr-3 rounded-xl bg-[#18181b] backdrop-blur-md border border-zinc-800 shadow-2xl animate-bounce-slow-delayed pointer-events-none">
+          <div className="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center shadow-sm border border-indigo-500/30">
+            <PieChart className="w-3.5 h-3.5" />
+          </div>
+          <div className="text-left">
+            <div className="text-[10px] font-black text-white leading-tight">Comisiones listas</div>
+            <div className="text-[9px] text-zinc-400 font-medium leading-tight mt-0.5">Calculadas solas al cierre</div>
+          </div>
         </div>
-        <div className="text-left">
-          <div className="text-[10px] font-black text-white leading-tight">Comisiones listas</div>
-          <div className="text-[9px] text-zinc-400 font-medium leading-tight mt-0.5">Calculadas solas al cierre</div>
-        </div>
-      </div>
+      )}
 
-      <div className="relative transition-transform duration-500 ease-out will-change-transform group-hover:[transform:translateY(-8px)_rotateY(0deg)_rotateX(0deg)] cursor-default animate-phone-float">
+      <div className={`relative ${isStatic ? '' : 'transition-transform duration-500 ease-out will-change-transform group-hover:[transform:translateY(-8px)_rotateY(0deg)_rotateX(0deg)] cursor-default animate-phone-float'}`}>
         
         {/* Hardware Buttons */}
         <div className="absolute -left-[3px] top-20 w-[3px] h-5 bg-gradient-to-r from-zinc-700 to-zinc-400 rounded-l-xs shadow-sm" />
@@ -410,7 +422,7 @@ export function AgendaPhoneDemo() {
       </div>
       
       {/* Floor Shadow */}
-      <div className="w-3/4 h-5 bg-zinc-950/35 blur-xl rounded-[100%] mx-auto mt-4" />
+      {!isStatic && <div className="w-3/4 h-5 bg-zinc-950/35 blur-xl rounded-[100%] mx-auto mt-4" />}
     </div>
   );
 }

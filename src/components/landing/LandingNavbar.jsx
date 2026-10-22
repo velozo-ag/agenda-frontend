@@ -45,11 +45,18 @@ export function LandingNavbar({ onOpenWizard }) {
             }`}
           >
             {/* Brand */}
-            <a href="#top" className="flex items-center gap-2.5 group" aria-label="Roosty Agenda">
+            <a
+              href="#top"
+              className="flex items-center gap-2.5 group"
+              aria-label="Roosty Agenda - Software de turnos online para barberías y salones"
+            >
               <img
-                src="/roosty2.png"
-                alt="Roosty"
-                className="h-6 sm:h-7 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80 invert opacity-90"
+                src="/inspo/roostylogoname.png"
+                alt="Roosty Agenda Logo"
+                width="120"
+                height="28"
+                decoding="async"
+                className="h-6 sm:h-7 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80"
               />
               <span className="font-sans text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                 Agenda
@@ -57,7 +64,7 @@ export function LandingNavbar({ onOpenWizard }) {
             </a>
 
             {/* Desktop links */}
-            <nav className="hidden md:flex items-center gap-8">
+            <nav aria-label="Navegación principal" className="hidden md:flex items-center gap-8">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.href}
@@ -114,7 +121,14 @@ export function LandingNavbar({ onOpenWizard }) {
         <div className="absolute inset-0 bg-zinc-950/95 backdrop-blur-3xl" onClick={() => setOpen(false)} />
         <div className="relative h-full flex flex-col px-6 pt-5 pb-10">
           <div className="flex items-center justify-between h-14">
-            <img src="/roosty2.png" alt="Roosty" className="h-7 w-auto invert opacity-90" />
+            <img
+              src="/inspo/roostylogoname.png"
+              alt="Roosty Agenda Logo"
+              width="120"
+              height="28"
+              decoding="async"
+              className="h-7 w-auto object-contain"
+            />
             <button
               type="button"
               onClick={() => setOpen(false)}

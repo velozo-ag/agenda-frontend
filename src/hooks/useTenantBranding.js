@@ -15,17 +15,37 @@ export const hexToRgb = (hex) => {
 export const updateFavicon = (logoUrl) => {
   if (typeof document === 'undefined') return;
   const resolvedUrl = logoUrl ? getImageUrl(logoUrl) : null;
-  const targetHref = (resolvedUrl && typeof resolvedUrl === 'string' && resolvedUrl.trim())
-    ? resolvedUrl.trim()
-    : '/icon-R.png';
+  const customHref =
+    resolvedUrl && typeof resolvedUrl === 'string' && resolvedUrl.trim() ? resolvedUrl.trim() : null;
 
   // Remove existing icon links to force browser refresh
   const existingLinks = document.querySelectorAll("link[rel*='icon']");
   existingLinks.forEach((el) => el.remove());
 
+  if (!customHref) {
+    // Restore official Roosty multi-size 1:1 icons (multiples of 48px for Google Search)
+    const defaultIcons = [
+      { rel: 'icon', type: 'image/png', sizes: '48x48', href: '/icon-48.png' },
+      { rel: 'icon', type: 'image/png', sizes: '96x96', href: '/icon-96.png' },
+      { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/roostyicon.png' },
+      { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/icon-512.png' },
+      { rel: 'shortcut icon', type: 'image/png', href: '/roostyicon.png' },
+      { rel: 'apple-touch-icon', type: 'image/png', sizes: '180x180', href: '/apple-icon.png' },
+    ];
+    defaultIcons.forEach((cfg) => {
+      const link = document.createElement('link');
+      link.rel = cfg.rel;
+      if (cfg.type) link.type = cfg.type;
+      if (cfg.sizes) link.sizes = cfg.sizes;
+      link.href = cfg.href;
+      document.head.appendChild(link);
+    });
+    return;
+  }
+
   const newLink = document.createElement('link');
   newLink.rel = 'icon';
-  const cleanHref = targetHref.toLowerCase().split('?')[0];
+  const cleanHref = customHref.toLowerCase().split('?')[0];
   if (cleanHref.endsWith('.svg')) {
     newLink.type = 'image/svg+xml';
   } else if (cleanHref.endsWith('.png')) {
@@ -37,7 +57,7 @@ export const updateFavicon = (logoUrl) => {
   } else if (cleanHref.endsWith('.webp')) {
     newLink.type = 'image/webp';
   }
-  newLink.href = targetHref;
+  newLink.href = customHref;
   document.head.appendChild(newLink);
 
   let appleLink = document.querySelector("link[rel='apple-touch-icon']");
@@ -46,7 +66,7 @@ export const updateFavicon = (logoUrl) => {
     appleLink.rel = 'apple-touch-icon';
     document.head.appendChild(appleLink);
   }
-  appleLink.href = targetHref;
+  appleLink.href = customHref;
 };
 
 export const getPageTitleForPath = (pathname, storeName) => {
@@ -238,4 +258,3 @@ export const useDemoInfo = () => {
     isLoading,
   };
 };
-

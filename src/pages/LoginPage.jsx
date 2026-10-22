@@ -98,11 +98,11 @@ export function LoginPage() {
             </div>
           ) : (
             <div className="flex items-center justify-center">
-              <div className="w-16 h-16 bg-gradient-to-tr from-zinc-800 to-zinc-700 rounded-2xl flex items-center justify-center shadow-xl border border-zinc-700/50">
-                 <img
-                  src="/icon-R.png"
-                  alt="Roosty Logo"
-                  className="w-8 h-8 object-contain filter drop-shadow-md brightness-200"
+              <div className="w-16 h-16 bg-gradient-to-tr from-zinc-900 to-zinc-800 rounded-2xl flex items-center justify-center shadow-xl border border-zinc-700/50">
+                <img
+                  src="/inspo/roostylogo.png"
+                  alt="Roosty Agenda Logo"
+                  className="w-10 h-10 object-contain drop-shadow-md"
                 />
               </div>
             </div>

@@ -1,4 +1,5 @@
 import { ArrowRight, Globe, Zap, MessageCircle, Scissors } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { WHATSAPP_SALES_LINK } from './landingConfig';
 
 /**
@@ -72,9 +73,16 @@ export function FooterCTA({ onOpenWizard }) {
         {/* Fila inferior */}
         <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-zinc-500">
           <div className="flex items-center gap-3">
-            <img src="/roosty2.png" alt="Roosty" className="h-6 w-auto object-contain invert opacity-90" />
+            <img
+              src="/inspo/roostylogoname.png"
+              alt="Roosty Agenda - Software de turnos y gestión para barberías y salones"
+              width="110"
+              height="24"
+              decoding="async"
+              className="h-6 w-auto object-contain"
+            />
             <span className="text-zinc-700">|</span>
-            <span className="text-xs text-zinc-400">Agenda y gestión para barberías y salones</span>
+            <span className="text-xs text-zinc-400">Software de turnos online y gestión para barberías, peluquerías y salones</span>
           </div>
 
           <div className="flex flex-wrap justify-center gap-6 text-xs text-zinc-400">
@@ -90,6 +98,9 @@ export function FooterCTA({ onOpenWizard }) {
             <a href={WHATSAPP_SALES_LINK} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
               Contacto
             </a>
+            <Link to="/catalog-cards" className="hover:text-indigo-400 transition-colors font-medium">
+              Catálogo Cards
+            </Link>
           </div>
 
           <div className="text-xs text-zinc-500">

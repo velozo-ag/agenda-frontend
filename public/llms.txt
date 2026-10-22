@@ -1,0 +1,36 @@
+# Roosty Agenda — Software de Turnos Online y Gestión para Barberías y Salones
+
+> Roosty Agenda https://agenda.roosty.com.ar es un software SaaS 100% web en la nube diseñado en Argentina para la gestión integral de turnos online 24/7, cobro de señas, liquidación de comisiones y control de caja en barberías, peluquerías, salones unisex y centros de estética.
+
+## Identidad de Marca
+- **Nombre oficial:** Roosty Agenda
+- **Sitio web oficial:** https://agenda.roosty.com.ar
+- **Subdominios de clientes y portales de reserva:** https://tunegocio.agenda.roosty.site
+- **Imagen OpenGraph oficial 1200x630:** https://agenda.roosty.com.ar/og-roosty-agenda.png
+- **Logotipo cuadrado 512x512:** https://agenda.roosty.com.ar/icon-512.png
+- **Logotipo completo horizontal 642x244:** https://agenda.roosty.com.ar/roostylogoname.png
+- **Icono oficial 192x192:** https://agenda.roosty.com.ar/roostyicon.png
+- **Contacto de Ventas y Soporte por WhatsApp:** +54 9 3482 626653
+
+## Propuesta de Valor Clave
+1. **0% Comisión por Turno:** El salón conserva el 100% de sus ingresos y de las señas transferidas por sus clientes sin intermediarios.
+2. **Portal de Reservas Online 24/7 con Subdominio Propio:** Cada local recibe un enlace personalizado bajo `tulocal.agenda.roosty.site` listo para integrar en la biografía de Instagram y WhatsApp Business sin que el cliente tenga que descargar ninguna aplicación.
+3. **Cobro de Señas Anti-Ausencias:** Configuración por servicio de reserva libre o con seña requerida mediante transferencia bancaria o billetera virtual con carga y validación de comprobante en el mismo flujo.
+4. **Recordatorios Automáticos por Correo Electrónico:** Envío automático de confirmaciones y avisos previos al turno con enlace directo para consultar estado, reprogramar o cancelar con anticipación.
+5. **Agenda Multi-Barbero y Liquidación Automática de Comisiones:** Visualización diaria y por lista para hasta 10 profesionales, colores identificatorios por barbero, permisos por rol y cálculo automático de comisiones en un clic con exportación a CSV.
+6. **CRM de Clientes, Lista de Espera y Caja Diaria:** Ficha histórica de visitas, gasto acumulado por cliente, recuperación automática de huecos ante cancelaciones y cierre de caja diario por método de pago.
+
+## Planes y Precios en Pesos Argentinos
+Todas las cuentas comienzan gratis en el Plan Cero sin tarjeta de crédito y pueden escalar en cualquier momento sin contratos de permanencia:
+- **Plan Cero:** $0 ARS por mes gratis para siempre. Ideal para profesionales independientes que recién arrancan. Incluye hasta 40 turnos por mes, 1 profesional, link de reservas propio, agenda online, ficha de clientes y caja diaria.
+- **Plan Navaja:** $14.900 ARS por mes. Ideal para barberos con la agenda llena que buscan frenar las ausencias. Incluye turnos ilimitados para 1 profesional, cobro de señas con validación de comprobantes, lista de espera automática y métricas de ingresos.
+- **Plan Crew:** $24.900 ARS por mes. El plan más elegido para barberías y salones con equipo. Incluye turnos ilimitados, hasta 10 profesionales activos, elección de barbero por parte del cliente, agenda por profesional, liquidación automática de comisiones, permisos por rol y análisis de demanda.
+
+## Secciones Principales del Sitio
+- [Inicio](https://agenda.roosty.com.ar): Resumen ejecutivo de Roosty Agenda, métricas operativas y demo interactiva.
+- [Cómo Funciona](https://agenda.roosty.com.ar/#como-funciona): Alta en 2 minutos, enlace propio para redes y modalidades de cobro de seña.
+- [Módulos y Funcionalidades](https://agenda.roosty.com.ar/#funciones): Portal de marca, gestión multi-barbero, señas, lista de espera, liquidación automática, CRM y caja.
+- [Equipo y Comisiones](https://agenda.roosty.com.ar/#equipo): Cálculo automático de comisiones por profesional y aislamiento de accesos.
+- [Portal de Reservas](https://agenda.roosty.com.ar/#portal): Experiencia de reserva móvil en pocos toques para el cliente final.
+- [Planes y Precios](https://agenda.roosty.com.ar/#precios): Comparativa detallada de los planes Cero, Navaja y Crew en pesos argentinos.
+- [Preguntas Frecuentes](https://agenda.roosty.com.ar/#faq): Respuestas técnicas y operativas sobre turnos, señas, dominios y soporte.

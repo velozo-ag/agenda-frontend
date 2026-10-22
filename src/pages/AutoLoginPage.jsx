@@ -44,12 +44,12 @@ export function AutoLoginPage() {
         {/* Roosty Logo with subtle spinner */}
         <div className="relative">
           <img
-            src="/icon-R.png"
-            alt="Roosty"
+            src="/inspo/roostylogo.png"
+            alt="Roosty Agenda"
             className="w-16 h-16 object-contain filter drop-shadow-lg"
           />
           <div className="absolute -bottom-1 -right-1 bg-zinc-900 rounded-full p-1 border border-zinc-800 shadow-md">
-            <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
+            <Loader2 className="w-4 h-4 animate-spin text-indigo-500" />
           </div>
         </div>
 
@@ -63,9 +63,9 @@ export function AutoLoginPage() {
         <div className="pt-2 flex items-center justify-center gap-2 text-xs text-zinc-500">
           <span>Potenciado por</span>
           <img
-            src="/roosty2.png"
-            alt="roosty."
-            className="h-3.5 w-auto brightness-0 invert opacity-50"
+            src="/inspo/roostylogoname.png"
+            alt="Roosty Agenda"
+            className="h-4 w-auto object-contain opacity-70"
           />
         </div>
       </div>

@@ -22,6 +22,7 @@ import { ClientsPage } from '../pages/ClientsPage';
 import { ClientDetailPage } from '../pages/ClientDetailPage';
 import { BookingPage } from '../pages/BookingPage';
 import { LandingPage } from '../pages/LandingPage';
+import { CatalogCardsPage } from '../pages/CatalogCardsPage';
 import { BookingConfirmationPage } from '../pages/BookingConfirmationPage';
 import { BookingStatusPage } from '../pages/BookingStatusPage';
 import { SetupChecklistWidget } from '../components/onboarding/SetupChecklistWidget';
@@ -128,6 +129,9 @@ export function AppRouter() {
     <Routes>
       {/* Root Route: Always the public customer booking page (accessible whether logged in or not) */}
       <Route path="/" element={tenantSlug ? <BookingPage /> : <LandingPage />} />
+
+      {/* Public WhatsApp Catalog Cards Generator (1080x1080) */}
+      <Route path="/catalog-cards" element={<CatalogCardsPage />} />
 
       {/* Public Booking Portal (No auth needed) */}
       <Route path="/book" element={tenantSlug ? <BookingPage /> : <LandingPage />} />

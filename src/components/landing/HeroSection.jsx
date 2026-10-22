@@ -6,6 +6,7 @@ export function HeroSection({ onOpenWizard }) {
   return (
     <section
       id="top"
+      aria-label="Software de turnos online y gestión para barberías y salones"
       className="relative pt-24 pb-24 md:pt-28 md:pb-32 lg:pt-32 lg:pb-40 overflow-hidden bg-zinc-950 border-b border-white/5"
     >
       {/* Textura + brillo de marca */}
@@ -18,7 +19,7 @@ export function HeroSection({ onOpenWizard }) {
           <div className="flex flex-col items-center lg:items-start text-center lg:text-left lg:-mt-16 w-full">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-medium text-zinc-300 mb-8 backdrop-blur-md">
               <span className="tracking-widest uppercase">
-                Software para Barberías
+                Software de Turnos para Barberías y Salones
               </span>
             </div>
 
@@ -33,8 +34,7 @@ export function HeroSection({ onOpenWizard }) {
             </h1>
 
             <p className="mt-8 text-lg sm:text-xl text-zinc-400 font-normal leading-relaxed max-w-xl lg:max-w-md xl:max-w-lg tracking-tight">
-              Automatizá tus turnos, organizá a tu equipo y olvidate de los mensajes. 
-              El estándar para salones que buscan crecer.
+              Automatizá tus reservas 24/7 con link propio para Instagram y WhatsApp, cobrá señas por transferencia, calculá comisiones de tu equipo y olvidate de las ausencias.
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
