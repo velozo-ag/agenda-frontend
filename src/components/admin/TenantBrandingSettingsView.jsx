@@ -394,6 +394,7 @@ export function TenantBrandingSettingsView() {
                   label="Logo Cuadrado del Local"
                   description="Aparece en el encabezado y en la portada (JPG, PNG o WEBP). Si no se sube, se utiliza el isotipo oficial de Roosty por defecto."
                   value={formData.logoUrl}
+                  type="branding"
                   onChange={(url) => handleChange('logoUrl', url)}
                   previewAspect="square"
                 />
@@ -402,6 +403,7 @@ export function TenantBrandingSettingsView() {
                   label="Imagen de Portada (Banner Superior Panorámico)"
                   description="Banner amplio superior para el Portal de Reservas (Relación 21:9 o 16:9)."
                   value={formData.heroUrl}
+                  type="branding"
                   onChange={(url) => handleChange('heroUrl', url)}
                   previewAspect="banner"
                 />
@@ -411,6 +413,7 @@ export function TenantBrandingSettingsView() {
                     label="Banner para WhatsApp & Redes Sociales (Link Preview al compartir)"
                     description="Imagen horizontal (Recomendado 1200x630 px en JPG, PNG o WEBP). Es el banner oficial que verán automáticamente tus clientes al compartir el link de tu salón por WhatsApp, historias de Instagram o Facebook."
                     value={formData.backgroundImageUrl}
+                    type="branding"
                     onChange={(url) => handleChange('backgroundImageUrl', url)}
                     previewAspect="banner"
                   />

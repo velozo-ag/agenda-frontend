@@ -2,17 +2,20 @@ import React, { useState, useRef } from 'react';
 import { UploadCloud, Loader2, Image as ImageIcon, X, Check, Link as LinkIcon } from 'lucide-react';
 import { uploadService } from '../../services/uploadService';
 import { getImageUrl } from '../../utils/imageUrl';
+import { compressImage } from '../../utils/imageCompressor';
 
 export function ImageUploader({
   value = '',
   onChange,
-  type = 'products',
+  type = 'general',
   label = 'Imagen',
-  description = 'JPG, PNG o WEBP (máx. 5MB)',
+  description = 'JPG, PNG o WEBP (máx. 15MB, optimización automática)',
   className = '',
   previewAspect = 'square',
+  maxDimension = 1920,
 }) {
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showUrlInput, setShowUrlInput] = useState(false);
@@ -28,24 +31,41 @@ export function ImageUploader({
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      setErrorMessage('La imagen no puede superar los 5MB');
+    if (file.size > 20 * 1024 * 1024) {
+      setErrorMessage('La imagen no puede superar los 20MB');
       return;
     }
 
     setErrorMessage('');
     setIsUploading(true);
+    setUploadStatus('Optimizando imagen...');
 
     try {
-      const data = await uploadService.uploadImage(file, type);
+      // Compress and resize client-side to ensure file is lightweight (~150KB-400KB)
+      // This prevents 413 (Content Too Large) errors and speeds up uploads substantially.
+      const fileToUpload = await compressImage(file, {
+        maxWidth: maxDimension,
+        maxHeight: maxDimension,
+        quality: 0.85,
+      });
+
+      setUploadStatus('Subiendo al servidor...');
+      const data = await uploadService.uploadImage(fileToUpload, type);
       if (data?.url) {
         onChange?.(data.url);
         setManualUrl(data.url);
       }
     } catch (err) {
-      setErrorMessage(err.response?.data?.message || 'Error al subir la imagen al servidor');
+      if (err.response?.status === 413) {
+        setErrorMessage('La imagen es demasiado pesada para el servidor (413 Payload Too Large).');
+      } else if (!err.response && (err.message?.includes('Network Error') || err.message?.includes('status code 413'))) {
+        setErrorMessage('Error de red o archivo demasiado pesado para el servidor web (413).');
+      } else {
+        setErrorMessage(err.response?.data?.message || 'Error al subir la imagen al servidor');
+      }
     } finally {
       setIsUploading(false);
+      setUploadStatus('');
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -189,7 +209,7 @@ export function ImageUploader({
               {isUploading ? (
                 <div className="flex items-center gap-2 text-amber-500 dark:text-amber-400 text-xs py-2">
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Subiendo al servidor...</span>
+                  <span>{uploadStatus || 'Subiendo al servidor...'}</span>
                 </div>
               ) : isDragging ? (
                 <div className="py-2 text-center animate-bounce">

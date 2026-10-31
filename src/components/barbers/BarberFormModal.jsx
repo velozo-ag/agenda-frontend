@@ -111,6 +111,7 @@ export default function BarberFormModal({ isOpen, onClose, barberToEdit }) {
             label="Foto del Barbero"
             description="Foto de perfil visible en el portal de reservas (cuadrada o circular). JPG, PNG o WEBP."
             value={formData.avatarUrl}
+            type="barbers"
             onChange={(url) => setFormData((prev) => ({ ...prev, avatarUrl: url }))}
             previewAspect="square"
           />
