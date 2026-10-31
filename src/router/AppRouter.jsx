@@ -43,23 +43,8 @@ function ProtectedLayoutContent() {
   const isAdmin = user?.role === 'ADMIN' || isSuperAdmin;
   const defaultHome = isSuperAdmin ? '/superadmin' : '/agenda';
 
-  const bgImg = getImageUrl(tenant?.backgroundImageUrl);
-
   return (
-    <div 
-      className="h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans overflow-hidden relative transition-colors duration-150"
-      style={{
-        backgroundImage: bgImg ? `url(${bgImg})` : undefined,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center top',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-      {/* Modern subtle overlay */}
-      {bgImg && (
-        <div className="fixed inset-0 pointer-events-none z-0 bg-white/75 dark:bg-zinc-950/75" />
-      )}
-
+    <div className="h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col font-sans overflow-hidden relative transition-colors duration-150">
       <div className="flex flex-col h-full w-full relative z-10">
         <DemoBanner />
         <Navbar />

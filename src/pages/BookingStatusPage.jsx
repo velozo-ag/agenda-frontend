@@ -177,7 +177,7 @@ export function BookingStatusPage() {
   }
 
   const assignedBarber = barbers.find((b) => b.id === appt.barberId);
-  const rawCover = salon.heroUrl || salon.backgroundImageUrl;
+  const rawCover = salon.heroUrl;
   const coverImageUrl = (rawCover ? getImageUrl(rawCover) : null) || DEFAULT_COVER_IMAGE;
 
   return (

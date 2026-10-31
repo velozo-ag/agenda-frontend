@@ -52,7 +52,7 @@ export function BookingConfirmationPage() {
   const assignedBarber = appt.barberId ? barbers.find(b => b.id === appt.barberId) : null;
   const effectiveWhatsapp = salon.whatsappPhone || salon.contactWhatsapp || salon.phone || '5491100000000';
 
-  const rawCover = salon.heroUrl || salon.backgroundImageUrl;
+  const rawCover = salon.heroUrl;
   const coverImageUrl = (rawCover ? getImageUrl(rawCover) : null) || DEFAULT_COVER_IMAGE;
 
   const handleDownloadIcs = () => {

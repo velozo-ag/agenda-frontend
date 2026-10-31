@@ -15,10 +15,10 @@ import {
   Copy,
   ExternalLink,
   Mail,
+  MessageCircle,
 } from 'lucide-react';
 import { useMyTenant, useUpdateBranding, applyTenantTheme } from '../../hooks/useTenantBranding';
 import { ImageUploader } from '../ui/ImageUploader';
-import { Switch } from '../ui/Switch';
 import { getImageUrl } from '../../utils/imageUrl';
 
 function InstagramIcon({ className = "w-3 h-3" }) {
@@ -168,7 +168,7 @@ export function TenantBrandingSettingsView() {
           <span>Identidad Visual & Portal de Reservas</span>
         </h2>
         <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-          Personalizá el logo, portada, wallpaper de fondo, tipografía, color de acentuación global y datos de contacto de tu salón.
+          Personalizá el logo, portada, banner para WhatsApp y redes, tipografía, color de acentuación global y datos de contacto de tu salón.
         </p>
       </div>
 
@@ -226,7 +226,7 @@ export function TenantBrandingSettingsView() {
               </div>
             </div>
 
-            {/* Section 2: Tipografía del Menú Digital */}
+            {/* Section 2: Tipografía del Portal */}
             <div className="space-y-3 pb-6 border-b border-zinc-200 dark:border-zinc-850">
               <h3 className="text-xs font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
                 <Type className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
@@ -305,58 +305,36 @@ export function TenantBrandingSettingsView() {
                   </div>
 
                   <div className="flex items-center gap-3 pt-1">
-                    <div className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-1.5">
+                    <div className="relative flex items-center">
                       <input
                         type="color"
                         value={formData.primaryColor}
                         onChange={(e) => handleChange('primaryColor', e.target.value)}
-                        className="w-6 h-6 rounded cursor-pointer bg-transparent border-0"
-                      />
-                      <input
-                        type="text"
-                        value={formData.primaryColor}
-                        onChange={(e) => handleChange('primaryColor', e.target.value)}
-                        className="w-20 bg-transparent text-xs font-mono text-zinc-900 dark:text-zinc-200 uppercase focus:outline-none"
+                        className="w-8 h-8 rounded-xl border border-zinc-200 dark:border-zinc-800 cursor-pointer bg-transparent"
                       />
                     </div>
-                    <span className="text-[11px] text-zinc-500 font-mono">
-                      Hex personalizado de acento
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono font-medium text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-900 px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                        {formData.primaryColor.toUpperCase()}
+                      </span>
+                      <span className="text-[11px] text-zinc-500 font-mono">
+                        Hex personalizado para botones, badges y detalles
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Color de Fondo y Tema del Portal Público */}
-              <div className="space-y-3">
+              {/* Fondo del Portal */}
+              <div className="space-y-3 pt-2">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                    <Palette className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
-                    <span>Tema & Fondo del Portal de Reservas</span>
+                    <Palette className="w-3.5 h-3.5 text-zinc-400" />
+                    <span>Fondo del Portal de Reservas</span>
                   </h3>
-                  <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-0.5 rounded-lg text-[10px] font-mono">
-                    <button
-                      type="button"
-                      onClick={() => handleChange('backgroundColor', '#09090b')}
-                      className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
-                        ['#09090b', '#140e0c', '#0a0f1d', '#0a140f', '#181412'].includes(formData.backgroundColor.toLowerCase())
-                          ? 'bg-zinc-300 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-bold'
-                          : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
-                      }`}
-                    >
-                      🌙 Oscuro
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleChange('backgroundColor', '#ffffff')}
-                      className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
-                        ['#ffffff', '#f4f4f5', '#f8fafc', '#fbfbfa'].includes(formData.backgroundColor.toLowerCase())
-                          ? 'bg-white dark:bg-zinc-200 text-zinc-900 font-bold shadow-sm'
-                          : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
-                      }`}
-                    >
-                      ☀️ Claro
-                    </button>
-                  </div>
+                  <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/80 px-2 py-0.5 rounded-full border border-zinc-200 dark:border-zinc-750">
+                    Solo portal público
+                  </span>
                 </div>
 
                 <div className="space-y-3 pt-1">
@@ -373,43 +351,42 @@ export function TenantBrandingSettingsView() {
                         }`}
                       >
                         <span
-                          className="w-3 h-3 rounded-full shrink-0 border border-black/10 dark:border-white/20"
+                          className="w-3 h-3 rounded-full shrink-0 border border-zinc-300 dark:border-zinc-700 shadow-inner"
                           style={{ backgroundColor: bg.hex }}
                         />
                         <span>{bg.name}</span>
-                        <span className="text-[9px] font-mono opacity-50 ml-0.5">({bg.mode})</span>
+                        <span className="text-[9px] text-zinc-400 font-mono">({bg.mode})</span>
                       </button>
                     ))}
                   </div>
 
                   <div className="flex items-center gap-3 pt-1">
-                    <div className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-1.5">
+                    <div className="relative flex items-center">
                       <input
                         type="color"
                         value={formData.backgroundColor}
                         onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                        className="w-6 h-6 rounded cursor-pointer bg-transparent border-0"
-                      />
-                      <input
-                        type="text"
-                        value={formData.backgroundColor}
-                        onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                        className="w-20 bg-transparent text-xs font-mono text-zinc-900 dark:text-zinc-200 uppercase focus:outline-none"
+                        className="w-8 h-8 rounded-xl border border-zinc-200 dark:border-zinc-800 cursor-pointer bg-transparent"
                       />
                     </div>
-                    <span className="text-[11px] text-zinc-500 font-mono">
-                      Hex personalizado para el fondo del portal
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono font-medium text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-900 px-2.5 py-1 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                        {formData.backgroundColor.toUpperCase()}
+                      </span>
+                      <span className="text-[11px] text-zinc-500 font-mono">
+                        Hex personalizado para el fondo del portal
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Section 4: Imágenes, Portadas & Fondos */}
+            {/* Section 4: Imágenes, Portadas & Banner WhatsApp */}
             <div className="space-y-3 pb-6 border-b border-zinc-200 dark:border-zinc-850">
               <h3 className="text-xs font-bold text-zinc-700 dark:text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
                 <ImageIcon className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
-                <span>Logo, Portada & Wallpaper de Fondo</span>
+                <span>Logo, Portada & Banner para WhatsApp / Redes</span>
               </h3>
 
               <div className="space-y-4 pt-1">
@@ -423,19 +400,60 @@ export function TenantBrandingSettingsView() {
 
                 <ImageUploader
                   label="Imagen de Portada (Banner Superior Panorámico)"
-                  description="Banner amplio superior para la Portal de Reservas (Relación 21:9 o 16:9)"
+                  description="Banner amplio superior para el Portal de Reservas (Relación 21:9 o 16:9)."
                   value={formData.heroUrl}
                   onChange={(url) => handleChange('heroUrl', url)}
                   previewAspect="banner"
                 />
 
-                <ImageUploader
-                  label="Wallpaper de Fondo del Salón (Estilo Barber / Laterales y Salón)"
-                  description="Imagen personalizada que se muestra de fondo en el panel de administración, agenda y enmarca los laterales de la pantalla."
-                  value={formData.backgroundImageUrl}
-                  onChange={(url) => handleChange('backgroundImageUrl', url)}
-                  previewAspect="banner"
-                />
+                <div className="space-y-3 rounded-2xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 p-3.5">
+                  <ImageUploader
+                    label="Banner para WhatsApp & Redes Sociales (Link Preview al compartir)"
+                    description="Imagen horizontal (Recomendado 1200x630 px en JPG, PNG o WEBP). Es el banner oficial que verán automáticamente tus clientes al compartir el link de tu salón por WhatsApp, historias de Instagram o Facebook."
+                    value={formData.backgroundImageUrl}
+                    onChange={(url) => handleChange('backgroundImageUrl', url)}
+                    previewAspect="banner"
+                  />
+
+                  {/* Vista Previa interactiva de la tarjeta de WhatsApp */}
+                  <div className="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 font-mono mb-2">
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>Vista previa de cómo se verá al compartir en WhatsApp:</span>
+                    </div>
+
+                    <div className="max-w-sm rounded-xl overflow-hidden bg-[#eef1f5] dark:bg-[#1f2c34] border border-zinc-200 dark:border-zinc-700/60 shadow-md text-left">
+                      {/* Banner Image Preview */}
+                      <div className="w-full aspect-[1.91/1] bg-zinc-200 dark:bg-zinc-800 relative overflow-hidden flex items-center justify-center">
+                        {formData.backgroundImageUrl ? (
+                          <img
+                            src={getImageUrl(formData.backgroundImageUrl)}
+                            alt="Banner WhatsApp"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex flex-col items-center justify-center gap-1 text-zinc-400 dark:text-zinc-500 p-4 text-center">
+                            <ImageIcon className="w-6 h-6 opacity-60" />
+                            <span className="text-[10px] font-mono">Sin banner personalizado (Se genera banner dinámico automático)</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card Content inside WhatsApp Bubble */}
+                      <div className="p-2.5 space-y-0.5">
+                        <p className="text-[12px] font-bold text-zinc-900 dark:text-zinc-100 line-clamp-1">
+                          {formData.storeName || 'Roosty Barbería'} | Reservas Online
+                        </p>
+                        <p className="text-[10px] text-zinc-600 dark:text-zinc-400 line-clamp-2">
+                          {formData.heroSubtitle || formData.heroTitle || 'Reservá tu turno online en segundos. Elegí tu profesional y horario disponible 24/7.'}
+                        </p>
+                        <p className="text-[9px] font-mono text-zinc-500 dark:text-zinc-400 pt-1 flex items-center gap-1">
+                          <span className="truncate">{tenantData?.slug ? `${tenantData.slug}.agenda.roosty.site` : 'barberia.agenda.roosty.site'}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -546,11 +564,11 @@ export function TenantBrandingSettingsView() {
             </div>
           </div>
 
-          {/* Right Column: Live Sticky Preview */}
+          {/* Right Column: Live Mockup / Preview */}
           <div className="lg:col-span-5 space-y-3">
             <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider font-mono">
               <Eye className="w-4 h-4 text-amber-500 dark:text-amber-400" />
-              <span>Vista Previa en Tiempo Real</span>
+              <span>Vista Previa del Portal en Vivo</span>
             </div>
 
             <div 
@@ -558,21 +576,8 @@ export function TenantBrandingSettingsView() {
               style={{ 
                 backgroundColor: formData.backgroundColor,
                 fontFamily: formData.fontFamily,
-                backgroundImage: formData.backgroundImageUrl ? `url(${formData.backgroundImageUrl})` : undefined,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center top',
               }}
             >
-              {/* Optional Steam-style vignette overlay in preview */}
-              {formData.backgroundImageUrl && (
-                <div 
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: `radial-gradient(ellipse at center, ${formData.backgroundColor}cc 0%, ${formData.backgroundColor}f2 70%, ${formData.backgroundColor} 100%)`,
-                  }}
-                />
-              )}
-
               <div className="relative z-10">
                 {/* Top Utility Marquee Preview */}
                 <div 
@@ -662,7 +667,7 @@ export function TenantBrandingSettingsView() {
                         background: `radial-gradient(circle at center, ${formData.primaryColor}30, ${formData.backgroundColor} 80%)`,
                       }}
                     >
-                      <span className="text-[10px] font-mono text-zinc-500">Banner Alargado</span>
+                      <span className="text-[10px] font-mono text-zinc-500">Banner Superior</span>
                     </div>
                   )}
                 </div>
@@ -727,7 +732,7 @@ export function TenantBrandingSettingsView() {
             {(() => {
               const publicUrl = tenantData?.slug
                 ? `https://${tenantData.slug}.agenda.roosty.site`
-                : window.location.origin;
+                : (typeof window !== 'undefined' ? window.location.origin : 'https://agenda.roosty.site');
 
               return (
                 <div className="p-4 rounded-3xl bg-white dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 space-y-3 shadow-xl select-none">
@@ -791,4 +796,3 @@ export function TenantBrandingSettingsView() {
     </div>
   );
 }
-

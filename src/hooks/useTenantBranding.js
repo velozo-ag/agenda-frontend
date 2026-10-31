@@ -113,6 +113,37 @@ export const getPageTitleForPath = (pathname, storeName) => {
   return `${name} | ${section}`;
 };
 
+export const updateOpenGraphMeta = (tenant) => {
+  if (!tenant || typeof document === 'undefined') return;
+  const storeName = tenant.storeName || tenant.name || 'Roosty Agenda';
+  const banner = tenant.backgroundImageUrl || tenant.heroUrl || tenant.logoUrl;
+  const fullBannerUrl = banner ? getImageUrl(banner) : null;
+  const description = tenant.heroSubtitle || tenant.heroTitle || 'Reservá tu turno online 24/7 en segundos.';
+
+  const setMeta = (attr, key, content) => {
+    if (!content) return;
+    let el = document.querySelector(`meta[${attr}="${key}"]`);
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute(attr, key);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('content', content);
+  };
+
+  setMeta('property', 'og:title', `${storeName} | Reservas Online`);
+  setMeta('property', 'og:site_name', storeName);
+  setMeta('property', 'og:description', description);
+  setMeta('name', 'twitter:title', `${storeName} | Reservas Online`);
+  setMeta('name', 'twitter:description', description);
+
+  if (fullBannerUrl) {
+    setMeta('property', 'og:image', fullBannerUrl);
+    setMeta('property', 'og:image:secure_url', fullBannerUrl);
+    setMeta('name', 'twitter:image', fullBannerUrl);
+  }
+};
+
 export const applyTenantTheme = (tenant, customSubTitle) => {
   if (!tenant || typeof document === 'undefined') return;
 
@@ -135,6 +166,9 @@ export const applyTenantTheme = (tenant, customSubTitle) => {
     const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
     document.title = getPageTitleForPath(pathname, storeName);
   }
+
+  // 4. Dynamic Meta Tags (Open Graph / WhatsApp / Twitter)
+  updateOpenGraphMeta(tenant);
 };
 
 export const useTenantBranding = (customSlug) => {
