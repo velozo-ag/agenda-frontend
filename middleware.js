@@ -92,7 +92,7 @@ export default async function middleware(request) {
   }
 
   // 2. Determine API base URL
-  const envApiUrl = process.env.VITE_API_URL || process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || '';
+  const envApiUrl = process.env.OG_API_URL || process.env.VITE_API_URL || process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || '';
   let apiBase = envApiUrl.trim();
   if (!apiBase) {
     apiBase = `${url.origin}/api/v1`;
