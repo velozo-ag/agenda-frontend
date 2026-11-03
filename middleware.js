@@ -154,6 +154,7 @@ export default async function middleware(request) {
         fetchBody,
         brandingFound: Boolean(branding),
         backgroundImageUrl: branding?.backgroundImageUrl || null,
+        heroUrl: branding?.heroUrl || null,
       }, null, 2),
       { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } }
     );
@@ -186,7 +187,8 @@ export default async function middleware(request) {
   if (/^https?:\/\//i.test(customBanner)) {
     ogImageUrl = customBanner;
   } else if (customBanner) {
-    ogImageUrl = bannerEndpoint;
+    // Ruta relativa (/uploads/...): se sirve directo desde el backend (estático, público)
+    ogImageUrl = resolveFullImageUrl(customBanner, apiOrigin);
   } else {
     ogImageUrl = bannerEndpoint;
   }
