@@ -108,6 +108,9 @@ export default async function middleware(request) {
   let branding = null;
   let fetchStatus = null;
   let fetchError = null;
+  let fetchServer = null;
+  let fetchCfRay = null;
+  let fetchBody = null;
 
   try {
     const endpoint = `${apiBase.replace(/\/+$/, '')}/tenant/public?tenant=${encodeURIComponent(slug)}`;
@@ -115,11 +118,15 @@ export default async function middleware(request) {
       headers: {
         'X-Tenant-Slug': slug,
         'Accept': 'application/json',
+        'User-Agent': 'RoostyOG-Middleware/1.0 (+https://agenda.roosty.site)',
       },
       // Fast timeout for social bots (3.5 seconds max)
       signal: AbortSignal.timeout(3500),
     });
     fetchStatus = res.status;
+    fetchServer = res.headers.get('server');
+    fetchCfRay = res.headers.get('cf-ray');
+    if (!res.ok) fetchBody = (await res.text()).slice(0, 300);
 
     if (res.ok) {
       const json = await res.json();
@@ -142,6 +149,9 @@ export default async function middleware(request) {
         apiBase,
         fetchStatus,
         fetchError,
+        fetchServer,
+        fetchCfRay,
+        fetchBody,
         brandingFound: Boolean(branding),
         backgroundImageUrl: branding?.backgroundImageUrl || null,
       }, null, 2),
