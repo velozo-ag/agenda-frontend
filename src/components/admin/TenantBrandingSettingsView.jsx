@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useMyTenant, useUpdateBranding, applyTenantTheme } from '../../hooks/useTenantBranding';
 import { ImageUploader } from '../ui/ImageUploader';
+import { QrBannerDownload } from './QrBannerDownload';
 import { getImageUrl } from '../../utils/imageUrl';
 
 function InstagramIcon({ className = "w-3 h-3" }) {
@@ -787,6 +788,13 @@ export function TenantBrandingSettingsView() {
                           <ExternalLink className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
                           <span>Abrir Portal</span>
                         </a>
+
+                        <QrBannerDownload
+                          tenant={{ ...tenantData, ...formData, slug: tenantData?.slug }}
+                          publicUrl={publicUrl}
+                          onDone={showToast}
+                          onError={showToast}
+                        />
                       </div>
                     </div>
                   </div>
